@@ -1,0 +1,249 @@
+version: '3'
+
+tasks:
+  # API Generation Tasks
+  generate:api:
+    desc: Generate API types for both frontend and backend
+    cmds:
+      - task: generate:api:frontend
+      - task: generate:api:backend
+
+  generate:api:frontend:
+    desc: Generate TypeScript API types from OpenAPI spec
+    dir: frontend
+    cmds:
+      - npx openapi-typescript ../openapi.yaml -o src/generated/api-types.ts
+    sources:
+      - ../openapi.yaml
+    generates:
+      - src/generated/api-types.ts
+
+  generate:api:backend:
+    desc: Generate Go API types from OpenAPI spec
+    dir: backend
+    cmds:
+      - ~/go/bin/oapi-codegen -generate types -package generated -o generated/types.go ../openapi.yaml
+      - ~/go/bin/oapi-codegen -generate chi-server -package generated -o generated/server.go ../openapi.yaml
+    sources:
+      - ../openapi.yaml
+    generates:
+      - generated/types.go
+      - generated/server.go
+
+  # Build Tasks
+  build:
+    desc: Build entire application (generates API types first)
+    deps:
+      - generate:api
+    cmds:
+      - task: build:frontend
+      - task: build:backend
+
+  build:frontend:
+    desc: Build frontend for production
+    dir: frontend
+    deps:
+      - generate:api:frontend
+    cmds:
+      - npm ci
+      - npm run build
+
+  build:backend:
+    desc: Build backend binary
+    dir: backend
+    deps:
+      - generate:api:backend
+    cmds:
+      - go mod download
+      - go build -o main .
+
+  # Development Tasks
+  dev:
+    desc: Start development servers
+    deps:
+      - generate:api
+    cmds:
+      - task: dev:frontend &
+      - task: dev:backend
+
+  dev:frontend:
+    desc: Start frontend dev server
+    dir: frontend
+    deps:
+      - generate:api:frontend
+    cmds:
+      - npm run dev
+
+  dev:backend:
+    desc: Start backend dev server
+    dir: backend
+    deps:
+      - generate:api:backend
+    cmds:
+      - go run main.go
+
+  # Docker Tasks
+  docker:build:
+    desc: Build all Docker containers (generates API types first)
+    deps:
+      - generate:api
+    cmds:
+      - docker-compose build
+
+  docker:up:
+    desc: Start Docker containers (builds if needed)
+    deps:
+      - generate:api
+    cmds:
+      - docker-compose up -d
+
+  docker:down:
+    desc: Stop Docker containers
+    cmds:
+      - docker-compose down
+
+  docker:logs:
+    desc: View Docker logs for all containers
+    cmds:
+      - docker-compose logs -f
+
+  docker:logs:frontend:
+    desc: View frontend container logs
+    cmds:
+      - docker-compose logs -f frontend
+
+  docker:logs:backend:
+    desc: View backend container logs
+    cmds:
+      - docker-compose logs -f backend
+
+  docker:logs:db:
+    desc: View database container logs
+    cmds:
+      - docker-compose logs -f db
+
+  docker:logs:tail:
+    desc: View last 100 lines of logs
+    cmds:
+      - docker-compose logs --tail=100
+
+  docker:restart:
+    desc: Restart Docker containers
+    cmds:
+      - docker-compose restart
+
+  docker:rebuild:
+    desc: Rebuild and restart Docker containers
+    deps:
+      - generate:api
+    cmds:
+      - docker-compose down
+      - docker-compose build --no-cache
+      - docker-compose up -d
+
+  # Test Tasks
+  test:
+    desc: Run all tests
+    cmds:
+      - task: test:frontend
+      - task: test:backend
+
+  test:frontend:
+    desc: Run frontend tests
+    dir: frontend
+    cmds:
+      - npm test
+
+  test:backend:
+    desc: Run backend tests
+    dir: backend
+    cmds:
+      - go test ./...
+
+  # Lint Tasks
+  lint:
+    desc: Lint all code
+    cmds:
+      - task: lint:frontend
+      - task: lint:backend
+
+  lint:frontend:
+    desc: Lint frontend code
+    dir: frontend
+    cmds:
+      - npm run lint
+
+  lint:backend:
+    desc: Lint backend code
+    dir: backend
+    cmds:
+      - go fmt ./...
+      - go vet ./...
+
+  # Clean Tasks
+  clean:
+    desc: Clean all build artifacts
+    cmds:
+      - task: clean:frontend
+      - task: clean:backend
+      - task: clean:docker
+
+  clean:frontend:
+    desc: Clean frontend build artifacts
+    dir: frontend
+    cmds:
+      - rm -rf dist node_modules
+
+  clean:backend:
+    desc: Clean backend build artifacts
+    dir: backend
+    cmds:
+      - rm -f main
+      - go clean
+
+  clean:docker:
+    desc: Clean Docker volumes and containers
+    cmds:
+      - docker-compose down -v
+      - docker system prune -f
+
+  # Install Tasks
+  install:
+    desc: Install all dependencies
+    cmds:
+      - task: install:frontend
+      - task: install:backend
+
+  install:frontend:
+    desc: Install frontend dependencies
+    dir: frontend
+    cmds:
+      - npm ci
+
+  install:backend:
+    desc: Install backend dependencies
+    dir: backend
+    cmds:
+      - go mod download
+
+  # Database Tasks
+  db:init:
+    desc: Initialize database
+    cmds:
+      - docker-compose exec db psql -U sharpl_user -d sharpl_db -f /docker-entrypoint-initdb.d/init.sql
+
+  db:shell:
+    desc: Open database shell
+    cmds:
+      - docker-compose exec db psql -U sharpl_user -d sharpl_db
+
+  db:backup:
+    desc: Backup database
+    cmds:
+      - docker-compose exec db pg_dump -U sharpl_user sharpl_db > backup_$(date +%Y%m%d_%H%M%S).sql
+
+  # Default task
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list

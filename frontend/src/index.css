@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-bg: #0a2647;
+  --color-dark-surface: #144272;
+  --color-dark-elevated: #205295;
+  --color-dark-border: #3a3a3a;
+  --color-dark-text-primary: #2c74b3;
+  --color-dark-text-secondary: #a0a0a0;
+  --color-dark-text-tertiary: #707070;
+  --color-dark-CTA-bg: #1e40af;
+  --color-dark-CTA-text: #1e40af;
+
+  --color-light-bg: #ffffff;
+  --color-light-surface: #f8f9fa;
+  --color-light-elevated: #ffffff;
+  --color-light-border: #e5e7eb;
+  --color-light-text-primary: #1a1a1a;
+  --color-light-text-secondary: #6b7280;
+  --color-light-text-tertiary: #9ca3af;
+}
+
+@layer base {
+  body {
+    @apply bg-light-bg dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary;
+  }
+}
+
+@layer components {
+  .text-body {
+    @apply text-light-text-secondary dark:text-dark-text-secondary;
+  }
+
+  .button-primary {
+    @apply bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700;
+  }
+
+  .button-secondary {
+    @apply bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400;
+  }
+}

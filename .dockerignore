@@ -1,0 +1,30 @@
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Node
+node_modules/
+dist/
+.env.local
+
+# Go
+backend/main
+*.exe
+
+# Database
+*.sql~
+postgres_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
