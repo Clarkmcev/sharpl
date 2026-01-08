@@ -1,48 +1,44 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen from-purple-50 to-pink-100">
-      <nav className="bg-white shadow-md">
+    <div className="min-h-screen bg-light-bg dark:bg-dark-bg">
+      <nav className="bg-light-surface dark:bg-dark-surface shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-indigo-600">Sharpl</h1>
-            <div className="flex gap-4">
-              <Link to="/login" className="text-gray-600 hover:text-indigo-600">
+            <h1 className="text-2xl font-bold text-primary">
+              sharpl
+            </h1>
+            <div className="flex gap-4 items-center">
+              <Button variant="secondary" onClick={() => navigate("/login")}>
                 Login
-              </Link>
-              <Link
-                to="/register"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-              >
+              </Button>
+              <Button variant="primary" onClick={() => navigate("/register")}>
                 Sign Up
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Welcome to Sharpl
+          <h1 className="text-6xl font-bold text-primary mb-6">
+            Welcome to sharpl
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-light-text-secondary dark:text-dark-text-secondary mb-12 max-w-2xl mx-auto">
             Your amazing application starts here
           </p>
           <div className="flex gap-4 justify-center">
-            <Link
-              to="/register"
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
-            >
+            <Button variant="primary" onClick={() => navigate("/register")}>
               Get Started
-            </Link>
-            <Link
-              to="/login"
-              className="px-6 py-3 bg-white text-indigo-600 border-2 border-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition duration-200"
-            >
+            </Button>
+            <Button variant="secondary" onClick={() => navigate("/login")}>
               Sign In
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
