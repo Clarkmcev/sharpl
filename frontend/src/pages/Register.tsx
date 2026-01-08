@@ -42,19 +42,24 @@ export default function Register() {
       return;
     }
 
+    // Store credentials temporarily for auto-login after onboarding
+    sessionStorage.setItem("pendingAuth", JSON.stringify({ email, password }));
+
     // Dispatch register action
     dispatch(registerRequest({ email, password, name }));
+
+    handleNavigateToOnboarding();
   };
 
-  // Redirect to onboarding after successful registration
-  useEffect(() => {
+  const handleNavigateToOnboarding = () => {
+    // Additional logic can be added here if needed
     if (!loading && !error && email) {
       const timer = setTimeout(() => {
         navigate("/onboarding");
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [loading, error, email, navigate]);
+  };
 
   return (
     <div
@@ -128,6 +133,7 @@ export default function Register() {
               loading={loading}
               fullWidth
               variant="primary"
+              onClick={handleNavigateToOnboarding}
             >
               Sign Up
             </Button>

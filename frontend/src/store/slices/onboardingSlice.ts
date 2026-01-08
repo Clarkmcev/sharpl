@@ -13,6 +13,7 @@ export interface OnboardingData {
   sport: string;
   experienceLevel: string;
   weeklyTrainingHours: number;
+  preparingForRace: boolean;
   races: Race[];
   currentVolume: string;
   longestRun: string;

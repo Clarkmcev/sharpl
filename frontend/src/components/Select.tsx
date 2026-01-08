@@ -28,7 +28,7 @@ export default function Select({
 }: SelectProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-md text-body mb-2">
+      <label htmlFor={id} className="block text-md text-body mb-4">
         {label}
       </label>
       <div className="relative">
@@ -38,7 +38,7 @@ export default function Select({
           onChange={onChange}
           className={`w-full px-4 pr-12 h-14 py-3 rounded-lg border appearance-none ${
             error ? "border-red-500 dark:border-red-700" : "border-transparent"
-          } bg-light-bg dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition cursor-pointer`}
+          } bg-light-bg dark:bg-dark-bg text-white focus:border-transparent outline-none transition cursor-pointer`}
           required={required}
         >
           {options.map((option) => (

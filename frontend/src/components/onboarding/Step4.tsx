@@ -1,10 +1,14 @@
 import OptionButton from "../OptionButton";
+import Select from "../Select";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import PoolIcon from "@mui/icons-material/Pool";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import RowingIcon from "@mui/icons-material/Rowing";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
 import type { OnboardingData } from "./types";
 
 interface Step4Props {
@@ -33,37 +37,34 @@ export default function Step4({
         Training preferences
       </h2>
 
-      <div>
-        <label className="block text-md text-body mb-4">
-          Days per week you can train :{" "}
-          <span className="text-white">{data.trainingDays} days</span>
-        </label>
-        <input
-          type="range"
-          min="3"
-          max="7"
-          value={data.trainingDays}
-          onChange={(e) => updateData("trainingDays", parseInt(e.target.value))}
-          className="w-full h-2 bg-light-bg dark:bg-dark-bg rounded-lg appearance-none cursor-pointer accent-indigo-600"
-        />
-        <div className="flex justify-between text-xs text-light-text-tertiary dark:text-dark-text-tertiary mt-1">
-          <span>3 days</span>
-          <span>5 days</span>
-          <span>7 days</span>
-        </div>
-      </div>
+      <Select
+        id="training-days"
+        label="Days per week you can train"
+        value={data.trainingDays.toString()}
+        onChange={(e) => updateData("trainingDays", parseInt(e.target.value))}
+        options={Array.from({ length: 5 }, (_, i) => ({
+          value: (i + 3).toString(),
+          label: `${i + 3} day${i + 3 === 1 ? "" : "s"}`,
+        }))}
+        required
+      />
 
       <div>
         <label className="block text-md text-body mb-4">
           Preferred workout time
         </label>
         <div className="grid grid-cols-3 gap-3">
-          {["Morning", "Afternoon", "Evening"].map((time) => (
+          {[
+            { label: "Morning", icon: <WbSunnyIcon /> },
+            { label: "Afternoon", icon: <LightModeIcon /> },
+            { label: "Evening", icon: <NightsStayIcon /> },
+          ].map((time) => (
             <OptionButton
-              key={time}
-              label={time}
-              selected={data.preferredWorkoutTime === time}
-              onClick={() => updateData("preferredWorkoutTime", time)}
+              key={time.label}
+              label={time.label}
+              icon={time.icon}
+              selected={data.preferredWorkoutTime === time.label}
+              onClick={() => updateData("preferredWorkoutTime", time.label)}
             />
           ))}
         </div>
@@ -75,9 +76,9 @@ export default function Step4({
             type="checkbox"
             checked={data.gymAccess}
             onChange={(e) => updateData("gymAccess", e.target.checked)}
-            className="w-5 h-5 text-indigo-600 bg-light-bg dark:bg-dark-bg border-light-border dark:border-dark-border rounded focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+            className="w-4 h-4 bg-light-bg dark:bg-dark-bg border-light-border dark:border-dark-border rounded cursor-pointer"
           />
-          <span className="text-md text-light-text-primary dark:text-dark-text-primary">
+          <span className="text-md text-body">
             I have access to a gym or indoor training facility
           </span>
         </label>

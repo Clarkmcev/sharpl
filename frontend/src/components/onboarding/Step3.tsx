@@ -10,7 +10,7 @@ interface Step3Props {
 export default function Step3({ data, updateData }: Step3Props) {
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
+      <h2 className="text-2xl font-bold text-white mb-6">
         Current fitness level
       </h2>
 
@@ -21,6 +21,7 @@ export default function Step3({ data, updateData }: Step3Props) {
         value={data.currentVolume}
         onChange={(e) => updateData("currentVolume", e.target.value)}
         placeholder="e.g., 30 miles/week or 5 hours/week"
+        required
       />
 
       <Input
@@ -30,6 +31,7 @@ export default function Step3({ data, updateData }: Step3Props) {
         value={data.longestRun}
         onChange={(e) => updateData("longestRun", e.target.value)}
         placeholder="e.g., 10 miles or 2 hours"
+        required
       />
 
       <Textarea
