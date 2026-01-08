@@ -13,6 +13,7 @@ export type OnboardingData = {
   weeklyTrainingHours: number;
 
   // Step 2: Goals & Race
+  preparingForRace: boolean;
   races: Race[];
 
   // Step 3: Current Fitness

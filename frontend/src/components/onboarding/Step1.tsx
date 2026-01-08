@@ -1,4 +1,5 @@
 import OptionButton from "../OptionButton";
+import Select from "../Select";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import PoolIcon from "@mui/icons-material/Pool";
@@ -86,19 +87,18 @@ export default function Step1({ data, updateData }: Step1Props) {
       </div>
 
       <div>
-        <label className="block text-md text-light-text-secondary dark:text-dark-text-secondary mb-4">
-          Your weekly training hours:{" "}
-          <span className="text-white">{data.weeklyTrainingHours} hours</span>
-        </label>
-        <input
-          type="range"
-          min="1"
-          max="20"
-          value={data.weeklyTrainingHours}
+        <Select
+          id="weekly-training-hours"
+          label="Weekly training hours"
+          value={data.weeklyTrainingHours.toString()}
           onChange={(e) =>
             updateData("weeklyTrainingHours", parseInt(e.target.value))
           }
-          className="w-full h-2 bg-light-surface dark:bg-dark-elevated rounded-lg appearance-none cursor-pointer accent-indigo-600"
+          options={Array.from({ length: 20 }, (_, i) => ({
+            value: (i + 1).toString(),
+            label: `${i + 1} hour${i + 1 === 1 ? "" : "s"}`,
+          }))}
+          required
         />
       </div>
     </div>

@@ -18,6 +18,8 @@
   --color-light-text-primary: #1a1a1a;
   --color-light-text-secondary: #6b7280;
   --color-light-text-tertiary: #9ca3af;
+  --color-light-CTA-bg: #3b82f6;
+  --color-light-CTA-text: #ffffff;
 }
 
 @layer base {
@@ -31,11 +33,46 @@
     @apply text-light-text-secondary dark:text-dark-text-secondary;
   }
 
+  .text-primary {
+    @apply text-light-text-primary dark:text-dark-text-primary;
+  }
+
   .button-primary {
     @apply bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700;
   }
 
   .button-secondary {
     @apply bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400;
+  }
+
+  .surface {
+    @apply bg-light-surface dark:bg-dark-surface;
+  }
+
+  .elevated {
+    @apply bg-light-elevated dark:bg-dark-elevated shadow-md;
+  }
+
+  .background {
+    @apply bg-light-bg dark:bg-dark-bg;
+  }
+
+  .background-primary {
+    @apply bg-light-CTA-bg dark:bg-dark-CTA-bg;
+  }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #1e40af #0000;
+  animation: l1 1s infinite;
+}
+@keyframes l1 {
+  to {
+    transform: rotate(0.5turn);
   }
 }
