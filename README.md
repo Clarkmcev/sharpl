@@ -1,5 +1,20 @@
 # Sharpl - Reach your goals
 
+**A training management platform for endurance athletes** who want to track, analyze, and optimize their performance across running, cycling, swimming, and triathlon disciplines.
+
+Sharpl helps athletes stay sharp by providing tools to:
+- 📊 Track workouts and training plans with precision
+- 📈 Analyze performance metrics and trends over time
+- 🎯 Set and monitor progress toward race goals
+- 💪 Balance training load to prevent overtraining and injury
+- 🔍 Gain insights from your training data to train smarter, not just harder
+
+Whether you're preparing for your first 5K or your next Ironman, Sharpl gives you the clarity and structure to reach peak performance.
+
+---
+
+## Technical Stack
+
 A containerized full-stack application with React (Vite + Tailwind CSS), Go (Gin), and PostgreSQL.
 **Features OpenAPI/Swagger for type-safe API communication.**
 
