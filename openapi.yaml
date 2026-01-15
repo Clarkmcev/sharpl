@@ -17,6 +17,8 @@ tags:
     description: Authentication operations
   - name: users
     description: User management operations
+  - name: onboarding
+    description: User onboarding operations
   - name: health
     description: Health check operations
 
@@ -203,6 +205,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /api/v1/onboarding:
+    post:
+      tags:
+        - onboarding
+      summary: Complete user onboarding
+      description: Save user onboarding data including sport preferences, goals, and training preferences
+      operationId: completeOnboarding
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingData'
+      responses:
+        '200':
+          description: Onboarding data saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - onboarding
+      summary: Get user onboarding data
+      description: Retrieve the current user's onboarding data
+      operationId: getOnboarding
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Onboarding data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+        '404':
+          description: Onboarding data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -361,3 +426,111 @@ components:
         error:
           type: string
           example: Invalid credentials
+
+    Race:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Boston Marathon
+        discipline:
+          type: string
+          enum: [Running, Triathlon]
+          example: Running
+        distance:
+          type: string
+          example: 42.195km
+        date:
+          type: string
+          format: date
+          example: 2026-04-20
+        goal:
+          type: string
+          example: Finish under 4 hours
+      required:
+        - name
+        - discipline
+        - distance
+        - date
+        - goal
+
+    OnboardingData:
+      type: object
+      properties:
+        sport:
+          type: string
+          example: Running
+        experienceLevel:
+          type: string
+          example: Intermediate
+        weeklyTrainingHours:
+          type: integer
+          minimum: 0
+          example: 5
+        preparingForRace:
+          type: boolean
+          example: true
+        races:
+          type: array
+          items:
+            $ref: '#/components/schemas/Race'
+          example:
+            - name: Boston Marathon
+              discipline: Running
+              distance: 42.195km
+              date: 2026-04-20
+              goal: Finish under 4 hours
+        currentVolume:
+          type: string
+          example: 40km per week
+        longestRun:
+          type: string
+          example: 20km
+        recentRaces:
+          type: string
+          example: Half marathon in October 2025
+        injuries:
+          type: string
+          example: None currently
+        trainingDays:
+          type: integer
+          minimum: 1
+          maximum: 7
+          example: 5
+        preferredWorkoutTime:
+          type: string
+          example: Morning
+        gymAccess:
+          type: boolean
+          example: true
+        crossTraining:
+          type: array
+          items:
+            type: string
+          example: [Cycling, Swimming]
+      required:
+        - sport
+        - experienceLevel
+        - weeklyTrainingHours
+        - preparingForRace
+        - races
+        - currentVolume
+        - longestRun
+        - recentRaces
+        - injuries
+        - trainingDays
+        - preferredWorkoutTime
+        - gymAccess
+        - crossTraining
+
+    OnboardingResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Onboarding data saved successfully
+        data:
+          $ref: '#/components/schemas/OnboardingData'
+      required:
+        - message
+        - data
