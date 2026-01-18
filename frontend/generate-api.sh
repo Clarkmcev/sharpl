@@ -1,13 +1,19 @@
 #!/bin/bash
 
-echo "🔄 Generating TypeScript types from OpenAPI spec..."
+echo "🔄 Generating TypeScript API client from OpenAPI spec..."
 
 cd "$(dirname "$0")"
 
-# Create generated directory if it doesn't exist
-mkdir -p src/generated
+# Remove old generated files
+rm -rf src/generated
 
-# Generate TypeScript types
-npx openapi-typescript ../openapi.yaml -o src/generated/api-types.ts
+# Generate TypeScript API client using openapi-generator via docker
+docker run --rm \
+  -v "${PWD}/../:/local" \
+  openapitools/openapi-generator-cli generate \
+  -i /local/openapi.yaml \
+  -g typescript-fetch \
+  -o /local/frontend/src/generated \
+  --additional-properties=supportsES6=true,npmVersion=10.0.0,typescriptThreePlus=true,withInterfaces=true
 
-echo "✅ TypeScript types generated in src/generated/api-types.ts"
+echo "✅ TypeScript API client generated in src/generated/"

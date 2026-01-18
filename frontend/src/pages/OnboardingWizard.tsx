@@ -8,7 +8,7 @@ import Step1 from "../components/onboarding/Step1";
 import Step2 from "../components/onboarding/Step2";
 import Step3 from "../components/onboarding/Step3";
 import Step4 from "../components/onboarding/Step4";
-import type { OnboardingData, Race } from "../components/onboarding/types";
+import type { OnboardingData } from "../components/onboarding/types";
 
 const initialData: OnboardingData = {
   sport: "",
@@ -282,7 +282,7 @@ export default function OnboardingWizard() {
           <p className="text-light-text-secondary dark:text-dark-text-secondary">
             Let's personalize your training experience
           </p>
-          
+
           {/* Skip Button */}
           <button
             onClick={() => {

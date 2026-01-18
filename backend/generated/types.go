@@ -13,6 +13,12 @@ const (
 	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
+// Defines values for RaceDiscipline.
+const (
+	Running   RaceDiscipline = "Running"
+	Triathlon RaceDiscipline = "Triathlon"
+)
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error *string `json:"error,omitempty"`
@@ -41,6 +47,54 @@ type LoginResponse struct {
 type MessageResponse struct {
 	Message *string `json:"message,omitempty"`
 }
+
+// OnboardingData defines model for OnboardingData.
+type OnboardingData struct {
+	CrossTraining        []string `json:"crossTraining"`
+	CurrentVolume        string   `json:"currentVolume"`
+	ExperienceLevel      string   `json:"experienceLevel"`
+	GymAccess            bool     `json:"gymAccess"`
+	Injuries             string   `json:"injuries"`
+	LongestRun           string   `json:"longestRun"`
+	PreferredWorkoutTime string   `json:"preferredWorkoutTime"`
+	PreparingForRace     bool     `json:"preparingForRace"`
+	Races                []Race   `json:"races"`
+	RecentRaces          string   `json:"recentRaces"`
+	Sport                string   `json:"sport"`
+	TrainingDays         int      `json:"trainingDays"`
+	WeeklyTrainingHours  int      `json:"weeklyTrainingHours"`
+}
+
+// OnboardingResponse defines model for OnboardingResponse.
+type OnboardingResponse struct {
+	Data    OnboardingData `json:"data"`
+	Message string         `json:"message"`
+}
+
+// PingEchoResponse defines model for PingEchoResponse.
+type PingEchoResponse struct {
+	Message  *string                 `json:"message,omitempty"`
+	Received *map[string]interface{} `json:"received,omitempty"`
+	Time     *time.Time              `json:"time,omitempty"`
+}
+
+// PingResponse defines model for PingResponse.
+type PingResponse struct {
+	Message *string    `json:"message,omitempty"`
+	Time    *time.Time `json:"time,omitempty"`
+}
+
+// Race defines model for Race.
+type Race struct {
+	Date       openapi_types.Date `json:"date"`
+	Discipline RaceDiscipline     `json:"discipline"`
+	Distance   string             `json:"distance"`
+	Goal       string             `json:"goal"`
+	Name       string             `json:"name"`
+}
+
+// RaceDiscipline defines model for Race.Discipline.
+type RaceDiscipline string
 
 // RegisterRequest defines model for RegisterRequest.
 type RegisterRequest struct {
@@ -75,8 +129,17 @@ type UsersResponse struct {
 	Users *[]User `json:"users,omitempty"`
 }
 
+// PostPingJSONBody defines parameters for PostPing.
+type PostPingJSONBody map[string]interface{}
+
 // LoginJSONRequestBody defines body for Login for application/json ContentType.
 type LoginJSONRequestBody = LoginRequest
 
 // RegisterJSONRequestBody defines body for Register for application/json ContentType.
 type RegisterJSONRequestBody = RegisterRequest
+
+// CompleteOnboardingJSONRequestBody defines body for CompleteOnboarding for application/json ContentType.
+type CompleteOnboardingJSONRequestBody = OnboardingData
+
+// PostPingJSONRequestBody defines body for PostPing for application/json ContentType.
+type PostPingJSONRequestBody PostPingJSONBody

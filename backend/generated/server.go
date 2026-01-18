@@ -23,6 +23,12 @@ type ServerInterface interface {
 	// User registration
 	// (POST /api/v1/auth/register)
 	Register(w http.ResponseWriter, r *http.Request)
+	// Get user onboarding data
+	// (GET /api/v1/onboarding)
+	GetOnboarding(w http.ResponseWriter, r *http.Request)
+	// Complete user onboarding
+	// (POST /api/v1/onboarding)
+	CompleteOnboarding(w http.ResponseWriter, r *http.Request)
 	// Get all users
 	// (GET /api/v1/users)
 	GetUsers(w http.ResponseWriter, r *http.Request)
@@ -32,6 +38,12 @@ type ServerInterface interface {
 	// Health check
 	// (GET /health)
 	GetHealth(w http.ResponseWriter, r *http.Request)
+	// Ping endpoint
+	// (GET /ping)
+	GetPing(w http.ResponseWriter, r *http.Request)
+	// Ping with body
+	// (POST /ping)
+	PostPing(w http.ResponseWriter, r *http.Request)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -56,6 +68,18 @@ func (_ Unimplemented) Register(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
+// Get user onboarding data
+// (GET /api/v1/onboarding)
+func (_ Unimplemented) GetOnboarding(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Complete user onboarding
+// (POST /api/v1/onboarding)
+func (_ Unimplemented) CompleteOnboarding(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
 // Get all users
 // (GET /api/v1/users)
 func (_ Unimplemented) GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +95,18 @@ func (_ Unimplemented) GetUserById(w http.ResponseWriter, r *http.Request, id in
 // Health check
 // (GET /health)
 func (_ Unimplemented) GetHealth(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Ping endpoint
+// (GET /ping)
+func (_ Unimplemented) GetPing(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Ping with body
+// (POST /ping)
+func (_ Unimplemented) PostPing(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -122,6 +158,46 @@ func (siw *ServerInterfaceWrapper) Register(w http.ResponseWriter, r *http.Reque
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.Register(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetOnboarding operation middleware
+func (siw *ServerInterfaceWrapper) GetOnboarding(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetOnboarding(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CompleteOnboarding operation middleware
+func (siw *ServerInterfaceWrapper) CompleteOnboarding(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CompleteOnboarding(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -187,6 +263,34 @@ func (siw *ServerInterfaceWrapper) GetHealth(w http.ResponseWriter, r *http.Requ
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetHealth(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetPing operation middleware
+func (siw *ServerInterfaceWrapper) GetPing(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPing(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostPing operation middleware
+func (siw *ServerInterfaceWrapper) PostPing(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostPing(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -319,6 +423,12 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Post(options.BaseURL+"/api/v1/auth/register", wrapper.Register)
 	})
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/onboarding", wrapper.GetOnboarding)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/v1/onboarding", wrapper.CompleteOnboarding)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/v1/users", wrapper.GetUsers)
 	})
 	r.Group(func(r chi.Router) {
@@ -326,6 +436,12 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/health", wrapper.GetHealth)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/ping", wrapper.GetPing)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/ping", wrapper.PostPing)
 	})
 
 	return r
