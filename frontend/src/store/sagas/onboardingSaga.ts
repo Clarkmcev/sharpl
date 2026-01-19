@@ -4,29 +4,21 @@ import {
   completeOnboardingRequest,
   completeOnboardingSuccess,
   completeOnboardingFailure,
-  type OnboardingData,
 } from "../slices/onboardingSlice";
+import type { OnboardingData } from "../../generated";
+import { onboardingApi } from "../../api/client";
 
 // Simulated API call - replace with actual API endpoint
-function* completeOnboardingSaga(
-  action: PayloadAction<OnboardingData>
-): Generator<any, void, any> {
+function* completeOnboardingSaga(action: PayloadAction<OnboardingData>) {
   try {
-    // TODO: Replace with actual API call when backend endpoint is ready
-    // const response = yield call(api.onboarding.complete, action.payload);
-
-    // For now, simulate API call
-    yield new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Store in localStorage as backup
-    localStorage.setItem("onboardingData", JSON.stringify(action.payload));
+    onboardingApi.completeOnboarding({ onboardingData: action.payload });
 
     yield put(completeOnboardingSuccess(action.payload));
   } catch (error: any) {
     yield put(
       completeOnboardingFailure(
-        error.message || "Failed to save onboarding data"
-      )
+        error.message || "Failed to save onboarding data",
+      ),
     );
   }
 }

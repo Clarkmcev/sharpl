@@ -39,14 +39,14 @@ const onboardingSlice = createSlice({
   reducers: {
     completeOnboardingRequest: (
       state,
-      _action: PayloadAction<OnboardingData>
+      _action: PayloadAction<OnboardingData>,
     ) => {
       state.loading = true;
       state.error = null;
     },
     completeOnboardingSuccess: (
       state,
-      action: PayloadAction<OnboardingData>
+      action: PayloadAction<OnboardingData>,
     ) => {
       state.loading = false;
       state.completed = true;

@@ -30,7 +30,7 @@ const usersSlice = createSlice({
     },
     fetchUsersSuccess: (
       state,
-      action: PayloadAction<{ users?: User[]; total?: number }>
+      action: PayloadAction<{ users?: User[]; total?: number }>,
     ) => {
       state.loading = false;
       state.users = action.payload.users || [];
@@ -42,7 +42,7 @@ const usersSlice = createSlice({
     },
 
     // Fetch user by ID actions
-    fetchUserByIdRequest: (state, _action: PayloadAction<number>) => {
+    fetchUserByIdRequest: (state) => {
       state.loading = true;
       state.error = null;
     },

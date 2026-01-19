@@ -33,7 +33,6 @@ export const usersApi = new UsersApi(getConfiguration());
 export const healthApi = new HealthApi(getConfiguration());
 export const onboardingApi = new OnboardingApi(getConfiguration());
 
-// Export typed API functions for backward compatibility
 export const auth = {
   login: async (email: string, password: string) => {
     try {
