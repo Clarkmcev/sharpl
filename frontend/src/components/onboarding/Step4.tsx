@@ -9,7 +9,7 @@ import RowingIcon from "@mui/icons-material/Rowing";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
-import type { OnboardingData } from "./types";
+import type { OnboardingData } from "../../generated";
 
 interface Step4Props {
   data: OnboardingData;

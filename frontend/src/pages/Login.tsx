@@ -13,7 +13,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
 
   const { loading, error, isAuthenticated } = useAppSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const { ref, style } = useAnimateOnRender();

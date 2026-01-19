@@ -7,7 +7,8 @@ import TimerIcon from "@mui/icons-material/Timer";
 import StarIcon from "@mui/icons-material/Star";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import type { OnboardingData, Race } from "./types";
+import type { Race } from "./types";
+import type { OnboardingData } from "../../generated";
 
 interface Step2Props {
   data: OnboardingData;
@@ -86,7 +87,7 @@ export default function Step2({
                   updateRace(
                     index,
                     "discipline",
-                    e.target.value as "Running" | "Triathlon"
+                    e.target.value as "Running" | "Triathlon",
                   );
                   // Reset distance when discipline changes
                   updateRace(index, "distance", "");
@@ -144,7 +145,7 @@ export default function Step2({
                 id={`race-date-${index}`}
                 label="Race Date"
                 type="date"
-                value={race.date}
+                value={String(race.date)}
                 onChange={(e) => updateRace(index, "date", e.target.value)}
                 required
               />

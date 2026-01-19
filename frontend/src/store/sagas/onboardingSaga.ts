@@ -11,7 +11,7 @@ import { onboardingApi } from "../../api/client";
 // Simulated API call - replace with actual API endpoint
 function* completeOnboardingSaga(action: PayloadAction<OnboardingData>) {
   try {
-    onboardingApi.completeOnboarding({ onboardingData: action.payload });
+    yield onboardingApi.completeOnboarding({ onboardingData: action.payload });
 
     yield put(completeOnboardingSuccess(action.payload));
   } catch (error: any) {

@@ -20,17 +20,19 @@ func main() {
 
 	// Initialize repositories
 	userRepo := repositories.NewUserRepository(database.GetDB())
+	onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(userRepo)
 	userHandler := handlers.NewUserHandler(userRepo)
+	onboardingHandler := handlers.NewOnboardingHandler(onboardingRepo)
 
 	// Setup router
 	router := gin.Default()
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:3000"},
+		AllowOrigins:     []string{"http://localhost:5174", "http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -83,6 +85,13 @@ func main() {
 		{
 			users.GET("", userHandler.GetUsers)
 			users.GET("/:id", userHandler.GetUser)
+		}
+
+		// Onboarding endpoints
+		onboarding := v1.Group("/onboarding")
+		{
+			onboarding.POST("", onboardingHandler.CompleteOnboarding)
+			onboarding.GET("", onboardingHandler.GetOnboarding)
 		}
 	}
 

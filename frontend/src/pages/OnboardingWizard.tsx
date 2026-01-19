@@ -17,7 +17,13 @@ const initialData: OnboardingData = {
   weeklyTrainingHours: 5,
   preparingForRace: true,
   races: [
-    { name: "", discipline: "Running", distance: "", date: "", goal: "" },
+    {
+      name: "",
+      discipline: "Running",
+      distance: "",
+      date: new Date(),
+      goal: "",
+    },
   ],
   currentVolume: "",
   longestRun: "",
@@ -213,7 +219,13 @@ export default function OnboardingWizard() {
       ...prev,
       races: [
         ...prev.races,
-        { name: "", discipline: "Running", distance: "", date: "", goal: "" },
+        {
+          name: "",
+          discipline: "Running",
+          distance: "",
+          date: new Date(),
+          goal: "",
+        },
       ],
     }));
   };
