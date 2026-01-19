@@ -9,6 +9,7 @@ import Step2 from "../components/onboarding/Step2";
 import Step3 from "../components/onboarding/Step3";
 import Step4 from "../components/onboarding/Step4";
 import type { OnboardingData } from "../components/onboarding/types";
+import type { Race } from "../generated";
 
 const initialData: OnboardingData = {
   sport: "",

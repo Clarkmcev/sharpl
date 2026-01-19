@@ -1,74 +1,114 @@
-import createClient from 'openapi-fetch'
-import type { paths } from '../generated/api-types'
+import {
+  Configuration,
+  AuthApi,
+  UsersApi,
+  HealthApi,
+  OnboardingApi,
+} from "../generated";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
-export const apiClient = createClient<paths>({
-  baseUrl: API_BASE_URL,
-})
+// Configure API client with base URL and auth token
+const getConfiguration = () => {
+  const token = localStorage.getItem("authToken");
+  return new Configuration({
+    basePath: API_BASE_URL,
+    accessToken: token ? async () => token : undefined,
+    middleware: [
+      {
+        post: async (context) => {
+          if (context.response.status === 401) {
+            localStorage.removeItem("authToken");
+            window.location.href = "/login";
+          }
+        },
+      },
+    ],
+  });
+};
 
-// Add default headers and interceptors
-apiClient.use({
-  onRequest({ request }) {
-    const token = localStorage.getItem('authToken')
-    if (token) {
-      request.headers.set('Authorization', `Bearer ${token}`)
-    }
-    return request
-  },
-  onResponse({ response }) {
-    if (response.status === 401) {
-      localStorage.removeItem('authToken')
-      window.location.href = '/login'
-    }
-    return response
-  },
-})
+// Initialize API instances
+export const authApi = new AuthApi(getConfiguration());
+export const usersApi = new UsersApi(getConfiguration());
+export const healthApi = new HealthApi(getConfiguration());
+export const onboardingApi = new OnboardingApi(getConfiguration());
 
-// Export typed API functions
+// Export typed API functions for backward compatibility
 export const auth = {
   login: async (email: string, password: string) => {
-    const { data, error } = await apiClient.POST('/api/v1/auth/login', {
-      body: { email, password },
-    })
-    if (data?.token) {
-      localStorage.setItem('authToken', data.token)
+    try {
+      const response = await authApi.login({
+        loginRequest: { email, password },
+      });
+      if (response.token) {
+        localStorage.setItem("authToken", response.token);
+      }
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
     }
-    return { data, error }
   },
 
   register: async (email: string, password: string, name?: string) => {
-    return await apiClient.POST('/api/v1/auth/register', {
-      body: { email, password, name },
-    })
+    try {
+      const response = await authApi.register({
+        registerRequest: { email, password, name },
+      });
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
 
   logout: async () => {
-    await apiClient.POST('/api/v1/auth/logout', {})
-    localStorage.removeItem('authToken')
+    await authApi.logout();
+    localStorage.removeItem("authToken");
   },
-}
+};
 
 export const users = {
   getAll: async () => {
-    return await apiClient.GET('/api/v1/users')
+    try {
+      const response = await usersApi.getUsers();
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
 
   getById: async (id: number) => {
-    return await apiClient.GET('/api/v1/users/{id}', {
-      params: { path: { id } },
-    })
+    try {
+      const response = await usersApi.getUserById({ id });
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
-}
+};
 
 export const health = {
   check: async () => {
-    return await apiClient.GET('/health')
+    try {
+      const response = await healthApi.getHealth();
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
   ping: async () => {
-    return await apiClient.GET('/ping')
+    try {
+      const response = await healthApi.getPing();
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
   pingWithBody: async (body: Record<string, any>) => {
-    return await apiClient.POST('/ping', { body })
+    try {
+      const response = await healthApi.postPing({ requestBody: body });
+      return { data: response, error: null };
+    } catch (error) {
+      return { data: null, error };
+    }
   },
-}
+};
