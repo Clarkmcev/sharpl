@@ -36,7 +36,7 @@ export default function Dashboard() {
     if (!isAuthenticated) {
       navigate("/login");
     } else {
-      dispatch(fetchUsersRequest());
+      // dispatch(fetchUsersRequest());
     }
   }, [isAuthenticated, navigate, dispatch]);
 
@@ -176,7 +176,7 @@ export default function Dashboard() {
           >
             <div
               className={`w-10 h-10 rounded-full ${getGradientClass(
-                themeColor
+                themeColor,
               )} flex items-center justify-center text-white font-bold`}
             >
               {user?.name?.[0]?.toUpperCase() || "U"}

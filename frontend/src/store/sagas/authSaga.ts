@@ -1,42 +1,38 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { auth as authApi } from "../../api/client";
 import {
   loginRequest,
   loginSuccess,
+  logoutSuccess,
   loginFailure,
   registerRequest,
-  registerSuccess,
   registerFailure,
+  registerSuccess,
   logoutRequest,
-  logoutSuccess,
 } from "../slices/authSlice";
+import { authApi } from "../../api/client";
 
 // Worker saga: will be fired on LOGIN_REQUEST actions
 function* loginSaga(
-  action: PayloadAction<{ email: string; password: string }>
+  action: PayloadAction<{ email: string; password: string }>,
 ) {
   try {
     const { email, password } = action.payload;
 
     // Call API
-    const response: Awaited<ReturnType<typeof authApi.login>> = yield call(
-      authApi.login,
-      email,
-      password
-    );
+    const response = yield authApi.login({ loginRequest: { email, password } });
 
     if (response.error) {
-      console.log(response.error);
+      console.log("Error :", response.error);
       yield put(loginFailure("Oops this didn't work."));
-    } else if (response.data) {
+    } else if (response) {
       // Success - dispatch success action
       yield put(
         loginSuccess({
-          user: response.data.user,
-          token: response.data.token,
-          message: response.data.message,
-        })
+          user: response.user,
+          token: response.token,
+          message: response.message,
+        }),
       );
     } else {
       yield put(loginFailure("No data received"));
@@ -48,20 +44,17 @@ function* loginSaga(
   }
 }
 
-// Worker saga: will be fired on REGISTER_REQUEST actions
+// // Worker saga: will be fired on REGISTER_REQUEST actions
 function* registerSaga(
-  action: PayloadAction<{ email: string; password: string; name?: string }>
+  action: PayloadAction<{ email: string; password: string; name?: string }>,
 ) {
   try {
     const { email, password, name } = action.payload;
-
     const response: Awaited<ReturnType<typeof authApi.register>> = yield call(
-      authApi.register,
       email,
       password,
-      name
+      name,
     );
-
     if (response.error) {
       yield put(registerFailure(response.error.error || "Registration failed"));
     } else {
@@ -73,10 +66,10 @@ function* registerSaga(
   }
 }
 
-// Worker saga: will be fired on LOGOUT_REQUEST actions
+// // Worker saga: will be fired on LOGOUT_REQUEST actions
 function* logoutSaga() {
   try {
-    yield call(authApi.logout);
+    yield authApi.logout();
     localStorage.removeItem("authToken");
     yield put(logoutSuccess());
   } catch (error) {

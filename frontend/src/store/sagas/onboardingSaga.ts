@@ -12,7 +12,6 @@ import { onboardingApi } from "../../api/client";
 function* completeOnboardingSaga(action: PayloadAction<OnboardingData>) {
   try {
     yield onboardingApi.completeOnboarding({ onboardingData: action.payload });
-
     yield put(completeOnboardingSuccess(action.payload));
   } catch (error: any) {
     yield put(
