@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import type { OnboardingData } from "../../generated";
 
 export interface Race {
   name: string;
@@ -7,22 +8,6 @@ export interface Race {
   distance: string;
   date: string;
   goal: string;
-}
-
-export interface OnboardingData {
-  sport: string;
-  experienceLevel: string;
-  weeklyTrainingHours: number;
-  preparingForRace: boolean;
-  races: Race[];
-  currentVolume: string;
-  longestRun: string;
-  recentRaces: string;
-  injuries: string;
-  trainingDays: number;
-  preferredWorkoutTime: string;
-  gymAccess: boolean;
-  crossTraining: string[];
 }
 
 interface OnboardingState {
@@ -54,12 +39,15 @@ const onboardingSlice = createSlice({
   reducers: {
     completeOnboardingRequest: (
       state,
-      _action: PayloadAction<OnboardingData>
+      _action: PayloadAction<OnboardingData>,
     ) => {
       state.loading = true;
       state.error = null;
     },
-    completeOnboardingSuccess: (state, action: PayloadAction<OnboardingData>) => {
+    completeOnboardingSuccess: (
+      state,
+      action: PayloadAction<OnboardingData>,
+    ) => {
       state.loading = false;
       state.completed = true;
       state.data = action.payload;

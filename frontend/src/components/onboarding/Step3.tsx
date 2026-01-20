@@ -1,6 +1,6 @@
+import type { OnboardingData } from "../../generated";
 import Input from "../Input";
 import Textarea from "../Textarea";
-import type { OnboardingData } from "./types";
 
 interface Step3Props {
   data: OnboardingData;

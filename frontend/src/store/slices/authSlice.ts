@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { components } from "../../generated/api-types";
-
-type User = components["schemas"]["User"];
+import type { User } from "../../generated";
 
 interface AuthState {
   user: User | null;
@@ -30,20 +28,21 @@ const authSlice = createSlice({
     // Login actions
     loginRequest: (
       state,
-      _action: PayloadAction<{ email: string; password: string }>
+      _action: PayloadAction<{ email: string; password: string }>,
     ) => {
       state.loading = true;
       state.error = null;
     },
     loginSuccess: (
       state,
-      action: PayloadAction<{ user: User; token: string; message: string }>
+      action: PayloadAction<{ user: User; token: string; message: string }>,
     ) => {
       state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.error = null;
+      localStorage.setItem("authToken", action.payload.token);
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -54,7 +53,11 @@ const authSlice = createSlice({
     // Register actions
     registerRequest: (
       state,
-      _action: PayloadAction<{ email: string; password: string; name?: string }>
+      _action: PayloadAction<{
+        email: string;
+        password: string;
+        name?: string;
+      }>,
     ) => {
       state.loading = true;
       state.error = null;
@@ -89,7 +92,7 @@ const authSlice = createSlice({
     },
     setCredentials: (
       state,
-      action: PayloadAction<{ user: User; token: string }>
+      action: PayloadAction<{ user: User; token: string }>,
     ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;

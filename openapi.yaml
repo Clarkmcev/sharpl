@@ -5,12 +5,18 @@ info:
   version: 1.0.0
   contact:
     name: Sharpl Team
-    
+
 servers:
   - url: http://localhost:8080
     description: Local development server
   - url: http://localhost:3000/api
     description: Frontend proxy
+
+x-cors:
+  allowedOrigins:
+    - http://localhost:3000
+    - http://localhost:5174
+    - http://localhost:5175
 
 tags:
   - name: auth
@@ -31,12 +37,12 @@ paths:
       description: Check if the server is running
       operationId: getHealth
       responses:
-        '200':
+        "200":
           description: Server is healthy
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
+                $ref: "#/components/schemas/HealthResponse"
 
   /ping:
     get:
@@ -46,13 +52,13 @@ paths:
       description: Simple ping endpoint for testing API connectivity
       operationId: getPing
       responses:
-        '200':
+        "200":
           description: Pong response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PingResponse'
-    
+                $ref: "#/components/schemas/PingResponse"
+
     post:
       tags:
         - health
@@ -67,18 +73,18 @@ paths:
               type: object
               additionalProperties: true
       responses:
-        '200':
+        "200":
           description: Pong response with echo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PingEchoResponse'
-        '400':
+                $ref: "#/components/schemas/PingEchoResponse"
+        "400":
           description: Invalid JSON
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/v1/auth/login:
     post:
@@ -92,26 +98,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
+        "200":
           description: Login successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '400':
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/v1/auth/register:
     post:
@@ -125,20 +131,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              $ref: "#/components/schemas/RegisterRequest"
       responses:
-        '201':
+        "201":
           description: User registered successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterResponse'
-        '400':
+                $ref: "#/components/schemas/RegisterResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/v1/auth/logout:
     post:
@@ -150,12 +156,12 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Logout successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
 
   /api/v1/users:
     get:
@@ -167,43 +173,12 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: List of users
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsersResponse'
-
-  /api/v1/users/{id}:
-    get:
-      tags:
-        - users
-      summary: Get user by ID
-      description: Retrieve a specific user by their ID
-      operationId: getUserById
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: User ID
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: User details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/UsersResponse"
 
   /api/v1/onboarding:
     post:
@@ -219,26 +194,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OnboardingData'
+              $ref: "#/components/schemas/OnboardingData"
       responses:
-        '200':
+        "200":
           description: Onboarding data saved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnboardingResponse'
-        '400':
+                $ref: "#/components/schemas/OnboardingResponse"
+        "400":
           description: Invalid request data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     get:
       tags:
@@ -249,24 +224,24 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: Onboarding data retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnboardingResponse'
-        '404':
+                $ref: "#/components/schemas/OnboardingResponse"
+        "404":
           description: Onboarding data not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   securitySchemes:
@@ -326,7 +301,7 @@ components:
           type: string
           example: Login successful
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
       required:
         - token
         - message
@@ -368,7 +343,7 @@ components:
         users:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         total:
           type: integer
           example: 10
@@ -377,7 +352,7 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
 
     HealthResponse:
       type: object
@@ -473,7 +448,7 @@ components:
         races:
           type: array
           items:
-            $ref: '#/components/schemas/Race'
+            $ref: "#/components/schemas/Race"
           example:
             - name: Boston Marathon
               discipline: Running
@@ -530,7 +505,7 @@ components:
           type: string
           example: Onboarding data saved successfully
         data:
-          $ref: '#/components/schemas/OnboardingData'
+          $ref: "#/components/schemas/OnboardingData"
       required:
         - message
         - data

@@ -8,7 +8,8 @@ import Step1 from "../components/onboarding/Step1";
 import Step2 from "../components/onboarding/Step2";
 import Step3 from "../components/onboarding/Step3";
 import Step4 from "../components/onboarding/Step4";
-import type { OnboardingData } from "../components/onboarding/types";
+// import type { OnboardingData } from "../components/onboarding/types";
+import type { OnboardingData, Race } from "../generated";
 
 const initialData: OnboardingData = {
   sport: "",
@@ -16,7 +17,13 @@ const initialData: OnboardingData = {
   weeklyTrainingHours: 5,
   preparingForRace: true,
   races: [
-    { name: "", discipline: "Running", distance: "", date: "", goal: "" },
+    {
+      name: "",
+      discipline: "Running",
+      distance: "",
+      date: new Date(),
+      goal: "",
+    },
   ],
   currentVolume: "",
   longestRun: "",
@@ -121,7 +128,7 @@ export default function OnboardingWizard() {
       case 2:
         if (!data.preparingForRace) return true;
         return data.races.every(
-          (race) => race.name && race.distance && race.date && race.goal
+          (race) => race.name && race.distance && race.date && race.goal,
         );
       case 3:
         return !!data.currentVolume && !!data.longestRun;
@@ -169,32 +176,32 @@ export default function OnboardingWizard() {
     dispatch(completeOnboardingRequest(data));
 
     // Check if user just registered and needs auto-login
-    const pendingAuth = sessionStorage.getItem("pendingAuth");
+    // const pendingAuth = sessionStorage.getItem("pendingAuth");
 
-    if (pendingAuth) {
-      try {
-        const { email, password } = JSON.parse(pendingAuth);
+    // if (pendingAuth) {
+    //   try {
+    //     const { email, password } = JSON.parse(pendingAuth);
 
-        // Auto-login after a brief delay
-        setTimeout(() => {
-          dispatch(loginRequest({ email, password }));
-          sessionStorage.removeItem("pendingAuth");
+    //     // Auto-login after a brief delay
+    //     setTimeout(() => {
+    //       dispatch(loginRequest({ email, password }));
+    //       sessionStorage.removeItem("pendingAuth");
 
-          // Redirect to dashboard after login
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 1000);
-        }, 1500);
-      } catch (error) {
-        console.error("Failed to parse pending auth", error);
-        navigate("/dashboard");
-      }
-    } else {
-      // User was already logged in, just redirect to dashboard
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
-    }
+    //       // Redirect to dashboard after login
+    //       setTimeout(() => {
+    //         navigate("/dashboard");
+    //       }, 1000);
+    //     }, 1500);
+    //   } catch (error) {
+    //     console.error("Failed to parse pending auth", error);
+    //     navigate("/dashboard");
+    //   }
+    // } else {
+    //   // User was already logged in, just redirect to dashboard
+    //   setTimeout(() => {
+    //     navigate("/dashboard");
+    //   }, 2000);
+    // }
   };
 
   const toggleCrossTraining = (activity: string) => {
@@ -212,7 +219,13 @@ export default function OnboardingWizard() {
       ...prev,
       races: [
         ...prev.races,
-        { name: "", discipline: "Running", distance: "", date: "", goal: "" },
+        {
+          name: "",
+          discipline: "Running",
+          distance: "",
+          date: new Date(),
+          goal: "",
+        },
       ],
     }));
   };
@@ -351,10 +364,10 @@ export default function OnboardingWizard() {
                   isCurrent
                     ? "text-white shadow-lg"
                     : isCompleted
-                    ? "text-white cursor-pointer"
-                    : isAccessible
-                    ? "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg dark:hover:bg-dark-bg cursor-pointer"
-                    : " text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed"
+                      ? "text-white cursor-pointer"
+                      : isAccessible
+                        ? "text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg dark:hover:bg-dark-bg cursor-pointer"
+                        : " text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed"
                 }`}
               >
                 <div className="flex flex-col items-center gap-1">
