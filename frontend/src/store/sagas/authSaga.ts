@@ -63,7 +63,7 @@ function* registerSaga(
     );
 
     if (response.error) {
-      yield put(registerFailure(response.error.error || "Registration failed"));
+      yield put(registerFailure("Registration failed"));
     } else {
       yield put(registerSuccess());
     }

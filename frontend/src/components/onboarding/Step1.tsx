@@ -7,7 +7,7 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import StarIcon from "@mui/icons-material/Star";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
-import type { OnboardingData } from "../../generated";
+import type { OnboardingData } from "./types";
 
 interface Step1Props {
   data: OnboardingData;

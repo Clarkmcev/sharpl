@@ -3,7 +3,6 @@ import {
   AuthApi,
   UsersApi,
   HealthApi,
-  OnboardingApi,
 } from "../generated";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
@@ -30,7 +29,38 @@ const getConfiguration = () => {
 export const authApi = new AuthApi(getConfiguration());
 export const usersApi = new UsersApi(getConfiguration());
 export const healthApi = new HealthApi(getConfiguration());
-export const onboardingApi = new OnboardingApi(getConfiguration());
+
+// Compatibility exports for sagas
+export const auth = {
+  login: async (email: string, password: string) => {
+    const response = await authApi.login({
+      loginRequest: { email, password },
+    });
+    if (response.token) {
+      localStorage.setItem("authToken", response.token);
+    }
+    return { data: response, error: null };
+  },
+
+  register: async (email: string, password: string, name?: string) => {
+    const response = await authApi.register({
+      registerRequest: { email, password, name },
+    });
+    return { data: response, error: null };
+  },
+
+  logout: async () => {
+    await authApi.logout();
+    localStorage.removeItem("authToken");
+  },
+};
+
+export const users = {
+  getAll: async () => {
+    const response = await usersApi.getUsers();
+    return { data: response, error: null };
+  },
+};
 
 // export const auth = {
 //   login: async (email: string, password: string) => {

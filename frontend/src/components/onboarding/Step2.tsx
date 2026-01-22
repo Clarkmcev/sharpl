@@ -8,7 +8,7 @@ import StarIcon from "@mui/icons-material/Star";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import type { Race } from "./types";
-import type { OnboardingData } from "../../generated";
+import type { OnboardingData } from "./types";
 
 interface Step2Props {
   data: OnboardingData;
@@ -49,7 +49,7 @@ export default function Step2({
       {/* Show races only if preparing for a race */}
       {data.preparingForRace && (
         <>
-          {data.races.map((race, index) => (
+          {data.races.map((race: Race, index: number) => (
             <div
               key={index}
               className="p-4 border-l-4 dark:border-dark-elevated/60 space-y-4 relative"

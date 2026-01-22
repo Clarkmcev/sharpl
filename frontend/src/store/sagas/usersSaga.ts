@@ -36,21 +36,8 @@ function* fetchUsersSaga() {
 // Worker saga: fetch user by ID
 function* fetchUserByIdSaga(action: PayloadAction<number>) {
   try {
-    const id = action.payload;
-    const response: Awaited<ReturnType<typeof usersApi.getById>> = yield call(
-      usersApi.getById,
-      id
-    );
-
-    if (response.error) {
-      yield put(fetchUserByIdFailure("User not found"));
-    } else if (response.data) {
-      yield put(
-        fetchUserByIdSuccess({
-          user: response.data.user,
-        })
-      );
-    }
+    // TODO: Implement getUserById API endpoint
+    yield put(fetchUserByIdFailure("Not implemented"));
   } catch (error) {
     console.log(error);
     yield put(fetchUserByIdFailure("Network error. Please try again."));

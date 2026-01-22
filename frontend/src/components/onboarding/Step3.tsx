@@ -1,4 +1,4 @@
-import type { OnboardingData } from "../../generated";
+import type { OnboardingData } from "./types";
 import Input from "../Input";
 import Textarea from "../Textarea";
 
