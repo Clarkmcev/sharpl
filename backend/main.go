@@ -10,6 +10,7 @@ import (
 	"sharpl-backend/internal/service"
 
 	loads "github.com/go-openapi/loads"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -48,6 +49,19 @@ func main() {
 
 	server.Port = 8080
 	server.ConfigureAPI()
+
+	// Add CORS middleware
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+		Debug:            true,
+	})
+
+	// Get the configured handler and wrap it with CORS
+	handler := server.GetHandler()
+	server.SetHandler(corsHandler.Handler(handler))
 
 	log.Println("Server starting on :8080")
 	if err := server.Serve(); err != nil {
