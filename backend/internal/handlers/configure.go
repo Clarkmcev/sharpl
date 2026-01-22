@@ -7,7 +7,7 @@ import (
 )
 
 func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService) (*operations.SharplAPIAPI, error) {
-	authHandler.NewAuthHandler(authService).Register(api)
+	authHandler.NewAuthHandler(authService).RegisterHandlers(api)
 
 	// // Health endpoints
 	// api.HealthGetHealthHandler = health.GetHealthHandlerFunc(func(params health.GetHealthParams) middleware.Responder {

@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchUsersRequest } from "../store/slices/usersSlice";
+// import { fetchUsersRequest } from "../store/slices/usersSlice";
 import { logoutRequest } from "../store/slices/authSlice";
-import Overview from "./Overview";
-import Profile from "./Profile";
-import Settings from "./Settings";
+// import Overview from "./Overview";
+// import Profile from "./Profile";
+// import Settings from "./Settings";
 import { getGradientClass } from "../utils/theme";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -13,7 +13,8 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InitialComponents from "../components/InitialComponents";
+import { useAuth } from "../hooks/auth";
+// import InitialComponents from "../components/InitialComponents";
 
 type Tab =
   | "overview"
@@ -24,23 +25,17 @@ type Tab =
   | "settings";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const user = useAuth();
   const themeColor = useAppSelector((state) => state.theme.color);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    } else {
-      dispatch(fetchUsersRequest());
-    }
-  }, [isAuthenticated, navigate, dispatch]);
-
-  const handleLogout = () => {
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("hello");
+    e.preventDefault();
     dispatch(logoutRequest());
   };
 
@@ -67,58 +62,58 @@ export default function Dashboard() {
     },
   ];
 
-  const renderContent = (): React.ReactElement => {
-    switch (activeTab) {
-      case "overview":
-        return <Overview />;
-      case "profile":
-        return <Profile />;
-      case "training":
-        return (
-          <InitialComponents
-            key={"training"}
-            icon={
-              <FitnessCenterIcon
-                sx={{ fontSize: 100 }}
-                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
-              />
-            }
-            component={<p>Your training plan will be shown here.</p>}
-          />
-        );
+  // const renderContent = (): React.ReactElement => {
+  //   switch (activeTab) {
+  //     case "overview":
+  //       return <Overview />;
+  //     case "profile":
+  //       return <Profile />;
+  //     case "training":
+  //       return (
+  //         <InitialComponents
+  //           key={"training"}
+  //           icon={
+  //             <FitnessCenterIcon
+  //               sx={{ fontSize: 100 }}
+  //               className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
+  //             />
+  //           }
+  //           component={<p>Your training plan will be shown here.</p>}
+  //         />
+  //       );
 
-      case "calendar":
-        return (
-          <InitialComponents
-            key={"calendar"}
-            icon={
-              <CalendarMonthIcon
-                sx={{ fontSize: 100 }}
-                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
-              />
-            }
-            component={<p>Your calendar and schedule will be shown here.</p>}
-          />
-        );
-      case "analytics":
-        return (
-          <InitialComponents
-            key={"analytics"}
-            icon={
-              <BarChartIcon
-                sx={{ fontSize: 100 }}
-                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
-              />
-            }
-            component={
-              <p>Your performance analytics and progress will be shown here.</p>
-            }
-          />
-        );
-      case "settings":
-        return <Settings />;
-    }
-  };
+  //     case "calendar":
+  //       return (
+  //         <InitialComponents
+  //           key={"calendar"}
+  //           icon={
+  //             <CalendarMonthIcon
+  //               sx={{ fontSize: 100 }}
+  //               className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
+  //             />
+  //           }
+  //           component={<p>Your calendar and schedule will be shown here.</p>}
+  //         />
+  //       );
+  //     case "analytics":
+  //       return (
+  //         <InitialComponents
+  //           key={"analytics"}
+  //           icon={
+  //             <BarChartIcon
+  //               sx={{ fontSize: 100 }}
+  //               className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
+  //             />
+  //           }
+  //           component={
+  //             <p>Your performance analytics and progress will be shown here.</p>
+  //           }
+  //         />
+  //       );
+  //     case "settings":
+  //       return <Settings />;
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex bg-light-bg dark:bg-dark-bg ">
@@ -176,7 +171,7 @@ export default function Dashboard() {
           >
             <div
               className={`w-10 h-10 rounded-full ${getGradientClass(
-                themeColor
+                themeColor,
               )} flex items-center justify-center text-white font-bold`}
             >
               {user?.name?.[0]?.toUpperCase() || "U"}
@@ -204,7 +199,7 @@ export default function Dashboard() {
       </aside>
 
       <main className="flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg">
+        {/* <div className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg">
           <div className="px-8 py-4">
             <h2 className="text-2xl font-bold text-light-text-secondary dark:text-dark-text-secondary ">
               {navItems.find((item) => item.id === activeTab)?.label}
@@ -212,7 +207,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="px-4">{renderContent()}</div>
+        <div className="px-4">{renderContent()}</div> */}
       </main>
     </div>
   );

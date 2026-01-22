@@ -13,7 +13,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
 
   const { loading, error, isAuthenticated } = useAppSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const { ref, style } = useAnimateOnRender();
@@ -26,7 +26,6 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // // Dispatch the login request action - saga will handle the async logic
     dispatch(loginRequest({ email, password }));
   };
 

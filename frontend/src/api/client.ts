@@ -1,9 +1,4 @@
-import {
-  Configuration,
-  AuthApi,
-  UsersApi,
-  HealthApi,
-} from "../generated";
+import { Configuration, AuthApi, UsersApi, HealthApi } from "../generated";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
@@ -14,14 +9,14 @@ const getConfiguration = () => {
     basePath: API_BASE_URL,
     accessToken: token ? async () => token : undefined,
     middleware: [
-      {
-        post: async (context) => {
-          if (context.response.status === 401) {
-            localStorage.removeItem("authToken");
-            window.location.href = "/login";
-          }
-        },
-      },
+      // {
+      //   post: async (context) => {
+      //     if (context.response.status === 401) {
+      //       localStorage.removeItem("authToken");
+      //       window.location.href = "/login";
+      //     }
+      //   },
+      // },
     ],
   });
 };
@@ -31,29 +26,29 @@ export const usersApi = new UsersApi(getConfiguration());
 export const healthApi = new HealthApi(getConfiguration());
 
 // Compatibility exports for sagas
-export const auth = {
-  login: async (email: string, password: string) => {
-    const response = await authApi.login({
-      loginRequest: { email, password },
-    });
-    if (response.token) {
-      localStorage.setItem("authToken", response.token);
-    }
-    return { data: response, error: null };
-  },
+// export const auth = {
+//   login: async (email: string, password: string) => {
+//     const response = await authApi.login({
+//       loginRequest: { email, password },
+//     });
+//     if (response.token) {
+//       localStorage.setItem("authToken", response.token);
+//     }
+//     return { data: response, error: null };
+//   },
 
-  register: async (email: string, password: string, name?: string) => {
-    const response = await authApi.register({
-      registerRequest: { email, password, name },
-    });
-    return { data: response, error: null };
-  },
+//   register: async (email: string, password: string, name?: string) => {
+//     const response = await authApi.register({
+//       registerRequest: { email, password, name },
+//     });
+//     return { data: response, error: null };
+//   },
 
-  logout: async () => {
-    await authApi.logout();
-    localStorage.removeItem("authToken");
-  },
-};
+//   logout: async () => {
+//     await authApi.logout();
+//     localStorage.removeItem("authToken");
+//   },
+// };
 
 export const users = {
   getAll: async () => {

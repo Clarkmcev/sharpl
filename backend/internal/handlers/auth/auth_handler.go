@@ -46,11 +46,40 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 		"user":    user,
 	})
 }
-func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
-	fmt.Println("Logout called")
+func (h AuthHandler) RegisterUser(params auth.RegisterParams) middleware.Responder {
+	var req struct {
+		Email    string  `json:"email"`
+		Password string  `json:"password"`
+		Name     *string `json:"name"`
+	}
+	if params.HTTPRequest.Body != nil {
+		if err := json.NewDecoder(params.HTTPRequest.Body).Decode(&req); err != nil {
+			return NewJSONResponse(http.StatusBadRequest, map[string]interface{}{
+				"error": "Invalid request body",
+			})
+		}
+	}
 
-	// Implement logout logic if needed (e.g., invalidate token)
+	if req.Email == "" || req.Password == "" {
+		return NewJSONResponse(http.StatusBadRequest, map[string]interface{}{
+			"error": "Email and password are required",
+		})
+	}
 
+	user, err := h.authService.Register(req.Email, req.Password, req.Name)
+	if err != nil {
+		return NewJSONResponse(http.StatusBadRequest, map[string]interface{}{
+			"error": err.Error(),
+		})
+	}
+
+	return NewJSONResponse(http.StatusCreated, map[string]interface{}{
+		"message": "User registered successfully",
+		"email":   user.Email,
+	})
+}
+
+func (h AuthHandler) Logout(params auth.LogoutParams, principal interface{}) middleware.Responder {
 	return NewJSONResponse(http.StatusOK, map[string]interface{}{
 		"message": "Logout successful",
 	})
