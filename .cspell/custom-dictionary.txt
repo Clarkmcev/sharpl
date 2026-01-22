@@ -1,2 +1,8 @@
 # Custom Dictionary Words
+APIAPI
 gorm
+GOROOT
+goswagger
+Redoc
+restapi
+Sharpl
