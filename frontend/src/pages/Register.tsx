@@ -47,8 +47,9 @@ export default function Register() {
 
     // Dispatch register action
     dispatch(registerRequest({ email, password, name }));
-
-    handleNavigateToOnboarding();
+    if (!validationError) {
+      handleNavigateToOnboarding();
+    }
   };
 
   const handleNavigateToOnboarding = () => {

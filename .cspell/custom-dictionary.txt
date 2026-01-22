@@ -3,6 +3,7 @@ APIAPI
 gorm
 GOROOT
 goswagger
+openapitools
 Redoc
 restapi
 Sharpl
