@@ -22,10 +22,11 @@ func main() {
 
 	// Initialize repositories
 	userRepo := repositories.NewUserRepository(database.GetDB())
+	sessionRepo := repositories.NewSessionRepository(database.GetDB())
 	// onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
 
 	// Initialize services
-	authService := service.SetAuthService(userRepo)
+	authService := service.SetAuthService(userRepo, sessionRepo)
 
 	// Load swagger spec
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
