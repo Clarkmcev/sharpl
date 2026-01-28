@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"sharpl-backend/generated/restapi/operations/auth"
+	"sharpl-backend/internal/middleware"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -16,7 +17,6 @@ type LoginRequest struct {
 }
 
 func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
-	fmt.Println("Login called")
 
 	var req LoginRequest
 	if params.HTTPRequest.Body != nil {
@@ -46,10 +46,24 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 		"user":    user,
 	})
 }
+
 func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
 	fmt.Println("Logout called")
 
-	// Implement logout logic if needed (e.g., invalidate token)
+	// Extract token from Authorization header
+	token, err := middleware.ExtractTokenFromRequest(params.HTTPRequest, h.authService)
+	if err != nil {
+		return NewJSONResponse(http.StatusUnauthorized, map[string]interface{}{
+			"error": err.Error(),
+		})
+	}
+
+	// Delete the session
+	if err := h.authService.Logout(token); err != nil {
+		return NewJSONResponse(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Failed to logout",
+		})
+	}
 
 	return NewJSONResponse(http.StatusOK, map[string]interface{}{
 		"message": "Logout successful",
