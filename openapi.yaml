@@ -9,7 +9,7 @@ info:
 servers:
   - url: http://localhost:8080
     description: Local development server
-  - url: http://localhost:3000/api
+  - url: http://localhost:3000
     description: Frontend proxy
 
 x-cors:

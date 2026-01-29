@@ -5,9 +5,9 @@ import {
   loginSuccess,
   logoutSuccess,
   loginFailure,
-  registerRequest,
-  registerFailure,
-  registerSuccess,
+  // registerRequest,
+  // registerFailure,
+  // registerSuccess,
   logoutRequest,
 } from "../slices/authSlice";
 import { authApi } from "../../api/client";
@@ -45,26 +45,26 @@ function* loginSaga(
 }
 
 // // Worker saga: will be fired on REGISTER_REQUEST actions
-function* registerSaga(
-  action: PayloadAction<{ email: string; password: string; name?: string }>,
-) {
-  try {
-    const { email, password, name } = action.payload;
-    const response: Awaited<ReturnType<typeof authApi.register>> = yield call(
-      email,
-      password,
-      name,
-    );
-    if (response.error) {
-      yield put(registerFailure(response.error.error || "Registration failed"));
-    } else {
-      yield put(registerSuccess());
-    }
-  } catch (error) {
-    console.log(error);
-    yield put(registerFailure("Network error. Please try again."));
-  }
-}
+// function* registerSaga(
+//   action: PayloadAction<{ email: string; password: string; name?: string }>,
+// ) {
+//   try {
+//     const { email, password, name } = action.payload;
+//     const response: Awaited<ReturnType<typeof authApi.register>> = yield call(
+//       email,
+//       password,
+//       name,
+//     );
+//     if (response.error) {
+//       yield put(registerFailure(response.error.error || "Registration failed"));
+//     } else {
+//       yield put(registerSuccess());
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     yield put(registerFailure("Network error. Please try again."));
+//   }
+// }
 
 // // Worker saga: will be fired on LOGOUT_REQUEST actions
 function* logoutSaga() {
@@ -83,6 +83,6 @@ function* logoutSaga() {
 // Watcher saga: spawns a new loginSaga on each LOGIN_REQUEST action
 export default function* authSaga() {
   yield takeLatest(loginRequest.type, loginSaga);
-  yield takeLatest(registerRequest.type, registerSaga);
+  // yield takeLatest(registerRequest.type, registerSaga);
   yield takeLatest(logoutRequest.type, logoutSaga);
 }

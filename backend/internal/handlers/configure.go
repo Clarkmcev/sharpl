@@ -4,8 +4,6 @@ import (
 	"sharpl-backend/generated/restapi/operations"
 	authHandler "sharpl-backend/internal/handlers/auth"
 	"sharpl-backend/internal/service"
-
-	"github.com/go-openapi/errors"
 )
 
 func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService) (*operations.SharplAPIAPI, error) {
@@ -13,20 +11,20 @@ func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthSe
 	// The BearerAuthenticator expects a function that takes (scheme string, auth function)
 	// and returns a runtime.Authenticator. We use the default implementation but
 	// provide our custom authentication function.
-	api.BearerAuthenticator = func(name string, authenticate func(string, []string) (interface{}, error)) runtime.Authenticator {
-		return runtime.AuthenticatorFunc(func(params interface{}) (bool, interface{}, error) {
-			// Extract token from the request
-			// The token is passed in through the params
-			if token, ok := params.(string); ok {
-				user, err := authService.ValidateToken(token)
-				if err != nil {
-					return false, nil, errors.New(401, "Invalid or expired token")
-				}
-				return true, user, nil
-			}
-			return false, nil, errors.New(401, "No token provided")
-		})
-	}
+	// api.BearerAuthenticator = func(name string, authenticate func(string, []string) (interface{}, error)) runtime.Authenticator {
+	// 	return runtime.AuthenticatorFunc(func(params interface{}) (bool, interface{}, error) {
+	// 		// Extract token from the request
+	// 		// The token is passed in through the params
+	// 		if token, ok := params.(string); ok {
+	// 			user, err := authService.ValidateToken(token)
+	// 			if err != nil {
+	// 				return false, nil, errors.New(401, "Invalid or expired token")
+	// 			}
+	// 			return true, user, nil
+	// 		}
+	// 		return false, nil, errors.New(401, "No token provided")
+	// 	})
+	// }
 
 	// Register auth handlers
 	authHandler.NewAuthHandler(authService).Register(api)
