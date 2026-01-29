@@ -40,6 +40,14 @@ export interface CompleteOnboardingRequest {
  */
 export interface OnboardingApiInterface {
     /**
+     * Creates request options for completeOnboarding without sending the request
+     * @param {OnboardingData} onboardingData 
+     * @throws {RequiredError}
+     * @memberof OnboardingApiInterface
+     */
+    completeOnboardingRequestOpts(requestParameters: CompleteOnboardingRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * Save user onboarding data including sport preferences, goals, and training preferences
      * @summary Complete user onboarding
      * @param {OnboardingData} onboardingData 
@@ -54,6 +62,13 @@ export interface OnboardingApiInterface {
      * Complete user onboarding
      */
     completeOnboarding(requestParameters: CompleteOnboardingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OnboardingResponse>;
+
+    /**
+     * Creates request options for getOnboarding without sending the request
+     * @throws {RequiredError}
+     * @memberof OnboardingApiInterface
+     */
+    getOnboardingRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * Retrieve the current user\'s onboarding data
@@ -78,10 +93,9 @@ export interface OnboardingApiInterface {
 export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInterface {
 
     /**
-     * Save user onboarding data including sport preferences, goals, and training preferences
-     * Complete user onboarding
+     * Creates request options for completeOnboarding without sending the request
      */
-    async completeOnboardingRaw(requestParameters: CompleteOnboardingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OnboardingResponse>> {
+    async completeOnboardingRequestOpts(requestParameters: CompleteOnboardingRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['onboardingData'] == null) {
             throw new runtime.RequiredError(
                 'onboardingData',
@@ -95,24 +109,25 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
 
         let urlPath = `/api/v1/onboarding`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: OnboardingDataToJSON(requestParameters['onboardingData']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Save user onboarding data including sport preferences, goals, and training preferences
+     * Complete user onboarding
+     */
+    async completeOnboardingRaw(requestParameters: CompleteOnboardingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OnboardingResponse>> {
+        const requestOptions = await this.completeOnboardingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OnboardingResponseFromJSON(jsonValue));
     }
@@ -127,17 +142,16 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
     }
 
     /**
-     * Retrieve the current user\'s onboarding data
-     * Get user onboarding data
+     * Creates request options for getOnboarding without sending the request
      */
-    async getOnboardingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OnboardingResponse>> {
+    async getOnboardingRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
+            const tokenString = await token("JWT", []);
 
             if (tokenString) {
                 headerParameters["Authorization"] = `Bearer ${tokenString}`;
@@ -146,12 +160,21 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
 
         let urlPath = `/api/v1/onboarding`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Retrieve the current user\'s onboarding data
+     * Get user onboarding data
+     */
+    async getOnboardingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OnboardingResponse>> {
+        const requestOptions = await this.getOnboardingRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OnboardingResponseFromJSON(jsonValue));
     }

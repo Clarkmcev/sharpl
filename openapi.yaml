@@ -153,8 +153,7 @@ paths:
       summary: User logout
       description: Logout current user
       operationId: logout
-      security:
-        - bearerAuth: []
+      security: []
       responses:
         "200":
           description: Logout successful
@@ -170,8 +169,6 @@ paths:
       summary: Get all users
       description: Retrieve a list of all users
       operationId: getUsers
-      security:
-        - bearerAuth: []
       responses:
         "200":
           description: List of users
@@ -187,8 +184,6 @@ paths:
       summary: Complete user onboarding
       description: Save user onboarding data including sport preferences, goals, and training preferences
       operationId: completeOnboarding
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -222,7 +217,7 @@ paths:
       description: Retrieve the current user's onboarding data
       operationId: getOnboarding
       security:
-        - bearerAuth: []
+        - JWT: []
       responses:
         "200":
           description: Onboarding data retrieved successfully
@@ -245,7 +240,7 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    JWT:
       type: http
       scheme: bearer
       bearerFormat: JWT

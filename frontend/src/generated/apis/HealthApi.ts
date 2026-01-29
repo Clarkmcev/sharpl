@@ -43,6 +43,13 @@ export interface PostPingRequest {
  */
 export interface HealthApiInterface {
     /**
+     * Creates request options for getHealth without sending the request
+     * @throws {RequiredError}
+     * @memberof HealthApiInterface
+     */
+    getHealthRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * Check if the server is running
      * @summary Health check
      * @param {*} [options] Override http request option.
@@ -58,6 +65,13 @@ export interface HealthApiInterface {
     getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthResponse>;
 
     /**
+     * Creates request options for getPing without sending the request
+     * @throws {RequiredError}
+     * @memberof HealthApiInterface
+     */
+    getPingRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * Simple ping endpoint for testing API connectivity
      * @summary Ping endpoint
      * @param {*} [options] Override http request option.
@@ -71,6 +85,14 @@ export interface HealthApiInterface {
      * Ping endpoint
      */
     getPing(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingResponse>;
+
+    /**
+     * Creates request options for postPing without sending the request
+     * @param {{ [key: string]: any; }} [requestBody] 
+     * @throws {RequiredError}
+     * @memberof HealthApiInterface
+     */
+    postPingRequestOpts(requestParameters: PostPingRequest): Promise<runtime.RequestOpts>;
 
     /**
      * Ping endpoint that echoes back the request body
@@ -96,10 +118,9 @@ export interface HealthApiInterface {
 export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
 
     /**
-     * Check if the server is running
-     * Health check
+     * Creates request options for getHealth without sending the request
      */
-    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthResponse>> {
+    async getHealthRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -107,12 +128,21 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
 
         let urlPath = `/health`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Check if the server is running
+     * Health check
+     */
+    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthResponse>> {
+        const requestOptions = await this.getHealthRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => HealthResponseFromJSON(jsonValue));
     }
@@ -127,10 +157,9 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
     }
 
     /**
-     * Simple ping endpoint for testing API connectivity
-     * Ping endpoint
+     * Creates request options for getPing without sending the request
      */
-    async getPingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingResponse>> {
+    async getPingRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -138,12 +167,21 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
 
         let urlPath = `/ping`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Simple ping endpoint for testing API connectivity
+     * Ping endpoint
+     */
+    async getPingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingResponse>> {
+        const requestOptions = await this.getPingRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PingResponseFromJSON(jsonValue));
     }
@@ -158,10 +196,9 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
     }
 
     /**
-     * Ping endpoint that echoes back the request body
-     * Ping with body
+     * Creates request options for postPing without sending the request
      */
-    async postPingRaw(requestParameters: PostPingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingEchoResponse>> {
+    async postPingRequestOpts(requestParameters: PostPingRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -171,13 +208,22 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
 
         let urlPath = `/ping`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['requestBody'],
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Ping endpoint that echoes back the request body
+     * Ping with body
+     */
+    async postPingRaw(requestParameters: PostPingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingEchoResponse>> {
+        const requestOptions = await this.postPingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PingEchoResponseFromJSON(jsonValue));
     }

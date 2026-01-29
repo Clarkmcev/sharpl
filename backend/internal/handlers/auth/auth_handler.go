@@ -2,10 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-
 	"sharpl-backend/generated/restapi/operations/auth"
-
 	middlewareInternal "sharpl-backend/internal/middleware"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -17,6 +16,7 @@ type LoginRequest struct {
 }
 
 func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
+	fmt.Println("Login called")
 	var req LoginRequest
 	if params.HTTPRequest.Body != nil {
 		if err := json.NewDecoder(params.HTTPRequest.Body).Decode(&req); err != nil {
@@ -46,16 +46,17 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 	})
 }
 
-func (h AuthHandler) Logout(params auth.LogoutParams, principal any) middleware.Responder {
-	// // Extract token from Authorization header
+func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
+	fmt.Println("Logout called")
 	token, err := middlewareInternal.ExtractTokenFromRequest(params.HTTPRequest, h.authService)
 	if err != nil {
-		return NewJSONResponse(http.StatusUnauthorized, map[string]interface{}{
-			"error": err.Error(),
+		// If token is invalid/expired, user is already logged out
+		return NewJSONResponse(http.StatusOK, map[string]interface{}{
+			"message": "Logout successful",
 		})
 	}
 
-	// // Delete the session
+	// Delete the session
 	if err := h.authService.Logout(token); err != nil {
 		return NewJSONResponse(http.StatusInternalServerError, map[string]interface{}{
 			"error": "Failed to logout",

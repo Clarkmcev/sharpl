@@ -15,22 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
-  UserResponse,
   UsersResponse,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
-    UserResponseFromJSON,
-    UserResponseToJSON,
     UsersResponseFromJSON,
     UsersResponseToJSON,
 } from '../models/index';
-
-export interface GetUserByIdRequest {
-    id: number;
-}
 
 /**
  * UsersApi - interface
@@ -40,20 +30,11 @@ export interface GetUserByIdRequest {
  */
 export interface UsersApiInterface {
     /**
-     * Retrieve a specific user by their ID
-     * @summary Get user by ID
-     * @param {number} id User ID
-     * @param {*} [options] Override http request option.
+     * Creates request options for getUsers without sending the request
      * @throws {RequiredError}
      * @memberof UsersApiInterface
      */
-    getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>>;
-
-    /**
-     * Retrieve a specific user by their ID
-     * Get user by ID
-     */
-    getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse>;
+    getUsersRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * Retrieve a list of all users
@@ -78,50 +59,22 @@ export interface UsersApiInterface {
 export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
 
     /**
-     * Retrieve a specific user by their ID
-     * Get user by ID
+     * Creates request options for getUsers without sending the request
      */
-    async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserById().'
-            );
-        }
-
+    async getUsersRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
 
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
+        let urlPath = `/api/v1/users`;
 
-        let urlPath = `/api/v1/users/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve a specific user by their ID
-     * Get user by ID
-     */
-    async getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse> {
-        const response = await this.getUserByIdRaw(requestParameters, initOverrides);
-        return await response.value();
+        };
     }
 
     /**
@@ -129,27 +82,8 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
      * Get all users
      */
     async getUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsersResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/api/v1/users`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
+        const requestOptions = await this.getUsersRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UsersResponseFromJSON(jsonValue));
     }

@@ -66,7 +66,7 @@ function* loginSaga(
 //   }
 // }
 
-// // Worker saga: will be fired on LOGOUT_REQUEST actions
+// Worker saga: will be fired on LOGOUT_REQUEST actions
 function* logoutSaga() {
   try {
     yield authApi.logout();

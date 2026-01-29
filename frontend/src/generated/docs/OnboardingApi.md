@@ -28,11 +28,7 @@ import type { CompleteOnboardingRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
-    // Configure HTTP bearer authorization: bearerAuth
-    accessToken: "YOUR BEARER TOKEN",
-  });
-  const api = new OnboardingApi(config);
+  const api = new OnboardingApi();
 
   const body = {
     // OnboardingData
@@ -64,7 +60,7 @@ example().catch(console.error);
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -102,7 +98,7 @@ import type { GetOnboardingRequest } from '';
 async function example() {
   console.log("🚀 Testing  SDK...");
   const config = new Configuration({ 
-    // Configure HTTP bearer authorization: bearerAuth
+    // Configure HTTP bearer authorization: JWT
     accessToken: "YOUR BEARER TOKEN",
   });
   const api = new OnboardingApi(config);
@@ -129,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[JWT](../README.md#JWT)
 
 ### HTTP request headers
 

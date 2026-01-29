@@ -5,7 +5,7 @@ echo "🔄 Generating TypeScript API client from OpenAPI spec..."
 cd "$(dirname "$0")"
 
 # Remove old generated files
-rm -rf src/generated
+sudo rm -rf src/generated
 
 # Generate TypeScript API client using openapi-generator via docker
 docker run --rm \

@@ -53,6 +53,14 @@ export interface RegisterOperationRequest {
  */
 export interface AuthApiInterface {
     /**
+     * Creates request options for login without sending the request
+     * @param {LoginRequest} loginRequest 
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    loginRequestOpts(requestParameters: LoginOperationRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * Authenticate user and return token
      * @summary User login
      * @param {LoginRequest} loginRequest 
@@ -69,6 +77,13 @@ export interface AuthApiInterface {
     login(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse>;
 
     /**
+     * Creates request options for logout without sending the request
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    logoutRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * Logout current user
      * @summary User logout
      * @param {*} [options] Override http request option.
@@ -82,6 +97,14 @@ export interface AuthApiInterface {
      * User logout
      */
     logout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MessageResponse>;
+
+    /**
+     * Creates request options for register without sending the request
+     * @param {RegisterRequest} registerRequest 
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    registerRequestOpts(requestParameters: RegisterOperationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * Register a new user
@@ -107,10 +130,9 @@ export interface AuthApiInterface {
 export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
 
     /**
-     * Authenticate user and return token
-     * User login
+     * Creates request options for login without sending the request
      */
-    async loginRaw(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>> {
+    async loginRequestOpts(requestParameters: LoginOperationRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['loginRequest'] == null) {
             throw new runtime.RequiredError(
                 'loginRequest',
@@ -127,13 +149,22 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
 
         let urlPath = `/api/v1/auth/login`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: LoginRequestToJSON(requestParameters['loginRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Authenticate user and return token
+     * User login
+     */
+    async loginRaw(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>> {
+        const requestOptions = await this.loginRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseFromJSON(jsonValue));
     }
@@ -148,31 +179,31 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
     }
 
     /**
-     * Logout current user
-     * User logout
+     * Creates request options for logout without sending the request
      */
-    async logoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MessageResponse>> {
+    async logoutRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
 
         let urlPath = `/api/v1/auth/logout`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Logout current user
+     * User logout
+     */
+    async logoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MessageResponse>> {
+        const requestOptions = await this.logoutRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => MessageResponseFromJSON(jsonValue));
     }
@@ -187,10 +218,9 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
     }
 
     /**
-     * Register a new user
-     * User registration
+     * Creates request options for register without sending the request
      */
-    async registerRaw(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegisterResponse>> {
+    async registerRequestOpts(requestParameters: RegisterOperationRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['registerRequest'] == null) {
             throw new runtime.RequiredError(
                 'registerRequest',
@@ -207,13 +237,22 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
 
         let urlPath = `/api/v1/auth/register`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: RegisterRequestToJSON(requestParameters['registerRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Register a new user
+     * User registration
+     */
+    async registerRaw(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegisterResponse>> {
+        const requestOptions = await this.registerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RegisterResponseFromJSON(jsonValue));
     }

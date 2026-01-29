@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchUsersRequest } from "../store/slices/usersSlice";
+// import { fetchUsersRequest } from "../store/slices/usersSlice";
 import { logoutRequest } from "../store/slices/authSlice";
 import Overview from "./Overview";
 import Profile from "./Profile";
@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/login");
+      // navigate("/login");
     } else {
       // dispatch(fetchUsersRequest());
     }
