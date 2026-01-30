@@ -32,7 +32,7 @@ import {
 } from '../models/index';
 
 export interface PostPingRequest {
-    requestBody?: { [key: string]: any; };
+    body?: { [key: string]: any; };
 }
 
 /**
@@ -88,7 +88,7 @@ export interface HealthApiInterface {
 
     /**
      * Creates request options for postPing without sending the request
-     * @param {{ [key: string]: any; }} [requestBody] 
+     * @param {{ [key: string]: any; }} [body] 
      * @throws {RequiredError}
      * @memberof HealthApiInterface
      */
@@ -97,7 +97,7 @@ export interface HealthApiInterface {
     /**
      * Ping endpoint that echoes back the request body
      * @summary Ping with body
-     * @param {{ [key: string]: any; }} [requestBody] 
+     * @param {{ [key: string]: any; }} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HealthApiInterface
@@ -213,7 +213,7 @@ export class HealthApi extends runtime.BaseAPI implements HealthApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['requestBody'],
+            body: requestParameters['body'],
         };
     }
 

@@ -12,7 +12,7 @@ All URIs are relative to *http://localhost:8080*
 
 ## login
 
-> LoginResponse login(loginRequest)
+> LoginResponse login(body)
 
 User login
 
@@ -33,7 +33,7 @@ async function example() {
 
   const body = {
     // LoginRequest
-    loginRequest: ...,
+    body: ...,
   } satisfies LoginOperationRequest;
 
   try {
@@ -53,7 +53,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **loginRequest** | [LoginRequest](LoginRequest.md) |  | |
+| **body** | [LoginRequest](LoginRequest.md) |  | |
 
 ### Return type
 
@@ -140,7 +140,7 @@ No authorization required
 
 ## register
 
-> RegisterResponse register(registerRequest)
+> RegisterResponse register(body)
 
 User registration
 
@@ -161,7 +161,7 @@ async function example() {
 
   const body = {
     // RegisterRequest
-    registerRequest: ...,
+    body: ...,
   } satisfies RegisterOperationRequest;
 
   try {
@@ -181,7 +181,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **registerRequest** | [RegisterRequest](RegisterRequest.md) |  | |
+| **body** | [RegisterRequest](RegisterRequest.md) |  | |
 
 ### Return type
 

@@ -29,7 +29,7 @@ import {
 } from '../models/index';
 
 export interface CompleteOnboardingRequest {
-    onboardingData: OnboardingData;
+    body: OnboardingData;
 }
 
 /**
@@ -41,7 +41,7 @@ export interface CompleteOnboardingRequest {
 export interface OnboardingApiInterface {
     /**
      * Creates request options for completeOnboarding without sending the request
-     * @param {OnboardingData} onboardingData 
+     * @param {OnboardingData} body 
      * @throws {RequiredError}
      * @memberof OnboardingApiInterface
      */
@@ -50,7 +50,7 @@ export interface OnboardingApiInterface {
     /**
      * Save user onboarding data including sport preferences, goals, and training preferences
      * @summary Complete user onboarding
-     * @param {OnboardingData} onboardingData 
+     * @param {OnboardingData} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OnboardingApiInterface
@@ -96,10 +96,10 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
      * Creates request options for completeOnboarding without sending the request
      */
     async completeOnboardingRequestOpts(requestParameters: CompleteOnboardingRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['onboardingData'] == null) {
+        if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
-                'onboardingData',
-                'Required parameter "onboardingData" was null or undefined when calling completeOnboarding().'
+                'body',
+                'Required parameter "body" was null or undefined when calling completeOnboarding().'
             );
         }
 
@@ -117,7 +117,7 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: OnboardingDataToJSON(requestParameters['onboardingData']),
+            body: OnboardingDataToJSON(requestParameters['body']),
         };
     }
 
@@ -149,14 +149,10 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("JWT", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
         }
+
 
         let urlPath = `/api/v1/onboarding`;
 

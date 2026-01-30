@@ -45,13 +45,11 @@ docker run --rm \
 docker run --rm \
   -u "$(id -u):$(id -g)" \
   -v "${PWD}/..:/local" \
-  openapitools/openapi-generator-cli:latest generate \
-  -i /local/openapi.yaml \
-  -g go \
-  -o /local/backend/generated \
-  --global-property=models \
-  --additional-properties=packageName=models
-
-sudo chmod -R 777 generated
+  -v "/usr/local/go:/usr/local/go:ro" \
+  -e GOROOT=/usr/local/go \
+  -e PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  quay.io/goswagger/swagger:latest generate model \
+  -f /local/openapi.yaml \
+  -t /local/backend/generated
 
 echo "✅ Go server code generated in generated/"

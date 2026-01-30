@@ -15,8 +15,8 @@ RUN npm ci
 # Copy frontend source
 COPY frontend/ .
 
-# Generate API types from OpenAPI spec
-RUN npx openapi-typescript /openapi.yaml -o src/generated/api-types.ts
+# # Generate API types from OpenAPI spec
+# RUN npx openapi-typescript /openapi.yaml -o src/generated/api-types.ts
 
 # Build the application
 RUN npm run build

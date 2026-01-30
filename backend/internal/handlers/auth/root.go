@@ -39,8 +39,9 @@ func (o *JSONResponse) WriteResponse(rw http.ResponseWriter, producer runtime.Pr
 	}
 }
 
-// Register registers device handlers
-func (h AuthHandler) Register(api *operations.SharplAPIAPI) {
+// RegisterHandlers registers auth handlers
+func (h AuthHandler) RegisterHandlers(api *operations.SharplAPIAPI) {
 	api.AuthLoginHandler = auth.LoginHandlerFunc(h.Login)
+	api.AuthRegisterHandler = auth.RegisterHandlerFunc(h.RegisterUser)
 	api.AuthLogoutHandler = auth.LogoutHandlerFunc(h.Logout)
 }

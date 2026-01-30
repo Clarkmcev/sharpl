@@ -25,6 +25,30 @@ type AuthService struct {
 	sessionRepo repositories.SessionRepository
 }
 
+func (s *AuthService) Register(email, password, name string) (*models.User, error) {
+	existingUser, _ := s.userRepo.GetByEmail(email)
+	if existingUser != nil {
+		return nil, errors.New("User with this email already exists")
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New("Failed to hash password")
+	}
+
+	user := &models.User{
+		Email:        email,
+		Name:         name,
+		PasswordHash: string(hashedPassword),
+	}
+
+	if err := s.userRepo.Create(user); err != nil {
+		return nil, errors.New("Failed to create user")
+	}
+
+	return user, nil
+}
+
 func (s *AuthService) Login(email, password string) (string, *models.User, error) {
 	user, err := s.userRepo.GetByEmail(email)
 	if err != nil {

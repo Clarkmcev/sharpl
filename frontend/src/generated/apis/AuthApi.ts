@@ -38,11 +38,11 @@ import {
 } from '../models/index';
 
 export interface LoginOperationRequest {
-    loginRequest: LoginRequest;
+    body: LoginRequest;
 }
 
 export interface RegisterOperationRequest {
-    registerRequest: RegisterRequest;
+    body: RegisterRequest;
 }
 
 /**
@@ -54,7 +54,7 @@ export interface RegisterOperationRequest {
 export interface AuthApiInterface {
     /**
      * Creates request options for login without sending the request
-     * @param {LoginRequest} loginRequest 
+     * @param {LoginRequest} body 
      * @throws {RequiredError}
      * @memberof AuthApiInterface
      */
@@ -63,7 +63,7 @@ export interface AuthApiInterface {
     /**
      * Authenticate user and return token
      * @summary User login
-     * @param {LoginRequest} loginRequest 
+     * @param {LoginRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApiInterface
@@ -100,7 +100,7 @@ export interface AuthApiInterface {
 
     /**
      * Creates request options for register without sending the request
-     * @param {RegisterRequest} registerRequest 
+     * @param {RegisterRequest} body 
      * @throws {RequiredError}
      * @memberof AuthApiInterface
      */
@@ -109,7 +109,7 @@ export interface AuthApiInterface {
     /**
      * Register a new user
      * @summary User registration
-     * @param {RegisterRequest} registerRequest 
+     * @param {RegisterRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApiInterface
@@ -133,10 +133,10 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * Creates request options for login without sending the request
      */
     async loginRequestOpts(requestParameters: LoginOperationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['loginRequest'] == null) {
+        if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
-                'loginRequest',
-                'Required parameter "loginRequest" was null or undefined when calling login().'
+                'body',
+                'Required parameter "body" was null or undefined when calling login().'
             );
         }
 
@@ -154,7 +154,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginRequestToJSON(requestParameters['loginRequest']),
+            body: LoginRequestToJSON(requestParameters['body']),
         };
     }
 
@@ -221,10 +221,10 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * Creates request options for register without sending the request
      */
     async registerRequestOpts(requestParameters: RegisterOperationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['registerRequest'] == null) {
+        if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
-                'registerRequest',
-                'Required parameter "registerRequest" was null or undefined when calling register().'
+                'body',
+                'Required parameter "body" was null or undefined when calling register().'
             );
         }
 
@@ -242,7 +242,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RegisterRequestToJSON(requestParameters['registerRequest']),
+            body: RegisterRequestToJSON(requestParameters['body']),
         };
     }
 

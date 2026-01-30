@@ -15,7 +15,7 @@ func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthSe
 	// Set up bearer token authentication
 	// BearerAuthenticator is a function that takes (name, authenticate) and returns an Authenticator
 	api.BearerAuthenticator = func(name string, authenticate security.ScopedTokenAuthentication) runtime.Authenticator {
-		fmt.Println("test")
+		fmt.Println("Test, test, test")
 		// Use the default security.BearerAuth implementation with our custom authentication logic
 		return security.BearerAuth(name, func(token string, scopes []string) (interface{}, error) {
 			user, err := authService.ValidateToken(token)
@@ -27,7 +27,7 @@ func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthSe
 	}
 
 	// Register auth handlers
-	authHandler.NewAuthHandler(authService).Register(api)
+	authHandler.NewAuthHandler(authService).RegisterHandlers(api)
 
 	return api, nil
 }

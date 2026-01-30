@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost:8080*
 
 ## completeOnboarding
 
-> OnboardingResponse completeOnboarding(onboardingData)
+> OnboardingResponse completeOnboarding(body)
 
 Complete user onboarding
 
@@ -32,7 +32,7 @@ async function example() {
 
   const body = {
     // OnboardingData
-    onboardingData: ...,
+    body: ...,
   } satisfies CompleteOnboardingRequest;
 
   try {
@@ -52,7 +52,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **onboardingData** | [OnboardingData](OnboardingData.md) |  | |
+| **body** | [OnboardingData](OnboardingData.md) |  | |
 
 ### Return type
 
@@ -98,8 +98,8 @@ import type { GetOnboardingRequest } from '';
 async function example() {
   console.log("🚀 Testing  SDK...");
   const config = new Configuration({ 
-    // Configure HTTP bearer authorization: JWT
-    accessToken: "YOUR BEARER TOKEN",
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
   });
   const api = new OnboardingApi(config);
 

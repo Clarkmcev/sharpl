@@ -1,4 +1,4 @@
-openapi: 3.0.3
+swagger: "2.0"
 info:
   title: Sharpl API
   description: API specification for Sharpl application
@@ -6,11 +6,10 @@ info:
   contact:
     name: Sharpl Team
 
-servers:
-  - url: http://localhost:8080
-    description: Local development server
-  - url: http://localhost:3000/api
-    description: Frontend proxy
+host: localhost:8080
+basePath: /
+schemes:
+  - http
 
 x-cors:
   allowedOrigins:
@@ -36,13 +35,13 @@ paths:
       summary: Health check
       description: Check if the server is running
       operationId: getHealth
+      produces:
+        - application/json
       responses:
         "200":
           description: Server is healthy
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HealthResponse"
+          schema:
+            $ref: "#/definitions/HealthResponse"
 
   /ping:
     get:
@@ -51,13 +50,13 @@ paths:
       summary: Ping endpoint
       description: Simple ping endpoint for testing API connectivity
       operationId: getPing
+      produces:
+        - application/json
       responses:
         "200":
           description: Pong response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PingResponse"
+          schema:
+            $ref: "#/definitions/PingResponse"
 
     post:
       tags:
@@ -65,26 +64,26 @@ paths:
       summary: Ping with body
       description: Ping endpoint that echoes back the request body
       operationId: postPing
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: true
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
       responses:
         "200":
           description: Pong response with echo
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PingEchoResponse"
+          schema:
+            $ref: "#/definitions/PingEchoResponse"
         "400":
           description: Invalid JSON
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /api/v1/auth/login:
     post:
@@ -93,31 +92,29 @@ paths:
       summary: User login
       description: Authenticate user and return token
       operationId: login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LoginRequest"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
       responses:
         "200":
           description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LoginResponse"
+          schema:
+            $ref: "#/definitions/LoginResponse"
         "400":
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /api/v1/auth/register:
     post:
@@ -126,25 +123,25 @@ paths:
       summary: User registration
       description: Register a new user
       operationId: register
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RegisterRequest"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/RegisterRequest"
       responses:
         "201":
           description: User registered successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RegisterResponse"
+          schema:
+            $ref: "#/definitions/RegisterResponse"
         "400":
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /api/v1/auth/logout:
     post:
@@ -153,14 +150,14 @@ paths:
       summary: User logout
       description: Logout current user
       operationId: logout
+      produces:
+        - application/json
       security: []
       responses:
         "200":
           description: Logout successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MessageResponse"
+          schema:
+            $ref: "#/definitions/MessageResponse"
 
   /api/v1/users:
     get:
@@ -169,13 +166,13 @@ paths:
       summary: Get all users
       description: Retrieve a list of all users
       operationId: getUsers
+      produces:
+        - application/json
       responses:
         "200":
           description: List of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsersResponse"
+          schema:
+            $ref: "#/definitions/UsersResponse"
 
   /api/v1/onboarding:
     post:
@@ -184,31 +181,29 @@ paths:
       summary: Complete user onboarding
       description: Save user onboarding data including sport preferences, goals, and training preferences
       operationId: completeOnboarding
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OnboardingData"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/OnboardingData"
       responses:
         "200":
           description: Onboarding data saved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OnboardingResponse"
+          schema:
+            $ref: "#/definitions/OnboardingResponse"
         "400":
           description: Invalid request data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -216,291 +211,286 @@ paths:
       summary: Get user onboarding data
       description: Retrieve the current user's onboarding data
       operationId: getOnboarding
+      produces:
+        - application/json
       security:
         - JWT: []
       responses:
         "200":
           description: Onboarding data retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OnboardingResponse"
+          schema:
+            $ref: "#/definitions/OnboardingResponse"
         "404":
           description: Onboarding data not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
-components:
-  securitySchemes:
-    JWT:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
 
-  schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        email:
-          type: string
-          format: email
-          example: user@example.com
-        name:
-          type: string
-          example: John Doe
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      required:
-        - id
-        - email
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      email:
+        type: string
+        format: email
+        example: user@example.com
+      name:
+        type: string
+        example: John Doe
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+    required:
+      - id
+      - email
 
-    LoginRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          example: user@example.com
-        password:
-          type: string
-          format: password
-          minLength: 6
-          example: password123
-      required:
-        - email
-        - password
+  LoginRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+        example: user@example.com
+      password:
+        type: string
+        format: password
+        minLength: 6
+        example: password123
+    required:
+      - email
+      - password
 
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        message:
-          type: string
-          example: Login successful
-        user:
-          $ref: "#/components/schemas/User"
-      required:
-        - token
-        - message
-        - user
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      message:
+        type: string
+        example: Login successful
+      user:
+        $ref: "#/definitions/User"
+    required:
+      - token
+      - message
+      - user
 
-    RegisterRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          example: newuser@example.com
-        password:
-          type: string
-          format: password
-          minLength: 6
-          example: password123
-        name:
-          type: string
-          example: John Doe
-      required:
-        - email
-        - password
+  RegisterRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+        example: newuser@example.com
+      password:
+        type: string
+        format: password
+        minLength: 6
+        example: password123
+      name:
+        type: string
+        example: John Doe
+    required:
+      - email
+      - password
 
-    RegisterResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: User registered successfully
-        email:
-          type: string
-          format: email
-          example: newuser@example.com
+  RegisterResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: User registered successfully
+      email:
+        type: string
+        format: email
+        example: newuser@example.com
 
-    UsersResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            $ref: "#/components/schemas/User"
-        total:
-          type: integer
-          example: 10
+  UsersResponse:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          $ref: "#/definitions/User"
+      total:
+        type: integer
+        example: 10
 
-    UserResponse:
-      type: object
-      properties:
-        user:
-          $ref: "#/components/schemas/User"
+  UserResponse:
+    type: object
+    properties:
+      user:
+        $ref: "#/definitions/User"
 
-    HealthResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          example: healthy
-        message:
-          type: string
-          example: Server is running
+  HealthResponse:
+    type: object
+    properties:
+      status:
+        type: string
+        example: healthy
+      message:
+        type: string
+        example: Server is running
 
-    PingResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: pong
-        time:
-          type: string
-          format: date-time
-          example: 2026-01-05T13:45:00Z
+  PingResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: pong
+      time:
+        type: string
+        format: date-time
+        example: 2026-01-05T13:45:00Z
 
-    PingEchoResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: pong
-        time:
-          type: string
-          format: date-time
-        received:
-          type: object
-          additionalProperties: true
+  PingEchoResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: pong
+      time:
+        type: string
+        format: date-time
+      received:
+        type: object
+        additionalProperties: true
 
-    MessageResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Operation successful
+  MessageResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Operation successful
 
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          example: Invalid credentials
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        example: Invalid credentials
 
-    Race:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Boston Marathon
-        discipline:
-          type: string
-          enum: [Running, Triathlon]
-          example: Running
-        distance:
-          type: string
-          example: 42.195km
-        date:
-          type: string
-          format: date
-          example: 2026-04-20
-        goal:
-          type: string
-          example: Finish under 4 hours
-      required:
-        - name
-        - discipline
-        - distance
-        - date
-        - goal
+  Race:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Boston Marathon
+      discipline:
+        type: string
+        enum: [Running, Triathlon]
+        example: Running
+      distance:
+        type: string
+        example: 42.195km
+      date:
+        type: string
+        format: date
+        example: 2026-04-20
+      goal:
+        type: string
+        example: Finish under 4 hours
+    required:
+      - name
+      - discipline
+      - distance
+      - date
+      - goal
 
-    OnboardingData:
-      type: object
-      properties:
-        sport:
+  OnboardingData:
+    type: object
+    properties:
+      sport:
+        type: string
+        example: Running
+      experienceLevel:
+        type: string
+        example: Intermediate
+      weeklyTrainingHours:
+        type: integer
+        minimum: 0
+        example: 5
+      preparingForRace:
+        type: boolean
+        example: true
+      races:
+        type: array
+        items:
+          $ref: "#/definitions/Race"
+        example:
+          - name: Boston Marathon
+            discipline: Running
+            distance: 42.195km
+            date: 2026-04-20
+            goal: Finish under 4 hours
+      currentVolume:
+        type: string
+        example: 40km per week
+      longestRun:
+        type: string
+        example: 20km
+      recentRaces:
+        type: string
+        example: Half marathon in October 2025
+      injuries:
+        type: string
+        example: None currently
+      trainingDays:
+        type: integer
+        minimum: 1
+        maximum: 7
+        example: 5
+      preferredWorkoutTime:
+        type: string
+        example: Morning
+      gymAccess:
+        type: boolean
+        example: true
+      crossTraining:
+        type: array
+        items:
           type: string
-          example: Running
-        experienceLevel:
-          type: string
-          example: Intermediate
-        weeklyTrainingHours:
-          type: integer
-          minimum: 0
-          example: 5
-        preparingForRace:
-          type: boolean
-          example: true
-        races:
-          type: array
-          items:
-            $ref: "#/components/schemas/Race"
-          example:
-            - name: Boston Marathon
-              discipline: Running
-              distance: 42.195km
-              date: 2026-04-20
-              goal: Finish under 4 hours
-        currentVolume:
-          type: string
-          example: 40km per week
-        longestRun:
-          type: string
-          example: 20km
-        recentRaces:
-          type: string
-          example: Half marathon in October 2025
-        injuries:
-          type: string
-          example: None currently
-        trainingDays:
-          type: integer
-          minimum: 1
-          maximum: 7
-          example: 5
-        preferredWorkoutTime:
-          type: string
-          example: Morning
-        gymAccess:
-          type: boolean
-          example: true
-        crossTraining:
-          type: array
-          items:
-            type: string
-          example: [Cycling, Swimming]
-      required:
-        - sport
-        - experienceLevel
-        - weeklyTrainingHours
-        - preparingForRace
-        - races
-        - currentVolume
-        - longestRun
-        - recentRaces
-        - injuries
-        - trainingDays
-        - preferredWorkoutTime
-        - gymAccess
-        - crossTraining
+        example: [Cycling, Swimming]
+    required:
+      - sport
+      - experienceLevel
+      - weeklyTrainingHours
+      - preparingForRace
+      - races
+      - currentVolume
+      - longestRun
+      - recentRaces
+      - injuries
+      - trainingDays
+      - preferredWorkoutTime
+      - gymAccess
+      - crossTraining
 
-    OnboardingResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Onboarding data saved successfully
-        data:
-          $ref: "#/components/schemas/OnboardingData"
-      required:
-        - message
-        - data
+  OnboardingResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Onboarding data saved successfully
+      data:
+        $ref: "#/definitions/OnboardingData"
+    required:
+      - message
+      - data
