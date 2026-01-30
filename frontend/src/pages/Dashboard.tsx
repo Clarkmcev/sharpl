@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 // import { fetchUsersRequest } from "../store/slices/usersSlice";
 import { logoutRequest } from "../store/slices/authSlice";
-import Overview from "./Overview";
 import Profile from "./Profile";
-import Settings from "./Settings";
 import { getGradientClass } from "../utils/theme";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -13,6 +11,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ProfileIcon from "@mui/icons-material/Person";
 import InitialComponents from "../components/InitialComponents";
 
 type Tab =
@@ -46,6 +45,11 @@ export default function Dashboard() {
 
   const navItems: { id: Tab; label: string; icon: React.ReactElement }[] = [
     {
+      id: "profile",
+      label: "Profile",
+      icon: <ProfileIcon fontSize="small" />,
+    },
+    {
       id: "training",
       label: "Training Plan",
       icon: <FitnessCenterIcon fontSize="small" />,
@@ -70,7 +74,18 @@ export default function Dashboard() {
   const renderContent = (): React.ReactElement => {
     switch (activeTab) {
       case "overview":
-        return <Overview />;
+        return (
+          <InitialComponents
+            key={"overview"}
+            icon={
+              <FitnessCenterIcon
+                sx={{ fontSize: 40 }}
+                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
+              />
+            }
+            component={<p>Your training plan will be shown here.</p>}
+          />
+        );
       case "profile":
         return <Profile />;
       case "training":
@@ -79,7 +94,7 @@ export default function Dashboard() {
             key={"training"}
             icon={
               <FitnessCenterIcon
-                sx={{ fontSize: 100 }}
+                sx={{ fontSize: 40 }}
                 className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
               />
             }
@@ -93,7 +108,7 @@ export default function Dashboard() {
             key={"calendar"}
             icon={
               <CalendarMonthIcon
-                sx={{ fontSize: 100 }}
+                sx={{ fontSize: 40 }}
                 className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
               />
             }
@@ -106,7 +121,7 @@ export default function Dashboard() {
             key={"analytics"}
             icon={
               <BarChartIcon
-                sx={{ fontSize: 100 }}
+                sx={{ fontSize: 40 }}
                 className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
               />
             }
@@ -116,7 +131,18 @@ export default function Dashboard() {
           />
         );
       case "settings":
-        return <Settings />;
+        return (
+          <InitialComponents
+            key={"settings"}
+            icon={
+              <SettingsIcon
+                sx={{ fontSize: 40 }}
+                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
+              />
+            }
+            component={<p>Your training plan will be shown here.</p>}
+          />
+        );
     }
   };
 
