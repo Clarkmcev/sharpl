@@ -15,7 +15,7 @@ function Tile({ children }: Props) {
     <div
       ref={ref}
       style={style}
-      className="bg-light-bg dark:bg-dark-bg p-4 h-full"
+      className="p-4 h-full surface-light rounded-md"
     >
       {children}
     </div>

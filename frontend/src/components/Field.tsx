@@ -8,12 +8,10 @@ interface FieldProps {
 function Field({ name, value }: FieldProps) {
   return (
     <div>
-      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
+      <label className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
         {name}
       </label>
-      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-        {value}
-      </p>
+      <p className="text-white font-medium">{value ? value : "/"}</p>
     </div>
   );
 }

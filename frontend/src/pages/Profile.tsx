@@ -1,19 +1,14 @@
 import { useAppSelector } from "../store/hooks";
-import {
-  getGradientClass,
-  getLightBgClass,
-  getTextClass,
-} from "../utils/theme";
+import { getTextClass } from "../utils/theme";
 import PersonIcon from "@mui/icons-material/Person";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WarningIcon from "@mui/icons-material/Warning";
-import EditIcon from "@mui/icons-material/Edit";
-import Button from "../components/Button";
 import Header from "../components/Header";
 import Field from "../components/Field";
+import Tile from "../components/Tile";
 
 export default function Profile() {
   const { data: onboardingData } = useAppSelector((state) => state.onboarding);
@@ -51,228 +46,132 @@ export default function Profile() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-light-surface dark:bg-dark-surface rounded-lg shadow-lg">
-        <div className={`px-6 py-4`}>
+      <div className="flex flex-col gap-2">
+        <div className="p-4">
           <h2 className="text-2xl font-bold text-white">Athlete Profile</h2>
           <p className="text-sm text-white/90 mt-1">
-            Your training profile and preferencesqwe
+            Your training profile and preferences
           </p>
         </div>
 
-        <div className="p-6 space-y-8">
-          {/* Personal Information */}
-          <section>
-            <Header
-              icon={<PersonIcon fontSize="small" />}
-              header="Personal Information"
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-11">
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Name
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {user?.name || "Not provided"}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Email
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {user?.email || "Not provided"}
-                </p>
-              </div>
-            </div>
-          </section>
+        {/* Personal Information */}
+        <Tile>
+          <Header
+            icon={<PersonIcon fontSize="small" />}
+            header="Personal Information"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+            <Field name="Name" value={user?.name || "Not provided"} />
+            <Field name="Email" value={user?.email || "Not provided"} />
+          </div>
+        </Tile>
 
-          {/* Sport & Experience */}
-          <section>
-            <Header
-              icon={<DirectionsRunIcon fontSize="small" />}
-              header="Sport & Experience"
+        {/* Sport & Experience */}
+        <Tile>
+          <Header
+            icon={<DirectionsRunIcon fontSize="small" />}
+            header="Sport & Experience"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+            <Field name="Primary Sport" value={onboardingData.sport} />
+            <Field
+              name="Experience Level"
+              value={onboardingData.experienceLevel}
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-11">
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Primary Sport
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.sport}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Experience Level
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium capitalize">
-                  {onboardingData.experienceLevel}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Weekly Training Hours
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.weeklyTrainingHours} hours
-                </p>
-              </div>
-            </div>
-          </section>
+            <Field
+              name="Weekly Training Hours"
+              value={`${onboardingData.weeklyTrainingHours} hours`}
+            />
+          </div>
+        </Tile>
 
-          {/* Race Goals */}
-          <section>
-            <Header
-              icon={<EmojiEventsIcon fontSize="small" />}
-              header="Race Goals"
-            />
-            <div className="grid grid-cols-1 gap-4 ml-11">
-              {onboardingData.races?.map((race, index) => (
-                <div
-                  key={index}
-                  className={`border-l-4 ${getTextClass(themeColor)} pl-4 py-2 bg-light-elevated dark:bg-dark-elevated rounded-r-lg`}
-                >
-                  <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                    Race {index + 1}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                        Name
-                      </label>
-                      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                        {race.name}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                        Discipline
-                      </label>
-                      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                        {race.discipline}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                        Distance
-                      </label>
-                      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                        {race.distance}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                        Date
-                      </label>
-                      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                        {new Date(race.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                        Goal
-                      </label>
-                      <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                        {race.goal}
-                      </p>
-                    </div>
-                  </div>
+        {/* Race Goals */}
+        <Tile>
+          <Header
+            icon={<EmojiEventsIcon fontSize="small" />}
+            header="Race Goals"
+          />
+          <div className="grid grid-cols-1 gap-4 ml-11">
+            {onboardingData.races?.map((race, index) => (
+              <div key={index} className={` pl-4 py-2 rounded-r-lg rounded`}>
+                <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                  Race {index + 1}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <Field name="Name" value={race.name} />
+                  <Field name="Discipline" value={race.discipline} />
+                  <Field name="Distance" value={race.distance} />
+                  <Field
+                    name="Date"
+                    value={new Date(race.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  />
+                  <Field name="Goal" value={race.goal} />
                 </div>
-              ))}
-            </div>
-          </section>
+              </div>
+            ))}
+          </div>
+        </Tile>
 
-          {/* Current Fitness */}
-          <section>
-            <Header
-              icon={<FitnessCenterIcon fontSize="small" />}
-              header="Current Fitness"
+        {/* Current Fitness */}
+        <Tile>
+          <Header
+            icon={<FitnessCenterIcon fontSize="small" />}
+            header="Current Fitness"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+            <Field
+              name="Current Volume"
+              value={onboardingData.currentVolume || "Not specified"}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-11">
-              <Field
-                name="Current Intensity"
-                value={onboardingData.currentVolume || "Not specified"}
-              />
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Longest Run
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.longestRun || "Not specified"}
-                </p>
+            <Field
+              name="Longest Run"
+              value={onboardingData.longestRun || "Not specified"}
+            />
+            {onboardingData.recentRaces && (
+              <div className="md:col-span-2">
+                <Field name="Recent Races" value={onboardingData.recentRaces} />
               </div>
-              {onboardingData.recentRaces && (
-                <div className="md:col-span-2">
-                  <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                    Recent Races
-                  </label>
-                  <p className="text-light-text-primary dark:text-dark-text-primary whitespace-pre-line">
-                    {onboardingData.recentRaces}
-                  </p>
-                </div>
-              )}
-              {onboardingData.injuries && (
-                <div className="md:col-span-2">
-                  <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                    Injuries
-                  </label>
-                  <p className="text-light-text-primary dark:text-dark-text-primary whitespace-pre-line">
-                    {onboardingData.injuries}
-                  </p>
-                </div>
-              )}
-            </div>
-          </section>
+            )}
+            {onboardingData.injuries && (
+              <div className="md:col-span-2">
+                <Field name="Injuries" value={onboardingData.injuries} />
+              </div>
+            )}
+          </div>
+        </Tile>
 
-          {/* Training Preferences */}
-          <section>
-            <Header
-              icon={<SettingsIcon fontSize="small" />}
-              header="Training Preferences"
+        {/* Training Preferences */}
+        <Tile>
+          <Header
+            icon={<SettingsIcon fontSize="small" />}
+            header="Training Preferences"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+            <Field
+              name="Training Days per Week"
+              value={`${onboardingData.trainingDays} days`}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-11">
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Training Days per Week
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.trainingDays} days
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Preferred Workout Time
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.preferredWorkoutTime || "Not specified"}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Gym Access
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {onboardingData.gymAccess ? "✅ Yes" : "❌ No"}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-                  Cross-Training
-                </label>
-                <p className="text-light-text-primary dark:text-dark-text-primary font-medium">
-                  {formatCrossTraining(onboardingData.crossTraining)}
-                </p>
-              </div>
-            </div>
-          </section>
-        </div>
+            <Field
+              name="Preferred Workout Time"
+              value={onboardingData.preferredWorkoutTime || "Not specified"}
+            />
+            <Field
+              name="Gym Access"
+              value={onboardingData.gymAccess ? "✅ Yes" : "❌ No"}
+            />
+            <Field
+              name="Cross-Training"
+              value={formatCrossTraining(onboardingData.crossTraining)}
+            />
+          </div>
+        </Tile>
 
         {/* Edit Button */}
-        <div className="px-6 py-4 border-t border-light-border dark:border-dark-border bg-light-elevated dark:bg-dark-elevated">
+        {/* <div className="px-6 py-4 border-t border-light-border dark:border-dark-border bg-light-elevated dark:bg-dark-elevated">
           <a
             href="/onboarding"
             className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition shadow-md ${getTextClass(themeColor)} ${getLightBgClass(themeColor)} hover:opacity-90`}
@@ -280,7 +179,7 @@ export default function Profile() {
             <EditIcon fontSize="small" className="mr-2" />
             Edit Profile
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

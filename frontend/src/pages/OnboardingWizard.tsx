@@ -174,34 +174,6 @@ export default function OnboardingWizard() {
 
     // Dispatch the onboarding data
     dispatch(completeOnboardingRequest(data));
-
-    // Check if user just registered and needs auto-login
-    // const pendingAuth = sessionStorage.getItem("pendingAuth");
-
-    // if (pendingAuth) {
-    //   try {
-    //     const { email, password } = JSON.parse(pendingAuth);
-
-    //     // Auto-login after a brief delay
-    //     setTimeout(() => {
-    //       dispatch(loginRequest({ email, password }));
-    //       sessionStorage.removeItem("pendingAuth");
-
-    //       // Redirect to dashboard after login
-    //       setTimeout(() => {
-    //         navigate("/dashboard");
-    //       }, 1000);
-    //     }, 1500);
-    //   } catch (error) {
-    //     console.error("Failed to parse pending auth", error);
-    //     navigate("/dashboard");
-    //   }
-    // } else {
-    //   // User was already logged in, just redirect to dashboard
-    //   setTimeout(() => {
-    //     navigate("/dashboard");
-    //   }, 2000);
-    // }
   };
 
   const toggleCrossTraining = (activity: string) => {
