@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { User } from "../../generated";
+import type { User, LoginRequest, RegisterRequest } from "../../generated";
 
 interface AuthState {
   user: User | null;
@@ -28,7 +28,7 @@ const authSlice = createSlice({
     // Login actions
     loginRequest: (
       state,
-      _action: PayloadAction<{ email: string; password: string }>,
+      _action: PayloadAction<LoginRequest>,
     ) => {
       state.loading = true;
       state.error = null;
@@ -53,11 +53,7 @@ const authSlice = createSlice({
     // Register actions
     registerRequest: (
       state,
-      _action: PayloadAction<{
-        email: string;
-        password: string;
-        name?: string;
-      }>,
+      _action: PayloadAction<RegisterRequest>,
     ) => {
       state.loading = true;
       state.error = null;
@@ -84,6 +80,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
+      localStorage.removeItem("authToken");
     },
 
     // Other actions

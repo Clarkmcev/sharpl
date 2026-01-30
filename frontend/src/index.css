@@ -49,12 +49,20 @@
     @apply bg-light-surface dark:bg-dark-surface;
   }
 
+  .surface-light {
+    @apply bg-light-surface/20 dark:bg-dark-surface/20 border border-light-border dark:border-dark-border/20;
+  }
+
   .elevated {
     @apply bg-light-elevated dark:bg-dark-elevated shadow-md;
   }
 
   .background {
     @apply bg-light-bg dark:bg-dark-bg;
+  }
+
+  .background-light {
+    @apply bg-light-bg/40 dark:bg-dark-bg/40;
   }
 
   .background-primary {

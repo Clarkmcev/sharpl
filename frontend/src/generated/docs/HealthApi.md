@@ -130,7 +130,7 @@ No authorization required
 
 ## postPing
 
-> PingEchoResponse postPing(requestBody)
+> PingEchoResponse postPing(body)
 
 Ping with body
 
@@ -151,7 +151,7 @@ async function example() {
 
   const body = {
     // { [key: string]: any; } (optional)
-    requestBody: Object,
+    body: Object,
   } satisfies PostPingRequest;
 
   try {
@@ -171,7 +171,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **requestBody** | `{ [key: string]: any; }` |  | [Optional] |
+| **body** | `{ [key: string]: any; }` |  | [Optional] |
 
 ### Return type
 

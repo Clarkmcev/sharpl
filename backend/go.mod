@@ -10,6 +10,7 @@ require (
 	github.com/go-openapi/strfmt v0.25.0
 	github.com/go-openapi/swag v0.25.4
 	github.com/jessevdk/go-flags v1.6.1
+	github.com/rs/cors v1.11.1
 	golang.org/x/crypto v0.46.0
 	golang.org/x/net v0.48.0
 	gorm.io/driver/postgres v1.6.0

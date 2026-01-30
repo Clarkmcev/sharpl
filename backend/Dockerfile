@@ -15,10 +15,10 @@ RUN go mod download
 
 COPY backend/ .
 
-# Generate API types from OpenAPI spec
-RUN mkdir -p generated && \
-    oapi-codegen -generate types -package generated -o generated/types.go /openapi.yaml && \
-    oapi-codegen -generate chi-server -package generated -o generated/server.go /openapi.yaml
+# # Generate API types from OpenAPI spec
+# RUN mkdir -p generated && \
+#     oapi-codegen -generate types -package generated -o generated/types.go /openapi.yaml && \
+#     oapi-codegen -generate chi-server -package generated -o generated/server.go /openapi.yaml
 
 # Build
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .

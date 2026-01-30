@@ -42,6 +42,14 @@ docker run --rm \
   -t /local/backend/generated \
   --skip-validation
 
-sudo chmod -R 777 generated
+docker run --rm \
+  -u "$(id -u):$(id -g)" \
+  -v "${PWD}/..:/local" \
+  -v "/usr/local/go:/usr/local/go:ro" \
+  -e GOROOT=/usr/local/go \
+  -e PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  quay.io/goswagger/swagger:latest generate model \
+  -f /local/openapi.yaml \
+  -t /local/backend/generated
 
 echo "✅ Go server code generated in generated/"

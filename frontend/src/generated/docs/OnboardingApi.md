@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost:8080*
 
 ## completeOnboarding
 
-> OnboardingResponse completeOnboarding(onboardingData)
+> OnboardingResponse completeOnboarding(body)
 
 Complete user onboarding
 
@@ -28,15 +28,11 @@ import type { CompleteOnboardingRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const config = new Configuration({ 
-    // Configure HTTP bearer authorization: bearerAuth
-    accessToken: "YOUR BEARER TOKEN",
-  });
-  const api = new OnboardingApi(config);
+  const api = new OnboardingApi();
 
   const body = {
     // OnboardingData
-    onboardingData: ...,
+    body: ...,
   } satisfies CompleteOnboardingRequest;
 
   try {
@@ -56,7 +52,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **onboardingData** | [OnboardingData](OnboardingData.md) |  | |
+| **body** | [OnboardingData](OnboardingData.md) |  | |
 
 ### Return type
 
@@ -64,7 +60,7 @@ example().catch(console.error);
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -102,8 +98,8 @@ import type { GetOnboardingRequest } from '';
 async function example() {
   console.log("🚀 Testing  SDK...");
   const config = new Configuration({ 
-    // Configure HTTP bearer authorization: bearerAuth
-    accessToken: "YOUR BEARER TOKEN",
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
   });
   const api = new OnboardingApi(config);
 
@@ -129,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[JWT](../README.md#JWT)
 
 ### HTTP request headers
 

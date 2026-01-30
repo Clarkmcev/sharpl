@@ -11,7 +11,7 @@ export default function InitialComponents({
 }: InitialComponentsProps) {
   return (
     <Tile>
-      <div className="text-center py-12 text-light-text-secondary dark:text-dark-text-secondary">
+      <div className="text-center py-12 text-light-text-secondary dark:text-dark-text-secondary text-transparent-200 dark:text-transparent-100">
         {icon}
         {component}
       </div>

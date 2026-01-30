@@ -31,7 +31,7 @@ const example = {
   "experienceLevel": Intermediate,
   "weeklyTrainingHours": 5,
   "preparingForRace": true,
-  "races": [{"name":"Boston Marathon","discipline":"Running","distance":"42.195km","date":"2026-04-20","goal":"Finish under 4 hours"}],
+  "races": [{name=Boston Marathon, discipline=Running, distance=42.195km, date=2026-04-20, goal=Finish under 4 hours}],
   "currentVolume": 40km per week,
   "longestRun": 20km,
   "recentRaces": Half marathon in October 2025,
@@ -39,7 +39,7 @@ const example = {
   "trainingDays": 5,
   "preferredWorkoutTime": Morning,
   "gymAccess": true,
-  "crossTraining": ["Cycling","Swimming"],
+  "crossTraining": [Cycling, Swimming],
 } satisfies OnboardingData
 
 console.log(example)
