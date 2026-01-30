@@ -42,6 +42,16 @@ docker run --rm \
   -t /local/backend/generated \
   --skip-validation
 
+docker run --rm \
+  -u "$(id -u):$(id -g)" \
+  -v "${PWD}/..:/local" \
+  openapitools/openapi-generator-cli:latest generate \
+  -i /local/openapi.yaml \
+  -g go \
+  -o /local/backend/generated \
+  --global-property=models \
+  --additional-properties=packageName=models
+
 sudo chmod -R 777 generated
 
 echo "✅ Go server code generated in generated/"
