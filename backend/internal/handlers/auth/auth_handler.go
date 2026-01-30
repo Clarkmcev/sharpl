@@ -66,7 +66,7 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 
 func (h AuthHandler) RegisterUser(params auth.RegisterParams) middleware.Responder {
 	fmt.Println("Register called")
-	
+
 	// params.Body is already parsed by go-swagger - use it directly!
 	if params.Body == nil {
 		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{

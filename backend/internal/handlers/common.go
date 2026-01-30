@@ -1,17 +1,26 @@
 package handlers
 
-// // AuthenticatedHandler wraps handlers that require authentication
-// func AuthenticatedHandler(handler func(*http.Request, *models.User) runtime.Responder) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		user, ok := middleware.GetUserFromContext(r.Context())
-// 		if !ok {
-// 			w.Header().Set("Content-Type", "application/json")
-// 			w.WriteHeader(http.StatusUnauthorized)
-// 			w.Write([]byte(`{"error": "User not found in context"}`))
-// 			return
-// 		}
+import (
+	"encoding/json"
+	"net/http"
 
-// 		responder := handler(r, user)
-// 		responder.WriteResponse(w, nil)
-// 	}
-// }
+	"github.com/go-openapi/runtime"
+)
+
+// JSONResponse is a custom responder for JSON responses
+type JSONResponse struct {
+	code    int
+	payload interface{}
+}
+
+func NewJSONResponse(code int, payload interface{}) *JSONResponse {
+	return &JSONResponse{code: code, payload: payload}
+}
+
+func (o *JSONResponse) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(o.code)
+	if o.payload != nil {
+		json.NewEncoder(rw).Encode(o.payload)
+	}
+}

@@ -23,10 +23,11 @@ func main() {
 	// Initialize repositories
 	userRepo := repositories.NewUserRepository(database.GetDB())
 	sessionRepo := repositories.NewSessionRepository(database.GetDB())
-	// onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
+	onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
 
 	// Initialize services
 	authService := service.SetAuthService(userRepo, sessionRepo)
+	onboardingService := service.NewOnboardingService(onboardingRepo)
 
 	// Load swagger spec
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
@@ -38,7 +39,7 @@ func main() {
 	api := operations.NewSharplAPIAPI(swaggerSpec)
 
 	// Configure handlers
-	api, err = handlers.ConfigureServices(api, authService)
+	api, err = handlers.ConfigureServices(api, authService, onboardingService, userRepo)
 	if err != nil {
 		log.Fatalln("Failed to configure services:", err)
 	}
