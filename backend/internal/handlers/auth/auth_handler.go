@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	generatedModels "sharpl-backend/generated/models"
@@ -14,22 +13,29 @@ import (
 
 func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 	fmt.Println("Login called")
-	var req generatedModels.LoginRequest
-	if params.HTTPRequest.Body != nil {
-		if err := json.NewDecoder(params.HTTPRequest.Body).Decode(&req); err != nil {
-			return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
-				Error: "Invalid request body",
-			})
-		}
+
+	if params.Body == nil {
+		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
+			Error: "Request body is required",
+		})
 	}
 
-	if req.Email == nil || req.Password == nil || req.Email.String() == "" || req.Password.String() == "" {
+	if params.Body.Email == nil || params.Body.Password == nil {
 		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
 			Error: "Email and password are required",
 		})
 	}
 
-	token, dbUser, err := h.authService.Login(req.Email.String(), req.Password.String())
+	email := params.Body.Email.String()
+	password := params.Body.Password.String()
+
+	if email == "" || password == "" {
+		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
+			Error: "Email and password cannot be empty",
+		})
+	}
+
+	token, dbUser, err := h.authService.Login(email, password)
 	if err != nil {
 		return NewJSONResponse(http.StatusUnauthorized, generatedModels.ErrorResponse{
 			Error: err.Error(),
@@ -38,12 +44,12 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 
 	// Convert internal user model to generated API user model
 	userID := int64(dbUser.ID)
-	email := strfmt.Email(dbUser.Email)
+	emailStrfmt := strfmt.Email(dbUser.Email)
 	message := "Login successful"
-	
+
 	apiUser := &generatedModels.User{
 		ID:        &userID,
-		Email:     &email,
+		Email:     &emailStrfmt,
 		Name:      dbUser.Name,
 		CreatedAt: strfmt.DateTime(dbUser.CreatedAt),
 		UpdatedAt: strfmt.DateTime(dbUser.UpdatedAt),
@@ -60,35 +66,42 @@ func (h AuthHandler) Login(params auth.LoginParams) middleware.Responder {
 
 func (h AuthHandler) RegisterUser(params auth.RegisterParams) middleware.Responder {
 	fmt.Println("Register called")
-	var req generatedModels.RegisterRequest
-	if params.HTTPRequest.Body != nil {
-		if err := json.NewDecoder(params.HTTPRequest.Body).Decode(&req); err != nil {
-			return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
-				Error: "Invalid request body",
-			})
-		}
+	
+	// params.Body is already parsed by go-swagger - use it directly!
+	if params.Body == nil {
+		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
+			Error: "Request body is required",
+		})
 	}
 
-	if req.Email == nil || req.Password == nil || req.Email.String() == "" || req.Password.String() == "" {
+	if params.Body.Email == nil || params.Body.Password == nil {
 		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
 			Error: "Email and password are required",
 		})
 	}
 
-	name := req.Name
+	email := params.Body.Email.String()
+	password := params.Body.Password.String()
+	name := params.Body.Name
 
-	dbUser, err := h.authService.Register(req.Email.String(), req.Password.String(), name)
+	if email == "" || password == "" {
+		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
+			Error: "Email and password cannot be empty",
+		})
+	}
+
+	dbUser, err := h.authService.Register(email, password, name)
 	if err != nil {
 		return NewJSONResponse(http.StatusBadRequest, generatedModels.ErrorResponse{
 			Error: err.Error(),
 		})
 	}
 
-	email := strfmt.Email(dbUser.Email)
+	emailStrfmt := strfmt.Email(dbUser.Email)
 	message := "User registered successfully"
-	
+
 	response := generatedModels.RegisterResponse{
-		Email:   email,
+		Email:   emailStrfmt,
 		Message: message,
 	}
 
