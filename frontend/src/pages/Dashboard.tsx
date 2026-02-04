@@ -23,21 +23,12 @@ type Tab =
   | "settings";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const themeColor = useAppSelector((state) => state.theme.color);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      // navigate("/login");
-    } else {
-      // dispatch(fetchUsersRequest());
-    }
-  }, [isAuthenticated, navigate, dispatch]);
 
   const handleLogout = () => {
     dispatch(logoutRequest());
@@ -201,9 +192,7 @@ export default function Dashboard() {
             }`}
           >
             <div
-              className={`w-10 h-10 rounded-full ${getGradientClass(
-                themeColor,
-              )} flex items-center justify-center text-white font-bold`}
+              className={`w-10 h-10 rounded-full background-light flex items-center justify-center text-white font-bold`}
             >
               {user?.name?.[0]?.toUpperCase() || "U"}
             </div>

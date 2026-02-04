@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import OnboardingWizard from "./pages/OnboardingWizard";
+import Onboarding from "./pages/Onboarding";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useSetTheme } from "./hooks/settings";
 
@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/onboarding" element={<OnboardingWizard />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route
           path="/dashboard"
           element={

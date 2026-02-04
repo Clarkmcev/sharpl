@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { whoamiRequest } from "../store/slices/authSlice";
 
 export const useWhoami = () => {
-  const currentUser = useAppSelector((state) => state.auth.currentUser);
+  const currentUser = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

@@ -206,6 +206,8 @@ paths:
         - application/json
       produces:
         - application/json
+      security:
+        - JWT: []
       parameters:
         - in: body
           name: body

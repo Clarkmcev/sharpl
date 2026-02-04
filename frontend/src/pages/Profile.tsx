@@ -1,42 +1,20 @@
 import { useAppSelector } from "../store/hooks";
-import { getTextClass } from "../utils/theme";
 import PersonIcon from "@mui/icons-material/Person";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import SettingsIcon from "@mui/icons-material/Settings";
-import WarningIcon from "@mui/icons-material/Warning";
 import Header from "../components/Header";
 import Field from "../components/Field";
 import Tile from "../components/Tile";
+import Uncompleted from "../components/onboarding/Uncompleted";
 
 export default function Profile() {
   const { data: onboardingData } = useAppSelector((state) => state.onboarding);
   const { user } = useAppSelector((state) => state.auth);
-  const themeColor = useAppSelector((state) => state.theme.color);
 
   if (!onboardingData) {
-    return (
-      <div className="p-4 rounded-lg">
-        <div className="px-4 py-3 rounded-lg flex items-start bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
-          <WarningIcon className="mr-3 text-yellow-600 dark:text-yellow-400" />
-          <div>
-            <p className="font-medium text-light-text-primary dark:text-dark-text-primary">
-              Complete your profile
-            </p>
-            <p className="text-sm mt-1 text-light-text-secondary dark:text-dark-text-secondary">
-              You haven't completed the onboarding process yet.{" "}
-              <a
-                href="/onboarding"
-                className={`underline ${getTextClass(themeColor)} hover:opacity-80`}
-              >
-                Complete setup
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <Uncompleted />;
   }
 
   const formatCrossTraining = (activities: string[]) => {

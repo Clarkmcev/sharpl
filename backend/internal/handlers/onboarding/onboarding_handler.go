@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-func (h *OnboardingHandler) CompleteOnboarding(params onboarding.CompleteOnboardingParams) middleware.Responder {
+func (h *OnboardingHandler) CompleteOnboarding(params onboarding.CompleteOnboardingParams, principal interface{}) middleware.Responder {
 	fmt.Println("CompleteOnboarding called")
 
 	// params.Body is already parsed by go-swagger
@@ -23,18 +23,11 @@ func (h *OnboardingHandler) CompleteOnboarding(params onboarding.CompleteOnboard
 		})
 	}
 
-	// Get user from auth token
-	token, err := extractTokenFromRequest(params.HTTPRequest, h.authService)
-	if err != nil {
+	// Get user from principal (already validated by JWT middleware)
+	user, ok := principal.(*models.User)
+	if !ok || user == nil {
 		return NewJSONResponse(http.StatusUnauthorized, generatedModels.ErrorResponse{
 			Error: "Unauthorized",
-		})
-	}
-
-	user, err := h.authService.ValidateToken(token)
-	if err != nil {
-		return NewJSONResponse(http.StatusUnauthorized, generatedModels.ErrorResponse{
-			Error: "Invalid token",
 		})
 	}
 

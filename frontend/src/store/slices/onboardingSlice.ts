@@ -17,18 +17,9 @@ interface OnboardingState {
   error: string | null;
 }
 
-const loadOnboardingData = (): OnboardingData | null => {
-  try {
-    const stored = localStorage.getItem("onboardingData");
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-};
-
 const initialState: OnboardingState = {
-  completed: !!loadOnboardingData(),
-  data: loadOnboardingData(),
+  completed: null,
+  data: null,
   loading: false,
   error: null,
 };
@@ -39,7 +30,7 @@ const onboardingSlice = createSlice({
   reducers: {
     completeOnboardingRequest: (
       state,
-      _action: PayloadAction<OnboardingData>,
+      action: PayloadAction<OnboardingData>,
     ) => {
       state.loading = true;
       state.error = null;

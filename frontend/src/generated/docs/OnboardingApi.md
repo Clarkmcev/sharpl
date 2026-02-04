@@ -28,7 +28,11 @@ import type { CompleteOnboardingRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new OnboardingApi();
+  const config = new Configuration({ 
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
+  });
+  const api = new OnboardingApi(config);
 
   const body = {
     // OnboardingData
@@ -60,7 +64,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[JWT](../README.md#JWT)
 
 ### HTTP request headers
 
