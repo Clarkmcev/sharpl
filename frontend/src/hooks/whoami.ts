@@ -3,12 +3,12 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { whoamiRequest } from "../store/slices/authSlice";
 
 export const useWhoami = () => {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const currentUser = useAppSelector((state) => state.auth.currentUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!currentUser && localStorage.getItem("authToken")) {
       dispatch(whoamiRequest());
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, currentUser]);
 };

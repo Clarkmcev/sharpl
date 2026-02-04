@@ -81,7 +81,6 @@ function* logoutSaga() {
 
 function* whoamiSaga() {
   try {
-    throw new Error("whoamiSaga called");
     console.log("whoamiSaga called");
     const user = yield authApi.whoami();
     yield put(whoamiSuccess(user));
