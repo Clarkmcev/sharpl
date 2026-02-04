@@ -1,5 +1,4 @@
-import React from "react";
-import StatusMessage from "../StatusMessage";
+import StatusMessage from "../../StatusMessage";
 
 function SuccessStatus({ message }: { message?: string }) {
   return (

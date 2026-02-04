@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 // import { fetchUsersRequest } from "../store/slices/usersSlice";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
-import { getGradientClass } from "../utils/theme";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import BarChartIcon from "@mui/icons-material/BarChart";
