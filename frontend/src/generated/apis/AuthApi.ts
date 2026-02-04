@@ -21,6 +21,7 @@ import type {
   MessageResponse,
   RegisterRequest,
   RegisterResponse,
+  User,
 } from '../models/index';
 import {
     ErrorResponseFromJSON,
@@ -35,6 +36,8 @@ import {
     RegisterRequestToJSON,
     RegisterResponseFromJSON,
     RegisterResponseToJSON,
+    UserFromJSON,
+    UserToJSON,
 } from '../models/index';
 
 export interface LoginOperationRequest {
@@ -121,6 +124,28 @@ export interface AuthApiInterface {
      * User registration
      */
     register(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegisterResponse>;
+
+    /**
+     * Creates request options for whoami without sending the request
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    whoamiRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
+     * Get information about the currently authenticated user
+     * @summary Get current user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    whoamiRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
+
+    /**
+     * Get information about the currently authenticated user
+     * Get current user
+     */
+    whoami(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
 
 }
 
@@ -263,6 +288,49 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      */
     async register(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegisterResponse> {
         const response = await this.registerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for whoami without sending the request
+     */
+    async whoamiRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+
+        let urlPath = `/auth/whoami`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get information about the currently authenticated user
+     * Get current user
+     */
+    async whoamiRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+        const requestOptions = await this.whoamiRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     * Get information about the currently authenticated user
+     * Get current user
+     */
+    async whoami(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.whoamiRaw(initOverrides);
         return await response.value();
     }
 

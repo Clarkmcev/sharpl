@@ -7,6 +7,7 @@ All URIs are relative to *http://localhost:8080/api/v1*
 | [**login**](AuthApi.md#loginoperation) | **POST** /login | User login |
 | [**logout**](AuthApi.md#logout) | **POST** /auth/logout | User logout |
 | [**register**](AuthApi.md#registeroperation) | **POST** /auth/register | User registration |
+| [**whoami**](AuthApi.md#whoami) | **GET** /auth/whoami | Get current user |
 
 
 
@@ -202,6 +203,70 @@ No authorization required
 |-------------|-------------|------------------|
 | **201** | User registered successfully |  -  |
 | **400** | Bad request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## whoami
+
+> User whoami()
+
+Get current user
+
+Get information about the currently authenticated user
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AuthApi,
+} from '';
+import type { WhoamiRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
+  });
+  const api = new AuthApi(config);
+
+  try {
+    const data = await api.whoami();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**User**](User.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Current user information |  -  |
+| **401** | Unauthorized |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

@@ -44,4 +44,5 @@ func (h AuthHandler) RegisterHandlers(api *operations.SharplAPIAPI) {
 	api.AuthLoginHandler = auth.LoginHandlerFunc(h.Login)
 	api.AuthRegisterHandler = auth.RegisterHandlerFunc(h.RegisterUser)
 	api.AuthLogoutHandler = auth.LogoutHandlerFunc(h.Logout)
+	api.AuthWhoamiHandler = auth.WhoamiHandlerFunc(h.Whoami)
 }

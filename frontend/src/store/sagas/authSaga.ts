@@ -10,6 +10,9 @@ import {
   registerFailure,
   registerSuccess,
   logoutRequest,
+  whoamiRequest,
+  whoamiSuccess,
+  whoamiFailure,
 } from "../slices/authSlice";
 import { authApi } from "../../api/client";
 
@@ -76,9 +79,24 @@ function* logoutSaga() {
   }
 }
 
+function* whoamiSaga() {
+  try {
+    throw new Error("whoamiSaga called");
+    console.log("whoamiSaga called");
+    const user = yield authApi.whoami();
+    yield put(whoamiSuccess(user));
+  } catch (error) {
+    console.log(error);
+    yield put(whoamiFailure("Failed to fetch user information"));
+    // Clear auth state on whoami failure (invalid/expired token)
+    localStorage.removeItem("authToken");
+  }
+}
+
 // Watcher saga: spawns a new loginSaga on each LOGIN_REQUEST action
 export default function* authSaga() {
   yield takeLatest(loginRequest.type, loginSaga);
   yield takeLatest(registerRequest.type, registerSaga);
   yield takeLatest(logoutRequest.type, logoutSaga);
+  yield takeLatest(whoamiRequest.type, whoamiSaga);
 }

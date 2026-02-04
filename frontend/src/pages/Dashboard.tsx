@@ -186,7 +186,7 @@ export default function Dashboard() {
                   : "text-light-text-secondary dark:text-dark-text-secondary"
               }`}
             >
-              <div>{item.icon}</div>
+              {item.icon}
               {sidebarOpen && (
                 <span className="ml-2 text-sm">{item.label}</span>
               )}

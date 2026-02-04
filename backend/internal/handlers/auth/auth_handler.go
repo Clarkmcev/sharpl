@@ -6,6 +6,7 @@ import (
 	generatedModels "sharpl-backend/generated/models"
 	"sharpl-backend/generated/restapi/operations/auth"
 	middlewareInternal "sharpl-backend/internal/middleware"
+	"sharpl-backend/internal/models"
 
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
@@ -130,4 +131,30 @@ func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
 	return NewJSONResponse(http.StatusOK, generatedModels.MessageResponse{
 		Message: message,
 	})
+}
+
+func (h AuthHandler) Whoami(params auth.WhoamiParams, principal interface{}) middleware.Responder {
+	fmt.Println("Whoami called")
+
+	// Get user from principal (set by JWTAuth)
+	user, ok := principal.(*models.User)
+	if !ok {
+		return NewJSONResponse(http.StatusUnauthorized, generatedModels.ErrorResponse{
+			Error: "User not found in principal",
+		})
+	}
+
+	// Convert internal user model to generated API user model
+	userID := int64(user.ID)
+	emailStrfmt := strfmt.Email(user.Email)
+
+	apiUser := &generatedModels.User{
+		ID:        &userID,
+		Email:     &emailStrfmt,
+		Name:      user.Name,
+		CreatedAt: strfmt.DateTime(user.CreatedAt),
+		UpdatedAt: strfmt.DateTime(user.UpdatedAt),
+	}
+
+	return NewJSONResponse(http.StatusOK, apiUser)
 }

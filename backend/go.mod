@@ -9,6 +9,7 @@ require (
 	github.com/go-openapi/spec v0.22.3
 	github.com/go-openapi/strfmt v0.25.0
 	github.com/go-openapi/swag v0.25.4
+	github.com/go-openapi/validate v0.25.1
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/rs/cors v1.11.1
 	golang.org/x/crypto v0.46.0
@@ -35,7 +36,6 @@ require (
 	github.com/go-openapi/swag/stringutils v0.25.4 // indirect
 	github.com/go-openapi/swag/typeutils v0.25.4 // indirect
 	github.com/go-openapi/swag/yamlutils v0.25.4 // indirect
-	github.com/go-openapi/validate v0.25.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

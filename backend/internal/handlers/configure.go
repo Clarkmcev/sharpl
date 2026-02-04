@@ -16,11 +16,11 @@ import (
 func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService, onboardingService *service.OnboardingService, userRepo repositories.UserRepository) (*operations.SharplAPIAPI, error) {
 	// Set up JWT authentication
 	api.JWTAuth = func(tokenString string) (interface{}, error) {
-		// go-swagger passes the full header value, extract just the token
-		token, err := authService.ExtractTokenFromHeader("Bearer " + tokenString)
-		if err != nil {
-			// If extraction fails, assume token doesn't have Bearer prefix
-			token = tokenString
+		// go-swagger passes just the token value (not the full header)
+		// If it starts with "Bearer ", extract the token part
+		token := tokenString
+		if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
+			token = tokenString[7:]
 		}
 
 		user, err := authService.ValidateToken(token)

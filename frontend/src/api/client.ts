@@ -13,7 +13,10 @@ const API_BASE_PATH = "/api/v1";
 // Token is fetched dynamically on each API call
 const configuration = new Configuration({
   basePath: `${API_BASE_URL}${API_BASE_PATH}`,
-  accessToken: async () => localStorage.getItem("authToken") || "",
+  apiKey: async () => {
+    const token = localStorage.getItem("authToken") || "";
+    return token ? `Bearer ${token}` : "";
+  },
   middleware: [
     // {
     //   post: async (context) => {
