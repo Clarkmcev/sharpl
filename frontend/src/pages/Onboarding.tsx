@@ -10,7 +10,6 @@ import Step3 from "../components/onboarding/Step3";
 import Step4 from "../components/onboarding/Step4";
 import StatusMessage from "../components/StatusMessage";
 import type { OnboardingData, Race } from "../generated";
-import Loader from "../components/onboarding/status/Loader";
 import Status from "../components/onboarding/Status";
 
 const initialData: OnboardingData = {

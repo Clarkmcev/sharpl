@@ -1,4 +1,4 @@
-function OnboardingSubmitLoader() {
+function Loader() {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center background">
       <div className="text-center">
@@ -35,4 +35,4 @@ function OnboardingSubmitLoader() {
   );
 }
 
-export default OnboardingSubmitLoader;
+export default Loader;
