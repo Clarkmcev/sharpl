@@ -21,7 +21,7 @@ A containerized full-stack application with React (Vite + Tailwind CSS), Go (Gin
 ## Architecture
 
 - **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS
-- **Backend**: Go + Gin Framework + GORM
+- **Backend**: Go + GORM
 - **Database**: PostgreSQL 16
 - **API Contract**: OpenAPI 3.0 (Swagger)
 - **Containerization**: Docker + Docker Compose
