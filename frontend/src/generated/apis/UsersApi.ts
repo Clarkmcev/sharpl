@@ -67,7 +67,7 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/api/v1/users`;
+        let urlPath = `/users`;
 
         return {
             path: urlPath,

@@ -1,10 +1,10 @@
 # UsersApi
 
-All URIs are relative to *http://localhost:8080*
+All URIs are relative to *http://localhost:8080/api/v1*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getUsers**](UsersApi.md#getusers) | **GET** /api/v1/users | Get all users |
+| [**getUsers**](UsersApi.md#getusers) | **GET** /users | Get all users |
 
 
 
