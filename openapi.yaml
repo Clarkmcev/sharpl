@@ -24,6 +24,8 @@ tags:
     description: User management operations
   - name: onboarding
     description: User onboarding operations
+  - name: races
+    description: Race management operations
   - name: health
     description: Health check operations
 
@@ -245,6 +247,164 @@ paths:
             $ref: "#/definitions/OnboardingResponse"
         "404":
           description: Onboarding data not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /races:
+    get:
+      tags:
+        - races
+      summary: Get user races
+      description: Retrieve all races for the current user
+      operationId: getRaces
+      produces:
+        - application/json
+      security:
+        - JWT: []
+      responses:
+        "200":
+          description: Races retrieved successfully
+          schema:
+            $ref: "#/definitions/RacesResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      tags:
+        - races
+      summary: Create a race
+      description: Create a new race for the current user
+      operationId: createRace
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - JWT: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/RaceInput"
+      responses:
+        "201":
+          description: Race created successfully
+          schema:
+            $ref: "#/definitions/RaceResponse"
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /races/{raceId}:
+    get:
+      tags:
+        - races
+      summary: Get a race
+      description: Retrieve a specific race by ID
+      operationId: getRace
+      produces:
+        - application/json
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: raceId
+          type: integer
+          format: int64
+          required: true
+          description: Race ID
+      responses:
+        "200":
+          description: Race retrieved successfully
+          schema:
+            $ref: "#/definitions/RaceResponse"
+        "404":
+          description: Race not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    put:
+      tags:
+        - races
+      summary: Update a race
+      description: Update an existing race
+      operationId: updateRace
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: raceId
+          type: integer
+          format: int64
+          required: true
+          description: Race ID
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/RaceInput"
+      responses:
+        "200":
+          description: Race updated successfully
+          schema:
+            $ref: "#/definitions/RaceResponse"
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Race not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    delete:
+      tags:
+        - races
+      summary: Delete a race
+      description: Delete a race
+      operationId: deleteRace
+      produces:
+        - application/json
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: raceId
+          type: integer
+          format: int64
+          required: true
+          description: Race ID
+      responses:
+        "200":
+          description: Race deleted successfully
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        "404":
+          description: Race not found
           schema:
             $ref: "#/definitions/ErrorResponse"
         "401":
@@ -517,3 +677,108 @@ definitions:
     required:
       - message
       - data
+
+  RaceInput:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Boston Marathon
+      discipline:
+        type: string
+        enum: [Running, Triathlon]
+        example: Running
+      distance:
+        type: string
+        example: 42.195km
+      date:
+        type: string
+        format: date
+        example: 2026-04-20
+      goal:
+        type: string
+        example: Finish under 4 hours
+    required:
+      - name
+      - discipline
+      - distance
+      - date
+      - goal
+
+  RaceData:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      user_id:
+        type: integer
+        format: int64
+        example: 1
+      name:
+        type: string
+        example: Boston Marathon
+      discipline:
+        type: string
+        enum: [Running, Triathlon]
+        example: Running
+      distance:
+        type: string
+        example: 42.195km
+      date:
+        type: string
+        format: date-time
+        example: 2026-04-20T00:00:00Z
+      goal:
+        type: string
+        example: Finish under 4 hours
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+    required:
+      - id
+      - user_id
+      - name
+      - discipline
+      - distance
+      - date
+      - goal
+
+  RaceResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Race retrieved successfully
+      data:
+        $ref: "#/definitions/RaceData"
+    required:
+      - message
+      - data
+
+  RacesResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Races retrieved successfully
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/RaceData"
+    required:
+      - message
+      - data
+
+  MessageResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Operation successful
+    required:
+      - message

@@ -116,7 +116,7 @@ func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
 		// If token is invalid/expired, user is already logged out
 		message := "Logout successful"
 		return NewJSONResponse(http.StatusOK, generatedModels.MessageResponse{
-			Message: message,
+			Message: &message,
 		})
 	}
 
@@ -129,7 +129,7 @@ func (h AuthHandler) Logout(params auth.LogoutParams) middleware.Responder {
 
 	message := "Logout successful"
 	return NewJSONResponse(http.StatusOK, generatedModels.MessageResponse{
-		Message: message,
+		Message: &message,
 	})
 }
 

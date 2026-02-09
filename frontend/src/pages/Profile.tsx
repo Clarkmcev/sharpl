@@ -1,4 +1,6 @@
-import { useAppSelector } from "../store/hooks";
+import { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { fetchOnboardingRequest } from "../store/slices/onboardingSlice";
 import PersonIcon from "@mui/icons-material/Person";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -10,8 +12,13 @@ import Tile from "../components/Tile";
 import Uncompleted from "../components/onboarding/Uncompleted";
 
 export default function Profile() {
+  const dispatch = useAppDispatch();
   const { data: onboardingData } = useAppSelector((state) => state.onboarding);
   const { user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchOnboardingRequest());
+  }, [dispatch]);
 
   if (!onboardingData) {
     return <Uncompleted />;

@@ -93,9 +93,9 @@ func extractTokenFromRequest(r *http.Request, authService *service.AuthService) 
 
 // Convert generated OnboardingData to internal OnboardingDataJSON
 func convertGeneratedToInternalOnboardingData(generated *generatedModels.OnboardingData) models.OnboardingDataJSON {
-	races := make([]models.Race, len(generated.Races))
+	races := make([]models.RaceSimple, len(generated.Races))
 	for i, r := range generated.Races {
-		races[i] = models.Race{
+		races[i] = models.RaceSimple{
 			Name:       *r.Name,
 			Discipline: *r.Discipline,
 			Distance:   *r.Distance,

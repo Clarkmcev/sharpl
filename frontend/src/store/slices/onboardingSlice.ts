@@ -28,6 +28,23 @@ const onboardingSlice = createSlice({
   name: "onboarding",
   initialState,
   reducers: {
+    fetchOnboardingRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchOnboardingSuccess: (
+      state,
+      action: PayloadAction<OnboardingData>,
+    ) => {
+      state.loading = false;
+      state.completed = true;
+      state.data = action.payload;
+      state.error = null;
+    },
+    fetchOnboardingFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     completeOnboardingRequest: (
       state,
       action: PayloadAction<OnboardingData>,
@@ -57,6 +74,9 @@ const onboardingSlice = createSlice({
 });
 
 export const {
+  fetchOnboardingRequest,
+  fetchOnboardingSuccess,
+  fetchOnboardingFailure,
   completeOnboardingRequest,
   completeOnboardingSuccess,
   completeOnboardingFailure,

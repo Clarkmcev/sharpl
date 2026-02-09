@@ -1,6 +1,7 @@
 apis/AuthApi.ts
 apis/HealthApi.ts
 apis/OnboardingApi.ts
+apis/RacesApi.ts
 apis/UsersApi.ts
 apis/index.ts
 docs/AuthApi.md
@@ -16,6 +17,11 @@ docs/OnboardingResponse.md
 docs/PingEchoResponse.md
 docs/PingResponse.md
 docs/Race.md
+docs/RaceData.md
+docs/RaceInput.md
+docs/RaceResponse.md
+docs/RacesApi.md
+docs/RacesResponse.md
 docs/RegisterRequest.md
 docs/RegisterResponse.md
 docs/User.md
@@ -33,6 +39,10 @@ models/OnboardingResponse.ts
 models/PingEchoResponse.ts
 models/PingResponse.ts
 models/Race.ts
+models/RaceData.ts
+models/RaceInput.ts
+models/RaceResponse.ts
+models/RacesResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
 models/User.ts
