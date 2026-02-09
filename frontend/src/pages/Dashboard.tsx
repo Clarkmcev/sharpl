@@ -22,11 +22,10 @@ type Tab =
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
-  const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const { user } = useAppSelector((state) => state.auth);
-  const themeColor = useAppSelector((state) => state.theme.color);
 
   const handleLogout = () => {
     dispatch(logoutRequest());

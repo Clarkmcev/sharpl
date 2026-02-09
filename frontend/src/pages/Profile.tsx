@@ -10,11 +10,13 @@ import Header from "../components/Header";
 import Field from "../components/Field";
 import Tile from "../components/Tile";
 import Uncompleted from "../components/onboarding/Uncompleted";
+// import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const dispatch = useAppDispatch();
   const { data: onboardingData } = useAppSelector((state) => state.onboarding);
   const { user } = useAppSelector((state) => state.auth);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchOnboardingRequest());
@@ -32,12 +34,12 @@ export default function Profile() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <div className="p-4">
+        {/* <div className="p-4">
           <h2 className="text-2xl font-bold text-white">Athlete Profile</h2>
           <p className="text-sm text-white/90 mt-1">
             Your training profile and preferences
           </p>
-        </div>
+        </div> */}
 
         {/* Personal Information */}
         <Tile>
@@ -67,37 +69,6 @@ export default function Profile() {
               name="Weekly Training Hours"
               value={`${onboardingData.weeklyTrainingHours} hours`}
             />
-          </div>
-        </Tile>
-
-        {/* Race Goals */}
-        <Tile>
-          <Header
-            icon={<EmojiEventsIcon fontSize="small" />}
-            header="Race Goals"
-          />
-          <div className="grid grid-cols-1 gap-4 ml-11">
-            {onboardingData.races?.map((race, index) => (
-              <div key={index} className={` pl-4 py-2 rounded-r-lg rounded`}>
-                <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                  Race {index + 1}
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                  <Field name="Name" value={race.name} />
-                  <Field name="Discipline" value={race.discipline} />
-                  <Field name="Distance" value={race.distance} />
-                  <Field
-                    name="Date"
-                    value={new Date(race.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  />
-                  <Field name="Goal" value={race.goal} />
-                </div>
-              </div>
-            ))}
           </div>
         </Tile>
 
@@ -146,7 +117,7 @@ export default function Profile() {
             />
             <Field
               name="Gym Access"
-              value={onboardingData.gymAccess ? "✅ Yes" : "❌ No"}
+              value={onboardingData.gymAccess ? "Yes" : "No"}
             />
             <Field
               name="Cross-Training"
@@ -155,16 +126,36 @@ export default function Profile() {
           </div>
         </Tile>
 
-        {/* Edit Button */}
-        {/* <div className="px-6 py-4 border-t border-light-border dark:border-dark-border bg-light-elevated dark:bg-dark-elevated">
-          <a
-            href="/onboarding"
-            className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition shadow-md ${getTextClass(themeColor)} ${getLightBgClass(themeColor)} hover:opacity-90`}
-          >
-            <EditIcon fontSize="small" className="mr-2" />
-            Edit Profile
-          </a>
-        </div> */}
+        {/* Race Goals */}
+        {/* <Tile>
+          <Header
+            icon={<EmojiEventsIcon fontSize="small" />}
+            header="Race Goals"
+          />
+          <div className="grid grid-cols-1 gap-4 ml-11">
+            {onboardingData.races?.map((race, index) => (
+              <div key={index} className={` pl-4 py-2 rounded-r-lg rounded`}>
+                <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                  Race {index + 1}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <Field name="Name" value={race.name} />
+                  <Field name="Discipline" value={race.discipline} />
+                  <Field name="Distance" value={race.distance} />
+                  <Field
+                    name="Date"
+                    value={new Date(race.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  />
+                  <Field name="Goal" value={race.goal} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Tile> */}
       </div>
     </div>
   );

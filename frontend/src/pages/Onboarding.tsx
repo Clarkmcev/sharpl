@@ -17,15 +17,7 @@ const initialData: OnboardingData = {
   experienceLevel: "",
   weeklyTrainingHours: 5,
   preparingForRace: true,
-  races: [
-    {
-      name: "",
-      discipline: "Running",
-      distance: "",
-      date: new Date(),
-      goal: "",
-    },
-  ],
+  races: [],
   currentVolume: "",
   longestRun: "",
   recentRaces: "",

@@ -1,27 +1,32 @@
+import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import WarningIcon from "@mui/icons-material/Warning";
+import ProfileEditModal from "../components/ProfileEditModal";
 
 export default function Overview() {
   const { user } = useAppSelector((state) => state.auth);
-  const { data: onboardingData } = useAppSelector((state) => state.onboarding);
+  const { data: profileData } = useAppSelector((state) => state.profile);
+
+  // Modal state
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Get the first/primary race
-  const primaryRace = onboardingData?.races?.[0];
+  const primaryRace = profileData?.races?.[0];
   const daysUntilRace = primaryRace?.date
     ? Math.ceil(
         (new Date(primaryRace.date).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24)
+          (1000 * 60 * 60 * 24),
       )
     : null;
 
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="from-purple-600 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
+      <div className="rounded-lg shadow-lg p-6 text-white">
         <h1 className="text-3xl font-bold mb-2">
           Welcome back, {user?.name?.split(" ")[0] || "Athlete"}! 👋
         </h1>
@@ -68,7 +73,7 @@ export default function Overview() {
               />
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              0 / {onboardingData?.weeklyTrainingHours || 0} hours
+              0 / {profileData?.weeklyTrainingHours || 0} hours
             </p>
           </div>
         </div>
@@ -78,7 +83,7 @@ export default function Overview() {
             <div>
               <p className="text-sm text-gray-600">Workouts</p>
               <p className="text-2xl font-bold text-gray-900">
-                0 / {onboardingData?.trainingDays || 0}
+                0 / {profileData?.trainingDays || 0}
               </p>
             </div>
             <div className="bg-green-100 rounded-full p-3">
@@ -130,7 +135,7 @@ export default function Overview() {
       </div>
 
       {/* Quick Actions */}
-      {!onboardingData && (
+      {!profileData && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div className="flex items-start">
             <WarningIcon
@@ -142,19 +147,25 @@ export default function Overview() {
                 Complete your profile
               </h3>
               <p className="text-sm text-yellow-800 mt-1">
-                Help us personalize your training by completing the onboarding
-                process.
+                Help us personalize your training by completing your profile.
               </p>
-              <a
-                href="/onboarding"
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
                 className="inline-block mt-2 text-sm font-medium text-yellow-900 underline hover:text-yellow-700"
               >
                 Complete setup →
-              </a>
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Profile Edit Modal */}
+      <ProfileEditModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        initialData={profileData || undefined}
+      />
     </div>
   );
 }
