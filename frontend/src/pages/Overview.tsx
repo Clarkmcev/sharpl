@@ -9,7 +9,7 @@ import ProfileEditModal from "../components/ProfileEditModal";
 
 export default function Overview() {
   const { user } = useAppSelector((state) => state.auth);
-  const { data: profileData } = useAppSelector((state) => state.profile);
+  const { data: profileData } = useAppSelector((state) => state.onboarding);
 
   // Modal state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);

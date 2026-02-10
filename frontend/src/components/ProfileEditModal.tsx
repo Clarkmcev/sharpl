@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { completeProfileRequest } from "../store/slices/profileSlice";
+import { completeOnboardingRequest } from "../store/slices/onboardingSlice";
 import Button from "./Button";
-import Step1 from "./profile/Step1";
-import Step2 from "./profile/Step2";
-import Step3 from "./profile/Step3";
-import Step4 from "./profile/Step4";
+import Step1 from "./onboarding/Step1";
+import Step2 from "./onboarding/Step2";
+import Step3 from "./onboarding/Step3";
+import Step4 from "./onboarding/Step4";
 import StatusMessage from "./StatusMessage";
-import type { ProfileData, Race } from "../generated";
+import type { OnboardingData, Race } from "../generated";
 
 interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData?: ProfileData;
+  initialData?: OnboardingData;
 }
 
 export default function ProfileEditModal({
@@ -21,7 +21,7 @@ export default function ProfileEditModal({
   initialData,
 }: ProfileEditModalProps) {
   const [step, setStep] = useState(1);
-  const [data, setData] = useState<ProfileData>(
+  const [data, setData] = useState<OnboardingData>(
     initialData || {
       sport: "",
       experienceLevel: "",
@@ -44,13 +44,13 @@ export default function ProfileEditModal({
       preferredWorkoutTime: "",
       gymAccess: false,
       crossTraining: [],
-    }
+    },
   );
   const [errors, setErrors] = useState<string[]>([]);
   const [showErrors, setShowErrors] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.profile);
+  const { loading, error } = useAppSelector((state) => state.onboarding);
 
   const totalSteps = 4;
 
@@ -72,7 +72,7 @@ export default function ProfileEditModal({
     }
   }, [step]);
 
-  const updateData = (field: keyof ProfileData, value: any) => {
+  const updateData = (field: keyof OnboardingData, value: any) => {
     setData((prev) => ({ ...prev, [field]: value }));
     setShowErrors(false);
   };
@@ -143,7 +143,7 @@ export default function ProfileEditModal({
       case 2:
         if (!data.preparingForRace) return true;
         return data.races.every(
-          (race) => race.name && race.distance && race.date && race.goal
+          (race) => race.name && race.distance && race.date && race.goal,
         );
       case 3:
         return !!data.currentVolume && !!data.longestRun;
@@ -179,8 +179,8 @@ export default function ProfileEditModal({
     }
 
     setCompletedSteps((prev) => new Set(prev).add(step));
-    dispatch(completeProfileRequest(data));
-    
+    dispatch(completeOnboardingRequest(data));
+
     // Close modal after successful submission
     setTimeout(() => {
       onClose();
@@ -309,10 +309,10 @@ export default function ProfileEditModal({
                     isCurrent
                       ? "bg-light-CTA-bg dark:bg-dark-CTA-bg text-white shadow-lg"
                       : isCompleted
-                      ? "bg-green-500 text-white cursor-pointer"
-                      : isAccessible
-                      ? "bg-light-elevated dark:bg-dark-elevated text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg dark:hover:bg-dark-bg cursor-pointer"
-                      : "bg-light-elevated dark:bg-dark-elevated text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed"
+                        ? "bg-green-500 text-white cursor-pointer"
+                        : isAccessible
+                          ? "bg-light-elevated dark:bg-dark-elevated text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-bg dark:hover:bg-dark-bg cursor-pointer"
+                          : "bg-light-elevated dark:bg-dark-elevated text-light-text-tertiary dark:text-dark-text-tertiary opacity-50 cursor-not-allowed"
                   }`}
                 >
                   <div className="flex items-center justify-center gap-1">

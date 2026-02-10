@@ -6,7 +6,7 @@ import ProfileEditModal from "../components/ProfileEditModal";
 
 export default function Settings() {
   const { user } = useAppSelector((state) => state.auth);
-  const { data: profileData } = useAppSelector((state) => state.profile);
+  const { data: profileData } = useAppSelector((state) => state.onboarding);
   const themeState = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
 
