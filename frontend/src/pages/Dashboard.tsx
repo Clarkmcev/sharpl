@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-// import { fetchUsersRequest } from "../store/slices/usersSlice";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";

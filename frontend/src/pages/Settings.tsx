@@ -38,6 +38,13 @@ export default function Settings() {
     alert("Profile updated successfully!");
   };
 
+  const handleSaveTheme = () => {
+    // Theme is saved immediately on change, so just show a confirmation
+    alert("Theme settings saved!");
+  };
+
+  handleSaveTheme();
+
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {

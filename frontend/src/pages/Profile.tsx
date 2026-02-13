@@ -1,22 +1,24 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
-import { fetchOnboardingRequest } from "../store/slices/onboardingSlice";
+import {
+  fetchOnboardingRequest,
+  completeOnboardingRequest,
+} from "../store/slices/onboardingSlice";
 import PersonIcon from "@mui/icons-material/Person";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Header from "../components/Header";
 import Field from "../components/Field";
+import EditableField from "../components/EditableField";
 import Tile from "../components/Tile";
 import Uncompleted from "../components/onboarding/Uncompleted";
-// import { useNavigate } from "react-router-dom";
+import type { OnboardingData } from "../generated";
 
 export default function Profile() {
   const dispatch = useAppDispatch();
   const { data: onboardingData } = useAppSelector((state) => state.onboarding);
   const { user } = useAppSelector((state) => state.auth);
-  // const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchOnboardingRequest());
@@ -31,15 +33,41 @@ export default function Profile() {
     return activities.join(", ");
   };
 
+  const handleFieldUpdate = (
+    field: keyof OnboardingData,
+    value: string | number | boolean,
+  ) => {
+    if (!onboardingData) return Promise.reject("No onboarding data");
+
+    const updatedData: OnboardingData = {
+      ...onboardingData,
+      [field]: value,
+    };
+
+    dispatch(completeOnboardingRequest(updatedData));
+    return Promise.resolve();
+  };
+
+  const test = [12, "string"];
+
+  console.log(test);
+
+  const sportOptions = ["Running", "Cycling", "Swimming", "Triathlon"];
+  const experienceLevelOptions = ["Beginner", "Intermediate", "Advanced"];
+  const preferredWorkoutTimeOptions = ["Morning", "Afternoon", "Evening"];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        {/* <div className="p-4">
-          <h2 className="text-2xl font-bold text-white">Athlete Profile</h2>
-          <p className="text-sm text-white/90 mt-1">
-            Your training profile and preferences
+        {/* Header */}
+        <div className="mb-2">
+          <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
+            Athlete Profile
+          </h2>
+          <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
+            Click any field to edit your training profile
           </p>
-        </div> */}
+        </div>
 
         {/* Personal Information */}
         <Tile>
@@ -60,14 +88,27 @@ export default function Profile() {
             header="Sport & Experience"
           />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field name="Primary Sport" value={onboardingData.sport} />
-            <Field
+            <EditableField
+              name="Primary Sport"
+              value={onboardingData.sport}
+              type="select"
+              options={sportOptions}
+              onSave={(value) => handleFieldUpdate("sport", value)}
+            />
+            <EditableField
               name="Experience Level"
               value={onboardingData.experienceLevel}
+              type="select"
+              options={experienceLevelOptions}
+              onSave={(value) => handleFieldUpdate("experienceLevel", value)}
             />
-            <Field
+            <EditableField
               name="Weekly Training Hours"
-              value={`${onboardingData.weeklyTrainingHours} hours`}
+              value={onboardingData.weeklyTrainingHours}
+              type="number"
+              onSave={(value) =>
+                handleFieldUpdate("weeklyTrainingHours", value)
+              }
             />
           </div>
         </Tile>
@@ -79,24 +120,30 @@ export default function Profile() {
             header="Current Fitness"
           />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field
+            <EditableField
               name="Current Volume"
-              value={onboardingData.currentVolume || "Not specified"}
+              value={onboardingData.currentVolume || ""}
+              onSave={(value) => handleFieldUpdate("currentVolume", value)}
             />
-            <Field
+            <EditableField
               name="Longest Run"
-              value={onboardingData.longestRun || "Not specified"}
+              value={onboardingData.longestRun || ""}
+              onSave={(value) => handleFieldUpdate("longestRun", value)}
             />
-            {onboardingData.recentRaces && (
-              <div className="md:col-span-2">
-                <Field name="Recent Races" value={onboardingData.recentRaces} />
-              </div>
-            )}
-            {onboardingData.injuries && (
-              <div className="md:col-span-2">
-                <Field name="Injuries" value={onboardingData.injuries} />
-              </div>
-            )}
+            <div className="md:col-span-2">
+              <EditableField
+                name="Recent Races"
+                value={onboardingData.recentRaces || ""}
+                onSave={(value) => handleFieldUpdate("recentRaces", value)}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <EditableField
+                name="Injuries"
+                value={onboardingData.injuries || ""}
+                onSave={(value) => handleFieldUpdate("injuries", value)}
+              />
+            </div>
           </div>
         </Tile>
 
@@ -107,17 +154,26 @@ export default function Profile() {
             header="Training Preferences"
           />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field
+            <EditableField
               name="Training Days per Week"
-              value={`${onboardingData.trainingDays} days`}
+              value={onboardingData.trainingDays}
+              type="number"
+              onSave={(value) => handleFieldUpdate("trainingDays", value)}
             />
-            <Field
+            <EditableField
               name="Preferred Workout Time"
-              value={onboardingData.preferredWorkoutTime || "Not specified"}
+              value={onboardingData.preferredWorkoutTime || ""}
+              type="select"
+              options={preferredWorkoutTimeOptions}
+              onSave={(value) =>
+                handleFieldUpdate("preferredWorkoutTime", value)
+              }
             />
-            <Field
+            <EditableField
               name="Gym Access"
-              value={onboardingData.gymAccess ? "Yes" : "No"}
+              value={onboardingData.gymAccess}
+              type="boolean"
+              onSave={(value) => handleFieldUpdate("gymAccess", value)}
             />
             <Field
               name="Cross-Training"
@@ -125,37 +181,6 @@ export default function Profile() {
             />
           </div>
         </Tile>
-
-        {/* Race Goals */}
-        {/* <Tile>
-          <Header
-            icon={<EmojiEventsIcon fontSize="small" />}
-            header="Race Goals"
-          />
-          <div className="grid grid-cols-1 gap-4 ml-11">
-            {onboardingData.races?.map((race, index) => (
-              <div key={index} className={` pl-4 py-2 rounded-r-lg rounded`}>
-                <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                  Race {index + 1}
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                  <Field name="Name" value={race.name} />
-                  <Field name="Discipline" value={race.discipline} />
-                  <Field name="Distance" value={race.distance} />
-                  <Field
-                    name="Date"
-                    value={new Date(race.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  />
-                  <Field name="Goal" value={race.goal} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </Tile> */}
       </div>
     </div>
   );

@@ -265,27 +265,11 @@ export default function ProfileEditModal({
         </div>
 
         {/* Progress Bar */}
-        <div className="px-6 py-4 bg-light-bg dark:bg-dark-bg">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary">
-              Step {step} of {totalSteps}
-            </span>
-            <span className="text-sm text-light-text-tertiary dark:text-dark-text-tertiary">
-              {Math.round((step / totalSteps) * 100)}% Complete
-            </span>
-          </div>
-          <div className="w-full bg-light-surface dark:bg-dark-surface rounded-full h-2">
-            <div
-              className="bg-light-CTA-bg dark:bg-dark-CTA-bg h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(step / totalSteps) * 100}%` }}
-            />
-          </div>
-
-          {/* Step Tabs */}
+        <div className="px-6 py-4">
           <div className="mt-4 flex overflow-x-auto gap-2">
             {[
               { number: 1, label: "Background" },
-              { number: 2, label: "Race Goals" },
+              // { number: 2, label: "Race Goals" },
               { number: 3, label: "Fitness Level" },
               { number: 4, label: "Preferences" },
             ].map((tab) => {
