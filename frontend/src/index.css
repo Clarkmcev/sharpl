@@ -53,6 +53,10 @@
     @apply bg-light-surface/20 dark:bg-dark-surface/20 border border-light-border dark:border-dark-border/20;
   }
 
+  .border-light {
+    @apply border-light-border/20 dark:border-dark-border/20;
+  }
+
   .elevated {
     @apply bg-light-elevated dark:bg-dark-elevated shadow-md;
   }

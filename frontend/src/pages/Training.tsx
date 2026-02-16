@@ -5,24 +5,24 @@ import { Configuration } from "../generated/runtime";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
 
 export default function Training() {
   const [racePlans, setRacePlans] = useState<RacePlan[]>([]);
   const [filteredPlans, setFilteredPlans] = useState<RacePlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRaceType, setSelectedRaceType] = useState<string>("all");
-  const [selectedDistance, setSelectedDistance] = useState<string>("all");
-  const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [selectedPlan, setSelectedPlan] = useState<RacePlan | null>(null);
 
   useEffect(() => {
     fetchRacePlans();
   }, []);
-
-  useEffect(() => {
-    filterPlans();
-  }, [selectedRaceType, selectedDistance, selectedLevel, racePlans]);
 
   const fetchRacePlans = async () => {
     try {
@@ -38,30 +38,6 @@ export default function Training() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const filterPlans = () => {
-    let filtered = [...racePlans];
-
-    if (selectedRaceType !== "all") {
-      filtered = filtered.filter((plan) => plan.raceType === selectedRaceType);
-    }
-
-    if (selectedDistance !== "all") {
-      filtered = filtered.filter((plan) => plan.distance === selectedDistance);
-    }
-
-    if (selectedLevel !== "all") {
-      filtered = filtered.filter(
-        (plan) => plan.experienceLevel === selectedLevel,
-      );
-    }
-
-    setFilteredPlans(filtered);
-  };
-
-  const getUniqueDistances = () => {
-    return Array.from(new Set(racePlans.map((plan) => plan.distance))).sort();
   };
 
   const getRaceTypeIcon = (type?: string) => {
@@ -106,78 +82,13 @@ export default function Training() {
         </p>
       </div>
 
-      {/* Filters */}
-      {/* <div className="bg-light-surface dark:bg-dark-surface rounded-lg shadow p-6 mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <FilterListIcon className="text-light-text-secondary dark:text-dark-text-secondary" />
-          <h2 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary">
-            Filters
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary mb-2">
-              Race Type
-            </label>
-            <select
-              value={selectedRaceType}
-              onChange={(e) => setSelectedRaceType(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-primary-500 dark:focus:ring-dark-primary-500"
-            >
-              <option value="all">All Types</option>
-              <option value="running">Running</option>
-              <option value="triathlon">Triathlon</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary mb-2">
-              Distance
-            </label>
-            <select
-              value={selectedDistance}
-              onChange={(e) => setSelectedDistance(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-primary-500 dark:focus:ring-dark-primary-500"
-            >
-              <option value="all">All Distances</option>
-              {getUniqueDistances().map((distance) => (
-                <option key={distance} value={distance}>
-                  {distance}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary mb-2">
-              Experience Level
-            </label>
-            <select
-              value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-primary-500 dark:focus:ring-dark-primary-500"
-            >
-              <option value="all">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="mt-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-          Showing {filteredPlans.length} of {racePlans.length} plans
-        </div>
-      </div> */}
-
       {/* Plans Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
         {filteredPlans.map((plan) => (
           <div
             key={plan.id}
-            onClick={() => setSelectedPlan(plan)}
             className="surface-light rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer overflow-hidden"
+            onClick={() => setSelectedPlan(plan)}
           >
             <div className="p-6">
               <div className="flex items-start justify-between mb-3">
@@ -229,81 +140,97 @@ export default function Training() {
       )}
 
       {/* Plan Details Modal */}
-      {/* {selectedPlan && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-          onClick={() => setSelectedPlan(null)}
-        >
-          <div
-            className="bg-light-surface dark:bg-dark-surface rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
+      <Modal
+        isOpen={!!selectedPlan}
+        onClose={() => setSelectedPlan(null)}
+        title={selectedPlan?.name}
+        maxWidth="3xl"
+        footer={
+          <div className="flex justify-end">
+            <Button onClick={() => setSelectedPlan(null)} variant="primary">
+              Close
+            </Button>
+          </div>
+        }
+      >
+        {selectedPlan && (
+          <div>
+            <div className="flex justify-between items-center gap-2 mb-6 rounded-lg">
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(
+                  selectedPlan.experienceLevel,
+                )}`}
+              >
+                {selectedPlan.experienceLevel.charAt(0).toUpperCase() +
+                  selectedPlan.experienceLevel.substring(1)}
+              </span>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                  {selectedPlan.durationWeeks} weeks
+                </span>
+                <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary capitalize">
+                  • {selectedPlan.raceType}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+              {selectedPlan.description}
+            </p>
+
+            {selectedPlan.weeklyStructure?.weeks &&
+              selectedPlan.weeklyStructure.weeks.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary mb-2">
-                    {selectedPlan.name}
-                  </h2>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(
-                        selectedPlan.experienceLevel,
-                      )}`}
-                    >
-                      {selectedPlan.experienceLevel}
-                    </span>
-                    <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                      {selectedPlan.durationWeeks} weeks
-                    </span>
+                  <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
+                    Weekly Structure
+                  </h3>
+                  <div className="space-y-2">
+                    {selectedPlan.weeklyStructure.weeks.map((week) => (
+                      <Disclosure key={week.week}>
+                        {({ open }) => (
+                          <>
+                            <DisclosureButton className="w-full flex items-center justify-between gap-3 p-4 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-primary-100/10 dark:hover:bg-dark-primary-900/20 transition-colors cursor-pointer">
+                              <div className="flex items-center gap-3">
+                                <div className="px-3 py-1 rounded-lg bg-light-primary-100 dark:bg-dark-primary-900/30">
+                                  <span className="text-sm font-bold text-white">
+                                    Week {week.week}
+                                  </span>
+                                </div>
+                                <p className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary text-left">
+                                  {week.description}
+                                </p>
+                              </div>
+                              <ExpandMoreIcon
+                                className={`text-light-text-secondary dark:text-dark-text-secondary transition-transform duration-200 ${
+                                  open ? "rotate-180" : ""
+                                }`}
+                              />
+                            </DisclosureButton>
+                            <DisclosurePanel className="px-4 pt-2 pb-3 text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                              <div className="pl-4 border-l-2 border-light-primary-500 dark:border-dark-primary-500">
+                                <p className="mb-2">
+                                  Detailed breakdown for Week {week.week}:
+                                </p>
+                                <ul className="list-disc list-inside space-y-1">
+                                  <li>Focus: {week.description}</li>
+                                  <li>Duration: 7 days</li>
+                                  <li>
+                                    Training sessions will be scheduled
+                                    throughout the week
+                                  </li>
+                                </ul>
+                              </div>
+                            </DisclosurePanel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
                   </div>
                 </div>
-                <button
-                  onClick={() => setSelectedPlan(null)}
-                  className="text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-                {selectedPlan.description}
-              </p>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-                  Weekly Structure
-                </h3>
-                <div className="space-y-3">
-                  {selectedPlan.weeklyStructure?.weeks?.map((week) => (
-                    <div
-                      key={week.week}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-light-bg dark:bg-dark-bg"
-                    >
-                      <div className="w-16 h-16 rounded-lg bg-light-primary-100 dark:bg-dark-primary-900/30 flex items-center justify-center">
-                        <span className="text-lg font-bold text-light-primary-500 dark:text-dark-primary-500">
-                          W{week.week}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-light-text-primary dark:text-dark-text-primary">
-                          {week.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSelectedPlan(null)}
-                className="w-full px-6 py-3 bg-light-primary-500 dark:bg-dark-primary-600 text-white rounded-lg hover:bg-light-primary-600 dark:hover:bg-dark-primary-700 transition"
-              >
-                Close
-              </button>
-            </div>
+              )}
           </div>
-        </div>
-      )} */}
+        )}
+      </Modal>
     </div>
   );
 }
