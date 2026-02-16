@@ -48,10 +48,6 @@ export default function Profile() {
     return Promise.resolve();
   };
 
-  const test = [12, "string"];
-
-  console.log(test);
-
   const sportOptions = ["Running", "Cycling", "Swimming", "Triathlon"];
   const experienceLevelOptions = ["Beginner", "Intermediate", "Advanced"];
   const preferredWorkoutTimeOptions = ["Morning", "Afternoon", "Evening"];
@@ -60,12 +56,13 @@ export default function Profile() {
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         {/* Header */}
-        <div className="mb-2">
+        <div className="mb-2 p-4">
           <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
-            Athlete Profile
+            Profile
           </h2>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
-            Click any field to edit your training profile
+            Your personal information and training preferences. Keep this up to
+            date so we can provide the best training experience for you.
           </p>
         </div>
 

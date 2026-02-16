@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
+import Training from "./Training";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -10,9 +11,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ProfileIcon from "@mui/icons-material/Person";
 import InitialComponents from "../components/InitialComponents";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 type Tab =
-  | "overview"
+  | "dashboard"
   | "profile"
   | "training"
   | "calendar"
@@ -31,6 +33,11 @@ export default function Dashboard() {
   };
 
   const navItems: { id: Tab; label: string; icon: React.ReactElement }[] = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: <DashboardIcon fontSize="small" />,
+    },
     {
       id: "profile",
       label: "Profile",
@@ -60,12 +67,12 @@ export default function Dashboard() {
 
   const renderContent = (): React.ReactElement => {
     switch (activeTab) {
-      case "overview":
+      case "dashboard":
         return (
           <InitialComponents
-            key={"overview"}
+            key={"dashboard"}
             icon={
-              <FitnessCenterIcon
+              <DashboardIcon
                 sx={{ fontSize: 40 }}
                 className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
               />
@@ -76,18 +83,7 @@ export default function Dashboard() {
       case "profile":
         return <Profile />;
       case "training":
-        return (
-          <InitialComponents
-            key={"training"}
-            icon={
-              <FitnessCenterIcon
-                sx={{ fontSize: 40 }}
-                className="text-light-primary-400 dark:text-dark-primary-600 mb-4"
-              />
-            }
-            component={<p>Your training plan will be shown here.</p>}
-          />
-        );
+        return <Training />;
 
       case "calendar":
         return (
@@ -217,7 +213,7 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto">
         <div className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg">
           <div className="px-8 py-4">
-            <h2 className="text-2xl font-bold text-light-text-secondary dark:text-dark-text-secondary ">
+            <h2 className="text-lg text-light-text-secondary dark:text-dark-text-secondary ">
               {navItems.find((item) => item.id === activeTab)?.label}
             </h2>
           </div>

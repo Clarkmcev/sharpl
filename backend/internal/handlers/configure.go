@@ -4,6 +4,7 @@ import (
 	"sharpl-backend/generated/restapi/operations"
 	authHandler "sharpl-backend/internal/handlers/auth"
 	onboardingHandler "sharpl-backend/internal/handlers/onboarding"
+	racePlansHandler "sharpl-backend/internal/handlers/raceplans"
 	racesHandler "sharpl-backend/internal/handlers/races"
 	usersHandler "sharpl-backend/internal/handlers/users"
 	"sharpl-backend/internal/repositories"
@@ -14,7 +15,7 @@ import (
 	"github.com/go-openapi/runtime/security"
 )
 
-func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService, onboardingService *service.OnboardingService, raceService *service.RaceService, userRepo repositories.UserRepository) (*operations.SharplAPIAPI, error) {
+func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService, onboardingService *service.OnboardingService, raceService *service.RaceService, racePlanService *service.RacePlanService, userRepo repositories.UserRepository) (*operations.SharplAPIAPI, error) {
 	// Set up JWT authentication
 	api.JWTAuth = func(tokenString string) (interface{}, error) {
 		// go-swagger passes just the token value (not the full header)
@@ -51,6 +52,9 @@ func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthSe
 
 	// Register race handlers
 	racesHandler.NewRaceHandler(raceService).RegisterHandlers(api)
+
+	// Register race plan handlers
+	racePlansHandler.NewRacePlanHandler(racePlanService).RegisterHandlers(api)
 
 	// Register user handlers
 	usersHandler.NewUserHandler(userRepo).RegisterHandlers(api)

@@ -27,7 +27,7 @@ export interface Race {
     name: string;
     /**
      * 
-     * @type {string}
+     * @type {RaceDisciplineEnum}
      * @memberof Race
      */
     discipline: RaceDisciplineEnum;
