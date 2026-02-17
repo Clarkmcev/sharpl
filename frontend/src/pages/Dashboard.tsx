@@ -140,11 +140,11 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex bg-light-bg dark:bg-dark-bg ">
+    <div className="h-screen flex bg-light-bg dark:bg-dark-bg overflow-hidden">
       <aside
         className={`${
           sidebarOpen ? "w-64" : "w-20"
-        } bg-light-surface dark:bg-dark-surface shadow-lg transition-all duration-300 flex flex-col`}
+        } bg-light-surface dark:bg-dark-surface shadow-lg transition-all duration-300 flex flex-col h-full`}
       >
         <div className="h-16 flex items-center justify-between px-4 b">
           {sidebarOpen && (
@@ -220,8 +220,8 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      <main ref={ref} className="flex-1 overflow-y-auto flex flex-col">
-        <header className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg ">
+      <main ref={ref} className="flex-1 flex flex-col h-full overflow-hidden">
+        <header className="flex-shrink-0 bg-light-bg dark:bg-dark-bg">
           <div className="px-8 py-4">
             <h2 className="text-lg text-light-text-secondary dark:text-dark-text-secondary ">
               {navItems.find((item) => item.id === activeTab)?.label}
@@ -229,7 +229,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className={`px-4 flex flex-col h-full pb-4`}>
+        <div className="flex-1 overflow-y-auto px-4 pb-4">
           {renderContent()}
         </div>
       </main>

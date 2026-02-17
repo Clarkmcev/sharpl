@@ -8,7 +8,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Header from "../components/Header";
+import SectionHeader from "../components/SectionHeader";
 import Field from "../components/Field";
 import EditableField from "../components/EditableField";
 import Tile from "../components/Tile";
@@ -56,7 +56,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 h-full">
+      <div className="flex flex-col gap-2">
         <PageHeader
           title="Your Profile"
           subtitle="Manage your personal information and training preferences."
@@ -65,7 +65,7 @@ export default function Profile() {
           <section className="flex space-y-4 flex-col">
             {/* Personal Information */}
             <Section>
-              <Header
+              <SectionHeader
                 icon={<PersonIcon fontSize="small" />}
                 header="Personal Information"
               />
@@ -77,7 +77,7 @@ export default function Profile() {
 
             {/* Sport & Experience */}
             <Section>
-              <Header
+              <SectionHeader
                 icon={<DirectionsRunIcon fontSize="small" />}
                 header="Sport & Experience"
               />
@@ -111,7 +111,7 @@ export default function Profile() {
 
             {/* Current Fitness */}
             <Section>
-              <Header
+              <SectionHeader
                 icon={<FitnessCenterIcon fontSize="small" />}
                 header="Current Fitness"
               />
@@ -145,7 +145,7 @@ export default function Profile() {
 
             {/* Training Preferences */}
             <Section>
-              <Header
+              <SectionHeader
                 icon={<SettingsIcon fontSize="small" />}
                 header="Training Preferences"
               />

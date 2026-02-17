@@ -137,7 +137,7 @@ function EditableField({
 
   return (
     <div>
-      <label className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+      <label className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
         {name}
       </label>
       <div className="flex items-center gap-2 group w-fit">

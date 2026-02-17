@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { fetchMyEnrollmentsRequest } from "../store/slices/trainingPlansSlice";
 import Tile from "../components/Tile";
-import Header from "../components/Header";
+import SectionHeader from "../components/SectionHeader";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
@@ -61,7 +61,7 @@ export default function MyPlan() {
 
       {myEnrollments.map((enrollment) => (
         <Tile key={enrollment.enrollmentId}>
-          <Header
+          <SectionHeader
             icon={getRaceTypeIcon(enrollment.racePlan?.raceType)}
             header={enrollment.racePlan?.name || "Training Plan"}
           />
