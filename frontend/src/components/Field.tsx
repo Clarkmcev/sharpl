@@ -1,4 +1,5 @@
 import React from "react";
+import Label from "./Label";
 
 interface FieldProps {
   name: string;
@@ -8,9 +9,7 @@ interface FieldProps {
 function Field({ name, value }: FieldProps) {
   return (
     <div>
-      <label className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-        {name}
-      </label>
+      <Label text={name} />
       <p className="text-white font-medium">{value ? value : "/"}</p>
     </div>
   );

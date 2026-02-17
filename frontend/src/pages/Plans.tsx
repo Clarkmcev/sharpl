@@ -18,17 +18,12 @@ import {
 } from "@headlessui/react";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
+import PageHeader from "../components/PageHeader";
 
 export default function Plans() {
   const dispatch = useAppDispatch();
-  const {
-    plans,
-    selectedPlan,
-    loading,
-    enrolling,
-    error,
-    enrollmentSuccess,
-  } = useAppSelector((state) => state.trainingPlans);
+  const { plans, selectedPlan, loading, enrolling, error, enrollmentSuccess } =
+    useAppSelector((state) => state.trainingPlans);
 
   useEffect(() => {
     dispatch(fetchTrainingPlansRequest());
@@ -87,14 +82,10 @@ export default function Plans() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-2 p-4">
-        <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
-          Training Plans
-        </h2>
-        <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
-          Choose a structured training plan to prepare for your race
-        </p>
-      </div>
+      <PageHeader
+        title="Available Training Plans"
+        subtitle="Browse and enroll in training plans that suit your goals"
+      />
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">

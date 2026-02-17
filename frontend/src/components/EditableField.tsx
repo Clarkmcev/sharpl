@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import Label from "./Label";
 
 interface EditableFieldProps {
   name: string;
@@ -137,18 +138,9 @@ function EditableField({
 
   return (
     <div>
-      <label className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
-        {name}
-      </label>
+      <Label text={name} />
       <div className="flex items-center gap-2 group w-fit">
         <p className="text-white font-medium flex-1">{displayValue()}</p>
-        {/* <button
-          // onClick={() => setIsEditing(true)}
-          className="opacity-0 group-hover:opacity-100  text-dark-CTA-bg"
-          title="Edit"
-        >
-          <EditIcon fontSize="small" />
-        </button> */}
       </div>
     </div>
   );

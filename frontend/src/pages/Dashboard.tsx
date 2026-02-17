@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
 import Plans from "./Plans";
-import MyPlan from "./MyPlan";
+import Training from "./Trainings";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -91,7 +91,7 @@ export default function Dashboard() {
       case "profile":
         return <Profile />;
       case "myplan":
-        return <MyPlan />;
+        return <Training />;
       case "training":
         return <Plans />;
 
@@ -221,9 +221,9 @@ export default function Dashboard() {
       </aside>
 
       <main ref={ref} className="flex-1 flex flex-col h-full overflow-hidden">
-        <header className="flex-shrink-0 bg-light-bg dark:bg-dark-bg">
-          <div className="px-8 py-4">
-            <h2 className="text-lg text-light-text-secondary dark:text-dark-text-secondary ">
+        <header className="bg-light-bg dark:bg-dark-bg">
+          <div className="px-4 py-2">
+            <h2 className="text-sm text-light-text-secondary dark:text-dark-text-secondary ">
               {navItems.find((item) => item.id === activeTab)?.label}
             </h2>
           </div>

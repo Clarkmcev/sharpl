@@ -6,8 +6,9 @@ import SectionHeader from "../components/SectionHeader";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import PageHeader from "../components/PageHeader";
 
-export default function MyPlan() {
+export default function Trainings() {
   const dispatch = useAppDispatch();
   const { myEnrollments, loadingEnrollments } = useAppSelector(
     (state) => state.trainingPlans,
@@ -49,53 +50,48 @@ export default function MyPlan() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-2 p-4">
-        <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
-          My Training Plans
-        </h2>
-        <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
-          Training plans you are currently enrolled in
-        </p>
-      </div>
-
+    <div className="flex flex-col gap-2">
+      <PageHeader
+        title="My Training Plans"
+        subtitle="Training plans you are currently enrolled in"
+      />
       {myEnrollments.map((enrollment) => (
         <Tile key={enrollment.enrollmentId}>
           <SectionHeader
             icon={getRaceTypeIcon(enrollment.racePlan?.raceType)}
             header={enrollment.racePlan?.name || "Training Plan"}
           />
-          <div className="ml-11 mt-4">
+          <div className="ml-12 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                   Duration
                 </p>
-                <p className="text-lg font-semibold">
+                <p className="text-md font-semibold text-white">
                   {enrollment.racePlan?.durationWeeks} weeks
                 </p>
               </div>
               <div>
-                <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                   Start Date
                 </p>
-                <p className="text-lg font-semibold">
+                <p className="text-md font-semibold text-white">
                   {enrollment.startDate
                     ? new Date(enrollment.startDate).toLocaleDateString()
                     : "Not set"}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                   Status
                 </p>
-                <p className="text-lg font-semibold capitalize">
+                <p className="text-md font-semibold capitalize text-white">
                   {enrollment.status}
                 </p>
               </div>
             </div>
             <div className="mt-4">
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                 {enrollment.racePlan?.description}
               </p>
             </div>
