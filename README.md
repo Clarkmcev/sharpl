@@ -3,6 +3,7 @@
 **A training management platform for endurance athletes** who want to track, analyze, and optimize their performance across running, cycling, swimming, and triathlon disciplines.
 
 Sharpl helps athletes stay sharp by providing tools to:
+
 - 📊 Track workouts and training plans with precision
 - 📈 Analyze performance metrics and trends over time
 - 🎯 Set and monitor progress toward race goals
@@ -20,7 +21,7 @@ A containerized full-stack application with React (Vite + Tailwind CSS), Go (Gin
 
 ## Architecture
 
-- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS
+- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS + Redux Toolkit
 - **Backend**: Go + GORM
 - **Database**: PostgreSQL 16
 - **API Contract**: OpenAPI 3.0 (Swagger)
