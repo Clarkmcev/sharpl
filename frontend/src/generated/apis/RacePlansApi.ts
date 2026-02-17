@@ -15,18 +15,32 @@
 
 import * as runtime from '../runtime';
 import type {
+  EnrollmentRequest,
+  EnrollmentResponse,
   ErrorResponse,
+  MyEnrollmentsResponse,
   RacePlanResponse,
   RacePlansResponse,
 } from '../models/index';
 import {
+    EnrollmentRequestFromJSON,
+    EnrollmentRequestToJSON,
+    EnrollmentResponseFromJSON,
+    EnrollmentResponseToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    MyEnrollmentsResponseFromJSON,
+    MyEnrollmentsResponseToJSON,
     RacePlanResponseFromJSON,
     RacePlanResponseToJSON,
     RacePlansResponseFromJSON,
     RacePlansResponseToJSON,
 } from '../models/index';
+
+export interface EnrollInRacePlanRequest {
+    planId: number;
+    body: EnrollmentRequest;
+}
 
 export interface FilterRacePlansRequest {
     raceType?: string;
@@ -45,6 +59,32 @@ export interface GetRacePlanRequest {
  * @interface RacePlansApiInterface
  */
 export interface RacePlansApiInterface {
+    /**
+     * Creates request options for enrollInRacePlan without sending the request
+     * @param {number} planId Race plan ID
+     * @param {EnrollmentRequest} body Enrollment details
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    enrollInRacePlanRequestOpts(requestParameters: EnrollInRacePlanRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * Enroll the authenticated user in a specific race training plan
+     * @summary Enroll user in a training plan
+     * @param {number} planId Race plan ID
+     * @param {EnrollmentRequest} body Enrollment details
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    enrollInRacePlanRaw(requestParameters: EnrollInRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EnrollmentResponse>>;
+
+    /**
+     * Enroll the authenticated user in a specific race training plan
+     * Enroll user in a training plan
+     */
+    enrollInRacePlan(requestParameters: EnrollInRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnrollmentResponse>;
+
     /**
      * Creates request options for filterRacePlans without sending the request
      * @param {string} [raceType] Filter by race type (running or triathlon)
@@ -72,6 +112,28 @@ export interface RacePlansApiInterface {
      * Filter race plans
      */
     filterRacePlans(requestParameters: FilterRacePlansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RacePlansResponse>;
+
+    /**
+     * Creates request options for getMyEnrollments without sending the request
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    getMyEnrollmentsRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
+     * Retrieve all training plans the authenticated user is enrolled in
+     * @summary Get user\'s enrolled training plans
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    getMyEnrollmentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MyEnrollmentsResponse>>;
+
+    /**
+     * Retrieve all training plans the authenticated user is enrolled in
+     * Get user\'s enrolled training plans
+     */
+    getMyEnrollments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MyEnrollmentsResponse>;
 
     /**
      * Creates request options for getRacePlan without sending the request
@@ -127,6 +189,67 @@ export interface RacePlansApiInterface {
 export class RacePlansApi extends runtime.BaseAPI implements RacePlansApiInterface {
 
     /**
+     * Creates request options for enrollInRacePlan without sending the request
+     */
+    async enrollInRacePlanRequestOpts(requestParameters: EnrollInRacePlanRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['planId'] == null) {
+            throw new runtime.RequiredError(
+                'planId',
+                'Required parameter "planId" was null or undefined when calling enrollInRacePlan().'
+            );
+        }
+
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling enrollInRacePlan().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+
+        let urlPath = `/race-plans/{planId}/enroll`;
+        urlPath = urlPath.replace(`{${"planId"}}`, encodeURIComponent(String(requestParameters['planId'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        };
+    }
+
+    /**
+     * Enroll the authenticated user in a specific race training plan
+     * Enroll user in a training plan
+     */
+    async enrollInRacePlanRaw(requestParameters: EnrollInRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EnrollmentResponse>> {
+        const requestOptions = await this.enrollInRacePlanRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnrollmentResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Enroll the authenticated user in a specific race training plan
+     * Enroll user in a training plan
+     */
+    async enrollInRacePlan(requestParameters: EnrollInRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnrollmentResponse> {
+        const response = await this.enrollInRacePlanRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for filterRacePlans without sending the request
      */
     async filterRacePlansRequestOpts(requestParameters: FilterRacePlansRequest): Promise<runtime.RequestOpts> {
@@ -174,6 +297,49 @@ export class RacePlansApi extends runtime.BaseAPI implements RacePlansApiInterfa
      */
     async filterRacePlans(requestParameters: FilterRacePlansRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RacePlansResponse> {
         const response = await this.filterRacePlansRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getMyEnrollments without sending the request
+     */
+    async getMyEnrollmentsRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+
+        let urlPath = `/my-enrollments`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Retrieve all training plans the authenticated user is enrolled in
+     * Get user\'s enrolled training plans
+     */
+    async getMyEnrollmentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MyEnrollmentsResponse>> {
+        const requestOptions = await this.getMyEnrollmentsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MyEnrollmentsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve all training plans the authenticated user is enrolled in
+     * Get user\'s enrolled training plans
+     */
+    async getMyEnrollments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MyEnrollmentsResponse> {
+        const response = await this.getMyEnrollmentsRaw(initOverrides);
         return await response.value();
     }
 

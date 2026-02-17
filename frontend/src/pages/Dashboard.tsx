@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
-import Training from "./Training";
+import Plans from "./Plans";
+import MyPlan from "./MyPlan";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -16,6 +17,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 type Tab =
   | "dashboard"
   | "profile"
+  | "myplan"
   | "training"
   | "calendar"
   | "analytics"
@@ -25,6 +27,7 @@ export default function Dashboard() {
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const ref = useRef<HTMLDivElement>(null);
 
   const { user } = useAppSelector((state) => state.auth);
 
@@ -44,8 +47,13 @@ export default function Dashboard() {
       icon: <ProfileIcon fontSize="small" />,
     },
     {
+      id: "myplan",
+      label: "My Plan",
+      icon: <FitnessCenterIcon fontSize="small" />,
+    },
+    {
       id: "training",
-      label: "Training Plan",
+      label: "Training Plans",
       icon: <FitnessCenterIcon fontSize="small" />,
     },
     {
@@ -82,8 +90,10 @@ export default function Dashboard() {
         );
       case "profile":
         return <Profile />;
+      case "myplan":
+        return <MyPlan />;
       case "training":
-        return <Training />;
+        return <Plans />;
 
       case "calendar":
         return (
@@ -210,16 +220,18 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg">
+      <main ref={ref} className="flex-1 overflow-y-auto flex flex-col">
+        <header className="sticky top-0 z-10 bg-light-bg dark:bg-dark-bg ">
           <div className="px-8 py-4">
             <h2 className="text-lg text-light-text-secondary dark:text-dark-text-secondary ">
               {navItems.find((item) => item.id === activeTab)?.label}
             </h2>
           </div>
-        </div>
+        </header>
 
-        <div className="px-4">{renderContent()}</div>
+        <div className={`px-4 flex flex-col h-full pb-4`}>
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

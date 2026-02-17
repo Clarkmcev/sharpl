@@ -4,6 +4,7 @@ import {
   UsersApi,
   HealthApi,
   OnboardingApi,
+  RacePlansApi,
 } from "../generated";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
@@ -33,3 +34,4 @@ export const authApi = new AuthApi(configuration);
 export const usersApi = new UsersApi(configuration);
 export const healthApi = new HealthApi(configuration);
 export const onboardingApi = new OnboardingApi(configuration);
+export const racePlansApi = new RacePlansApi(configuration);

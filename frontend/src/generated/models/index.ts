@@ -5,6 +5,8 @@ export * from './HealthResponse';
 export * from './LoginRequest';
 export * from './LoginResponse';
 export * from './MessageResponse';
+export * from './MyEnrollmentsResponse';
+export * from './MyEnrollmentsResponseDataInner';
 export * from './OnboardingData';
 export * from './OnboardingResponse';
 export * from './PingEchoResponse';

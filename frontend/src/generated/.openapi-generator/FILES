@@ -12,6 +12,8 @@ docs/HealthResponse.md
 docs/LoginRequest.md
 docs/LoginResponse.md
 docs/MessageResponse.md
+docs/MyEnrollmentsResponse.md
+docs/MyEnrollmentsResponseDataInner.md
 docs/OnboardingApi.md
 docs/OnboardingData.md
 docs/OnboardingResponse.md
@@ -41,6 +43,8 @@ models/HealthResponse.ts
 models/LoginRequest.ts
 models/LoginResponse.ts
 models/MessageResponse.ts
+models/MyEnrollmentsResponse.ts
+models/MyEnrollmentsResponseDataInner.ts
 models/OnboardingData.ts
 models/OnboardingResponse.ts
 models/PingEchoResponse.ts

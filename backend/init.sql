@@ -50,6 +50,24 @@ CREATE INDEX idx_race_plans_race_type ON race_plans(race_type);
 CREATE INDEX idx_race_plans_distance ON race_plans(distance);
 CREATE INDEX idx_race_plans_experience_level ON race_plans(experience_level);
 
+CREATE TABLE IF NOT EXISTS training_enrollments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    race_plan_id INTEGER NOT NULL REFERENCES race_plans(id) ON DELETE CASCADE,
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'active',
+    start_date DATE,
+    target_race_date DATE,
+    completed_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, race_plan_id, enrolled_at)
+);
+
+CREATE INDEX idx_training_enrollments_user_id ON training_enrollments(user_id);
+CREATE INDEX idx_training_enrollments_race_plan_id ON training_enrollments(race_plan_id);
+CREATE INDEX idx_training_enrollments_status ON training_enrollments(status);
+
 -- Insert sample data
 INSERT INTO users (email, password_hash, name) VALUES
     ('admin@example.com', '$2a$10$example_hash', 'Admin User'),

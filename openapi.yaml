@@ -495,6 +495,75 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /race-plans/{planId}/enroll:
+    post:
+      tags:
+        - race_plans
+      summary: Enroll user in a training plan
+      description: Enroll the authenticated user in a specific race training plan
+      operationId: enrollInRacePlan
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: planId
+          type: integer
+          format: int64
+          required: true
+          description: Race plan ID
+        - in: body
+          name: body
+          description: Enrollment details
+          required: true
+          schema:
+            $ref: "#/definitions/EnrollmentRequest"
+      responses:
+        "200":
+          description: Successfully enrolled in race plan
+          schema:
+            $ref: "#/definitions/EnrollmentResponse"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Race plan not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      security:
+        - JWT: []
+
+  /my-enrollments:
+    get:
+      tags:
+        - race_plans
+      summary: Get user's enrolled training plans
+      description: Retrieve all training plans the authenticated user is enrolled in
+      operationId: getMyEnrollments
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User enrollments retrieved successfully
+          schema:
+            $ref: "#/definitions/MyEnrollmentsResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      security:
+        - JWT: []
+
 securityDefinitions:
   JWT:
     type: apiKey
@@ -940,3 +1009,37 @@ definitions:
         example: Operation successful
     required:
       - message
+
+  MyEnrollmentsResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "Enrollments retrieved successfully"
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            enrollment_id:
+              type: integer
+              format: int64
+            user_id:
+              type: integer
+              format: int64
+            race_plan:
+              $ref: "#/definitions/RacePlan"
+            start_date:
+              type: string
+              format: date
+            target_race_date:
+              type: string
+              format: date
+            status:
+              type: string
+            enrolled_at:
+              type: string
+              format: date-time
+    required:
+      - message
+      - data

@@ -27,12 +27,13 @@ func main() {
 	onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
 	raceRepo := repositories.NewRaceRepository(database.GetDB())
 	racePlanRepo := repositories.NewRacePlanRepository(database.GetDB())
+	trainingEnrollmentRepo := repositories.NewTrainingEnrollmentRepository(database.GetDB())
 
 	// Initialize services
 	authService := service.SetAuthService(userRepo, sessionRepo)
 	onboardingService := service.NewOnboardingService(onboardingRepo, raceRepo)
 	raceService := service.NewRaceService(raceRepo)
-	racePlanService := service.NewRacePlanService(racePlanRepo)
+	racePlanService := service.NewRacePlanService(racePlanRepo, trainingEnrollmentRepo)
 
 	// Load swagger spec
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
