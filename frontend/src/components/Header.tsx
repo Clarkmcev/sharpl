@@ -7,9 +7,9 @@ interface HeaderProps {
 
 function Header({ icon, header }: HeaderProps) {
   return (
-    <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-      <span className="mr-2">{icon}</span>
-      {header}
+    <h3 className="text-lg font-semibold text-white ml-4 mb-4 flex items-center">
+      {icon}
+      <div className="ml-2">{header}</div>
     </h3>
   );
 }

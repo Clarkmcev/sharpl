@@ -14,6 +14,8 @@ import EditableField from "../components/EditableField";
 import Tile from "../components/Tile";
 import Uncompleted from "../components/onboarding/Uncompleted";
 import type { OnboardingData } from "../generated";
+import Section from "../components/Section";
+import PageHeader from "../components/PageHeader";
 
 export default function Profile() {
   const dispatch = useAppDispatch();
@@ -53,132 +55,131 @@ export default function Profile() {
   const preferredWorkoutTimeOptions = ["Morning", "Afternoon", "Evening"];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        {/* Header */}
-        <div className="mb-2 p-4">
-          <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
-            Profile
-          </h2>
-          <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
-            Your personal information and training preferences. Keep this up to
-            date so we can provide the best training experience for you.
-          </p>
-        </div>
-
-        {/* Personal Information */}
+    <>
+      <div className="flex flex-col gap-2 h-full">
+        <PageHeader
+          title="Your Profile"
+          subtitle="Manage your personal information and training preferences."
+        />
         <Tile>
-          <Header
-            icon={<PersonIcon fontSize="small" />}
-            header="Personal Information"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field name="Name" value={user?.name || "Not provided"} />
-            <Field name="Email" value={user?.email || "Not provided"} />
-          </div>
-        </Tile>
-
-        {/* Sport & Experience */}
-        <Tile>
-          <Header
-            icon={<DirectionsRunIcon fontSize="small" />}
-            header="Sport & Experience"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <EditableField
-              name="Primary Sport"
-              value={onboardingData.sport}
-              type="select"
-              options={sportOptions}
-              onSave={(value) => handleFieldUpdate("sport", value)}
-            />
-            <EditableField
-              name="Experience Level"
-              value={onboardingData.experienceLevel}
-              type="select"
-              options={experienceLevelOptions}
-              onSave={(value) => handleFieldUpdate("experienceLevel", value)}
-            />
-            <EditableField
-              name="Weekly Training Hours"
-              value={onboardingData.weeklyTrainingHours}
-              type="number"
-              onSave={(value) =>
-                handleFieldUpdate("weeklyTrainingHours", value)
-              }
-            />
-          </div>
-        </Tile>
-
-        {/* Current Fitness */}
-        <Tile>
-          <Header
-            icon={<FitnessCenterIcon fontSize="small" />}
-            header="Current Fitness"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <EditableField
-              name="Current Volume"
-              value={onboardingData.currentVolume || ""}
-              onSave={(value) => handleFieldUpdate("currentVolume", value)}
-            />
-            <EditableField
-              name="Longest Run"
-              value={onboardingData.longestRun || ""}
-              onSave={(value) => handleFieldUpdate("longestRun", value)}
-            />
-            <div className="md:col-span-2">
-              <EditableField
-                name="Recent Races"
-                value={onboardingData.recentRaces || ""}
-                onSave={(value) => handleFieldUpdate("recentRaces", value)}
+          <section className="flex space-y-4 flex-col">
+            {/* Personal Information */}
+            <Section>
+              <Header
+                icon={<PersonIcon fontSize="small" />}
+                header="Personal Information"
               />
-            </div>
-            <div className="md:col-span-2">
-              <EditableField
-                name="Injuries"
-                value={onboardingData.injuries || ""}
-                onSave={(value) => handleFieldUpdate("injuries", value)}
-              />
-            </div>
-          </div>
-        </Tile>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+                <Field name="Name" value={user?.name || "Not provided"} />
+                <Field name="Email" value={user?.email || "Not provided"} />
+              </div>
+            </Section>
 
-        {/* Training Preferences */}
-        <Tile>
-          <Header
-            icon={<SettingsIcon fontSize="small" />}
-            header="Training Preferences"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <EditableField
-              name="Training Days per Week"
-              value={onboardingData.trainingDays}
-              type="number"
-              onSave={(value) => handleFieldUpdate("trainingDays", value)}
-            />
-            <EditableField
-              name="Preferred Workout Time"
-              value={onboardingData.preferredWorkoutTime || ""}
-              type="select"
-              options={preferredWorkoutTimeOptions}
-              onSave={(value) =>
-                handleFieldUpdate("preferredWorkoutTime", value)
-              }
-            />
-            <EditableField
-              name="Gym Access"
-              value={onboardingData.gymAccess}
-              type="boolean"
-              onSave={(value) => handleFieldUpdate("gymAccess", value)}
-            />
-            <Field
-              name="Cross-Training"
-              value={formatCrossTraining(onboardingData.crossTraining)}
-            />
-          </div>
+            {/* Sport & Experience */}
+            <Section>
+              <Header
+                icon={<DirectionsRunIcon fontSize="small" />}
+                header="Sport & Experience"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+                <EditableField
+                  name="Primary Sport"
+                  value={onboardingData.sport}
+                  type="select"
+                  options={sportOptions}
+                  onSave={(value) => handleFieldUpdate("sport", value)}
+                />
+                <EditableField
+                  name="Experience Level"
+                  value={onboardingData.experienceLevel}
+                  type="select"
+                  options={experienceLevelOptions}
+                  onSave={(value) =>
+                    handleFieldUpdate("experienceLevel", value)
+                  }
+                />
+                <EditableField
+                  name="Weekly Training Hours"
+                  value={onboardingData.weeklyTrainingHours}
+                  type="number"
+                  onSave={(value) =>
+                    handleFieldUpdate("weeklyTrainingHours", value)
+                  }
+                />
+              </div>
+            </Section>
+
+            {/* Current Fitness */}
+            <Section>
+              <Header
+                icon={<FitnessCenterIcon fontSize="small" />}
+                header="Current Fitness"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+                <EditableField
+                  name="Current Volume"
+                  value={onboardingData.currentVolume || ""}
+                  onSave={(value) => handleFieldUpdate("currentVolume", value)}
+                />
+                <EditableField
+                  name="Longest Run"
+                  value={onboardingData.longestRun || ""}
+                  onSave={(value) => handleFieldUpdate("longestRun", value)}
+                />
+                <div className="md:col-span-2">
+                  <EditableField
+                    name="Recent Races"
+                    value={onboardingData.recentRaces || ""}
+                    onSave={(value) => handleFieldUpdate("recentRaces", value)}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <EditableField
+                    name="Injuries"
+                    value={onboardingData.injuries || ""}
+                    onSave={(value) => handleFieldUpdate("injuries", value)}
+                  />
+                </div>
+              </div>
+            </Section>
+
+            {/* Training Preferences */}
+            <Section>
+              <Header
+                icon={<SettingsIcon fontSize="small" />}
+                header="Training Preferences"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
+                <EditableField
+                  name="Training Days per Week"
+                  value={onboardingData.trainingDays}
+                  type="number"
+                  onSave={(value) => handleFieldUpdate("trainingDays", value)}
+                />
+                <EditableField
+                  name="Preferred Workout Time"
+                  value={onboardingData.preferredWorkoutTime || ""}
+                  type="select"
+                  options={preferredWorkoutTimeOptions}
+                  onSave={(value) =>
+                    handleFieldUpdate("preferredWorkoutTime", value)
+                  }
+                />
+                <EditableField
+                  name="Gym Access"
+                  value={onboardingData.gymAccess}
+                  type="boolean"
+                  onSave={(value) => handleFieldUpdate("gymAccess", value)}
+                />
+                <Field
+                  name="Cross-Training"
+                  value={formatCrossTraining(onboardingData.crossTraining)}
+                />
+              </div>
+            </Section>
+          </section>
         </Tile>
       </div>
-    </div>
+    </>
   );
 }

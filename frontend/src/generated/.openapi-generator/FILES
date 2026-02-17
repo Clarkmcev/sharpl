@@ -6,6 +6,9 @@ apis/RacesApi.ts
 apis/UsersApi.ts
 apis/index.ts
 docs/AuthApi.md
+docs/EnrollmentRequest.md
+docs/EnrollmentResponse.md
+docs/EnrollmentResponseData.md
 docs/ErrorResponse.md
 docs/HealthApi.md
 docs/HealthResponse.md
@@ -38,6 +41,9 @@ docs/UserResponse.md
 docs/UsersApi.md
 docs/UsersResponse.md
 index.ts
+models/EnrollmentRequest.ts
+models/EnrollmentResponse.ts
+models/EnrollmentResponseData.ts
 models/ErrorResponse.ts
 models/HealthResponse.ts
 models/LoginRequest.ts

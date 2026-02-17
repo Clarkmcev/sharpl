@@ -136,19 +136,19 @@ function EditableField({
   }
 
   return (
-    <div className="cursor-pointer" onClick={() => setIsEditing(true)}>
+    <div>
       <label className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
         {name}
       </label>
       <div className="flex items-center gap-2 group w-fit">
         <p className="text-white font-medium flex-1">{displayValue()}</p>
-        <button
-          onClick={() => setIsEditing(true)}
+        {/* <button
+          // onClick={() => setIsEditing(true)}
           className="opacity-0 group-hover:opacity-100  text-dark-CTA-bg"
           title="Edit"
         >
           <EditIcon fontSize="small" />
-        </button>
+        </button> */}
       </div>
     </div>
   );

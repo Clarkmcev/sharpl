@@ -225,7 +225,7 @@ export class RacePlansApi extends runtime.BaseAPI implements RacePlansApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
+            body: EnrollmentRequestToJSON(requestParameters['body']),
         };
     }
 

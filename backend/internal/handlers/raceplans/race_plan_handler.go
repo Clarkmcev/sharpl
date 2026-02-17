@@ -209,7 +209,7 @@ func (h *RacePlanHandler) GetMyEnrollments(params race_plans.GetMyEnrollmentsPar
 // Get user from principal (already validated by JWT middleware)
 user, ok := principal.(*models.User)
 if !ok || user == nil {
-return race_plans.NewGetMyEnrollmentsBadRequest().WithPayload(&generatedModels.ErrorResponse{
+return race_plans.NewGetMyEnrollmentsUnauthorized().WithPayload(&generatedModels.ErrorResponse{
 Error: "Invalid user authentication",
 })
 }

@@ -53,7 +53,7 @@ export default function Dashboard() {
     },
     {
       id: "training",
-      label: "Training Plans",
+      label: "Training Plan",
       icon: <FitnessCenterIcon fontSize="small" />,
     },
     {

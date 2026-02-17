@@ -62,7 +62,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **planId** | `number` | Race plan ID | [Defaults to `undefined`] |
-| **body** | `EnrollmentRequest` | Enrollment details | |
+| **body** | [EnrollmentRequest](EnrollmentRequest.md) | Enrollment details | |
 
 ### Return type
 

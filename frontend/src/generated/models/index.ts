@@ -1,5 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './EnrollmentRequest';
+export * from './EnrollmentResponse';
+export * from './EnrollmentResponseData';
 export * from './ErrorResponse';
 export * from './HealthResponse';
 export * from './LoginRequest';

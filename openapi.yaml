@@ -1043,3 +1043,58 @@ definitions:
     required:
       - message
       - data
+
+  EnrollmentRequest:
+    type: object
+    properties:
+      start_date:
+        type: string
+        format: date
+        example: "2024-01-15"
+        description: The date to start the training plan
+      target_race_date:
+        type: string
+        format: date
+        example: "2024-03-15"
+        description: The target race date
+    required:
+      - start_date
+
+  EnrollmentResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "Successfully enrolled in training plan"
+      data:
+        type: object
+        properties:
+          enrollment_id:
+            type: integer
+            format: int64
+            example: 1
+          user_id:
+            type: integer
+            format: int64
+            example: 1
+          race_plan_id:
+            type: integer
+            format: int64
+            example: 5
+          start_date:
+            type: string
+            format: date
+            example: "2024-01-15"
+          target_race_date:
+            type: string
+            format: date
+            example: "2024-03-15"
+          status:
+            type: string
+            example: "active"
+          enrolled_at:
+            type: string
+            format: date-time
+    required:
+      - message
+      - data
