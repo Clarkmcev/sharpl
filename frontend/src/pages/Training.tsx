@@ -196,7 +196,7 @@ export default function Training() {
                                     Week {week.week}
                                   </span>
                                 </div>
-                                <p className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary text-left">
+                                <p className="text-sm font-medium text-left">
                                   {week.description}
                                 </p>
                               </div>
