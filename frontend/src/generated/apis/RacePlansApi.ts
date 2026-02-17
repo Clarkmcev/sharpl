@@ -18,6 +18,7 @@ import type {
   EnrollmentRequest,
   EnrollmentResponse,
   ErrorResponse,
+  MessageResponse,
   MyEnrollmentsResponse,
   RacePlanResponse,
   RacePlansResponse,
@@ -29,6 +30,8 @@ import {
     EnrollmentResponseToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    MessageResponseFromJSON,
+    MessageResponseToJSON,
     MyEnrollmentsResponseFromJSON,
     MyEnrollmentsResponseToJSON,
     RacePlanResponseFromJSON,
@@ -49,6 +52,10 @@ export interface FilterRacePlansRequest {
 }
 
 export interface GetRacePlanRequest {
+    planId: number;
+}
+
+export interface UnenrollFromRacePlanRequest {
     planId: number;
 }
 
@@ -180,6 +187,30 @@ export interface RacePlansApiInterface {
      * Get all race plans
      */
     getRacePlans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RacePlansResponse>;
+
+    /**
+     * Creates request options for unenrollFromRacePlan without sending the request
+     * @param {number} planId Race plan ID
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    unenrollFromRacePlanRequestOpts(requestParameters: UnenrollFromRacePlanRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * Unenroll the authenticated user from a specific race training plan
+     * @summary Unenroll user from a training plan
+     * @param {number} planId Race plan ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RacePlansApiInterface
+     */
+    unenrollFromRacePlanRaw(requestParameters: UnenrollFromRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MessageResponse>>;
+
+    /**
+     * Unenroll the authenticated user from a specific race training plan
+     * Unenroll user from a training plan
+     */
+    unenrollFromRacePlan(requestParameters: UnenrollFromRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MessageResponse>;
 
 }
 
@@ -426,6 +457,57 @@ export class RacePlansApi extends runtime.BaseAPI implements RacePlansApiInterfa
      */
     async getRacePlans(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RacePlansResponse> {
         const response = await this.getRacePlansRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for unenrollFromRacePlan without sending the request
+     */
+    async unenrollFromRacePlanRequestOpts(requestParameters: UnenrollFromRacePlanRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['planId'] == null) {
+            throw new runtime.RequiredError(
+                'planId',
+                'Required parameter "planId" was null or undefined when calling unenrollFromRacePlan().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+
+        let urlPath = `/race-plans/{planId}/unenroll`;
+        urlPath = urlPath.replace(`{${"planId"}}`, encodeURIComponent(String(requestParameters['planId'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Unenroll the authenticated user from a specific race training plan
+     * Unenroll user from a training plan
+     */
+    async unenrollFromRacePlanRaw(requestParameters: UnenrollFromRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MessageResponse>> {
+        const requestOptions = await this.unenrollFromRacePlanRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MessageResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Unenroll the authenticated user from a specific race training plan
+     * Unenroll user from a training plan
+     */
+    async unenrollFromRacePlan(requestParameters: UnenrollFromRacePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MessageResponse> {
+        const response = await this.unenrollFromRacePlanRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -22,4 +22,5 @@ func (h *RacePlanHandler) RegisterHandlers(api *operations.SharplAPIAPI) {
 	api.RacePlansFilterRacePlansHandler = race_plans.FilterRacePlansHandlerFunc(h.FilterRacePlans)
 	api.RacePlansEnrollInRacePlanHandler = race_plans.EnrollInRacePlanHandlerFunc(h.EnrollInRacePlan)
 	api.RacePlansGetMyEnrollmentsHandler = race_plans.GetMyEnrollmentsHandlerFunc(h.GetMyEnrollments)
+	api.RacePlansUnenrollFromRacePlanHandler = race_plans.UnenrollFromRacePlanHandlerFunc(h.UnenrollFromRacePlan)
 }

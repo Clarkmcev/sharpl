@@ -8,9 +8,11 @@ interface TrainingPlansState {
   myEnrollments: MyEnrollmentsResponseDataInner[];
   loading: boolean;
   enrolling: boolean;
+  unenrolling: boolean;
   loadingEnrollments: boolean;
   error: string | null;
   enrollmentSuccess: boolean;
+  unenrollmentSuccess: boolean;
 }
 
 const initialState: TrainingPlansState = {
@@ -19,9 +21,11 @@ const initialState: TrainingPlansState = {
   myEnrollments: [],
   loading: false,
   enrolling: false,
+  unenrolling: false,
   loadingEnrollments: false,
   error: null,
   enrollmentSuccess: false,
+  unenrollmentSuccess: false,
 };
 
 const trainingPlansSlice = createSlice({
@@ -92,6 +96,29 @@ const trainingPlansSlice = createSlice({
       state.loadingEnrollments = false;
       state.error = action.payload;
     },
+
+    // Unenroll from training plan
+    unenrollFromPlanRequest: (state, action: PayloadAction<number>) => {
+      state.unenrolling = true;
+      state.error = null;
+      state.unenrollmentSuccess = false;
+    },
+    unenrollFromPlanSuccess: (state) => {
+      state.unenrolling = false;
+      state.error = null;
+      state.unenrollmentSuccess = true;
+    },
+    unenrollFromPlanFailure: (state, action: PayloadAction<string>) => {
+      state.unenrolling = false;
+      state.error = action.payload;
+      state.unenrollmentSuccess = false;
+    },
+
+    // Reset unenrollment state
+    resetUnenrollmentState: (state) => {
+      state.unenrollmentSuccess = false;
+      state.error = null;
+    },
   },
 });
 
@@ -107,6 +134,10 @@ export const {
   fetchMyEnrollmentsRequest,
   fetchMyEnrollmentsSuccess,
   fetchMyEnrollmentsFailure,
+  unenrollFromPlanRequest,
+  unenrollFromPlanSuccess,
+  unenrollFromPlanFailure,
+  resetUnenrollmentState,
 } = trainingPlansSlice.actions;
 
 export default trainingPlansSlice.reducer;

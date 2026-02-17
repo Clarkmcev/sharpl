@@ -2,8 +2,7 @@ import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logoutRequest } from "../store/slices/authSlice";
 import Profile from "./Profile";
-import Plans from "./Plans";
-import Training from "./Trainings";
+import AvailablePlans from "./Plans";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -47,11 +46,6 @@ export default function Dashboard() {
       icon: <ProfileIcon fontSize="small" />,
     },
     {
-      id: "myplan",
-      label: "My Plan",
-      icon: <FitnessCenterIcon fontSize="small" />,
-    },
-    {
       id: "training",
       label: "Training Plan",
       icon: <FitnessCenterIcon fontSize="small" />,
@@ -90,10 +84,8 @@ export default function Dashboard() {
         );
       case "profile":
         return <Profile />;
-      case "myplan":
-        return <Training />;
       case "training":
-        return <Plans />;
+        return <AvailablePlans />;
 
       case "calendar":
         return (
@@ -173,7 +165,7 @@ export default function Dashboard() {
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center cursor-pointer ${
                 sidebarOpen ? "px-4" : "px-2 justify-center"
-              } py-3 rounded-lg transition-all hover:text-light-text-primary hover:dark:text-dark-text-primary ${
+              } py-2 rounded-lg transition-all hover:text-light-text-primary hover:dark:text-dark-text-primary ${
                 activeTab === item.id
                   ? `text-light-text-primary dark:text-dark-text-primary font-medium`
                   : "text-light-text-secondary dark:text-dark-text-secondary"

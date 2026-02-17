@@ -276,3 +276,31 @@ Message: &message,
 Data:    enrollmentData,
 })
 }
+
+func (h *RacePlanHandler) UnenrollFromRacePlan(params race_plans.UnenrollFromRacePlanParams, principal interface{}) middleware.Responder {
+	// Get user from principal (already validated by JWT middleware)
+	user, ok := principal.(*models.User)
+	if !ok || user == nil {
+		return race_plans.NewUnenrollFromRacePlanBadRequest().WithPayload(&generatedModels.ErrorResponse{
+			Error: "Invalid user authentication",
+		})
+	}
+
+	// Unenroll user
+	err := h.racePlanService.UnenrollUser(user.ID, uint(params.PlanID))
+	if err != nil {
+		if err.Error() == "enrollment not found" {
+			return race_plans.NewUnenrollFromRacePlanNotFound().WithPayload(&generatedModels.ErrorResponse{
+				Error: err.Error(),
+			})
+		}
+		return race_plans.NewUnenrollFromRacePlanInternalServerError().WithPayload(&generatedModels.ErrorResponse{
+			Error: "Failed to unenroll from training plan",
+		})
+	}
+
+	message := "Successfully unenrolled from training plan"
+	return race_plans.NewUnenrollFromRacePlanOK().WithPayload(&generatedModels.MessageResponse{
+		Message: &message,
+	})
+}

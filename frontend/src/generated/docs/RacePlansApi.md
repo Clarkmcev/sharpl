@@ -9,6 +9,7 @@ All URIs are relative to *http://localhost:8080/api/v1*
 | [**getMyEnrollments**](RacePlansApi.md#getmyenrollments) | **GET** /my-enrollments | Get user\&#39;s enrolled training plans |
 | [**getRacePlan**](RacePlansApi.md#getraceplan) | **GET** /race-plans/{planId} | Get a race plan |
 | [**getRacePlans**](RacePlansApi.md#getraceplans) | **GET** /race-plans | Get all race plans |
+| [**unenrollFromRacePlan**](RacePlansApi.md#unenrollfromraceplan) | **DELETE** /race-plans/{planId}/unenroll | Unenroll user from a training plan |
 
 
 
@@ -352,6 +353,80 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Race plans retrieved successfully |  -  |
+| **500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## unenrollFromRacePlan
+
+> MessageResponse unenrollFromRacePlan(planId)
+
+Unenroll user from a training plan
+
+Unenroll the authenticated user from a specific race training plan
+
+### Example
+
+```ts
+import {
+  Configuration,
+  RacePlansApi,
+} from '';
+import type { UnenrollFromRacePlanRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
+  });
+  const api = new RacePlansApi(config);
+
+  const body = {
+    // number | Race plan ID
+    planId: 789,
+  } satisfies UnenrollFromRacePlanRequest;
+
+  try {
+    const data = await api.unenrollFromRacePlan(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **planId** | `number` | Race plan ID | [Defaults to `undefined`] |
+
+### Return type
+
+[**MessageResponse**](MessageResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Successfully unenrolled from race plan |  -  |
+| **400** | Bad request |  -  |
+| **404** | Enrollment not found |  -  |
 | **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

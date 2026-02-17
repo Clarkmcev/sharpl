@@ -74,3 +74,17 @@ func (s *RacePlanService) GetUserEnrollments(userID uint) ([]models.TrainingEnro
 func (s *RacePlanService) GetActiveEnrollments(userID uint) ([]models.TrainingEnrollment, error) {
 	return s.enrollmentRepo.GetActiveByUserID(userID)
 }
+
+func (s *RacePlanService) UnenrollUser(userID uint, racePlanID uint) error {
+	// Check if user is enrolled in this plan
+	exists, err := s.enrollmentRepo.CheckExistingEnrollment(userID, racePlanID)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return errors.New("enrollment not found")
+	}
+
+	// Unenroll user
+	return s.enrollmentRepo.UnenrollUser(userID, racePlanID)
+}

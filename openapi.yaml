@@ -564,6 +564,42 @@ paths:
       security:
         - JWT: []
 
+  /race-plans/{planId}/unenroll:
+    delete:
+      tags:
+        - race_plans
+      summary: Unenroll user from a training plan
+      description: Unenroll the authenticated user from a specific race training plan
+      operationId: unenrollFromRacePlan
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: planId
+          type: integer
+          format: int64
+          required: true
+          description: Race plan ID
+      responses:
+        "200":
+          description: Successfully unenrolled from race plan
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Enrollment not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      security:
+        - JWT: []
+
 securityDefinitions:
   JWT:
     type: apiKey

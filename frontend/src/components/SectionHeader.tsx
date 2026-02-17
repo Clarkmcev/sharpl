@@ -1,15 +1,15 @@
 import React from "react";
 
 interface HeaderProps {
-  icon: React.ReactElement;
+  icon?: React.ReactNode;
   header: string;
 }
 
 function SectionHeader({ icon, header }: HeaderProps) {
   return (
-    <h3 className="text-lg font-semibold text-white ml-4 mb-4 flex items-center">
+    <h3 className="text-white ml-2 mb-4 flex items-center">
       {icon}
-      <div className="ml-2 text-lg font-light">{header}</div>
+      <div className="ml-2 text-md font-light">{header}</div>
     </h3>
   );
 }

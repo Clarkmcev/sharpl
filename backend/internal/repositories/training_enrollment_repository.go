@@ -58,3 +58,8 @@ func (r *TrainingEnrollmentRepository) CompleteEnrollment(id uint) error {
 			"completed_at": now,
 		}).Error
 }
+
+func (r *TrainingEnrollmentRepository) UnenrollUser(userID uint, racePlanID uint) error {
+	return r.db.Where("user_id = ? AND race_plan_id = ? AND status = ?", userID, racePlanID, "active").
+		Delete(&models.TrainingEnrollment{}).Error
+}

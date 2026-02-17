@@ -4,9 +4,10 @@ import EditIcon from "@mui/icons-material/Edit";
 interface Props {
   children: React.ReactNode;
   isEditable?: boolean;
+  className?: string;
 }
 
-function Tile({ children, isEditable }: Props) {
+function Tile({ children, isEditable, className }: Props) {
   const { ref, style } = useAnimateOnRender({
     delay: 20,
     duration: 100,
@@ -17,7 +18,7 @@ function Tile({ children, isEditable }: Props) {
     <div
       ref={ref}
       style={style}
-      className="p-4 h-full surface-light rounded-md"
+      className={`p-4 h-full surface-light rounded-md ${className}`}
     >
       {children}
       {isEditable && (
