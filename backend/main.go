@@ -6,6 +6,7 @@ import (
 	"sharpl-backend/generated/restapi/operations"
 	"sharpl-backend/internal/database"
 	"sharpl-backend/internal/handlers"
+	"sharpl-backend/internal/middleware"
 	"sharpl-backend/internal/repositories"
 	"sharpl-backend/internal/service"
 
@@ -49,7 +50,11 @@ func main() {
 	defer server.Shutdown()
 
 	server.Port = 8080
+
 	server.ConfigureAPI()
+
+	corsHandler := middleware.SetupCORS()
+	server.SetHandler(corsHandler.Handler(api.Serve(nil)))
 
 	log.Println("Server starting on :8080")
 	if err := server.Serve(); err != nil {

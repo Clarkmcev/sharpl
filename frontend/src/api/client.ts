@@ -7,11 +7,12 @@ import {
 } from "../generated";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_BASE_PATH = "/api/v1";
 
 // Configure API client with base URL and auth token
 // Token is fetched dynamically on each API call
 const configuration = new Configuration({
-  basePath: API_BASE_URL,
+  basePath: `${API_BASE_URL}${API_BASE_PATH}`,
   accessToken: async () => localStorage.getItem("authToken") || "",
   middleware: [
     // {

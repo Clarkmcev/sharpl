@@ -110,7 +110,7 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/api/v1/onboarding`;
+        let urlPath = `/onboarding`;
 
         return {
             path: urlPath,
@@ -154,7 +154,7 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
         }
 
 
-        let urlPath = `/api/v1/onboarding`;
+        let urlPath = `/onboarding`;
 
         return {
             path: urlPath,

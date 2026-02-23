@@ -147,7 +147,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/api/v1/auth/login`;
+        let urlPath = `/login`;
 
         return {
             path: urlPath,
@@ -187,7 +187,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/api/v1/auth/logout`;
+        let urlPath = `/auth/logout`;
 
         return {
             path: urlPath,
@@ -235,7 +235,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/api/v1/auth/register`;
+        let urlPath = `/auth/register`;
 
         return {
             path: urlPath,

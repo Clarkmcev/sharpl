@@ -1,12 +1,12 @@
 # AuthApi
 
-All URIs are relative to *http://localhost:8080*
+All URIs are relative to *http://localhost:8080/api/v1*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**login**](AuthApi.md#loginoperation) | **POST** /api/v1/auth/login | User login |
-| [**logout**](AuthApi.md#logout) | **POST** /api/v1/auth/logout | User logout |
-| [**register**](AuthApi.md#registeroperation) | **POST** /api/v1/auth/register | User registration |
+| [**login**](AuthApi.md#loginoperation) | **POST** /login | User login |
+| [**logout**](AuthApi.md#logout) | **POST** /auth/logout | User logout |
+| [**register**](AuthApi.md#registeroperation) | **POST** /auth/register | User registration |
 
 
 
