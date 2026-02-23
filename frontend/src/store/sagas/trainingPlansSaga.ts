@@ -14,6 +14,7 @@ import {
   unenrollFromPlanSuccess,
   unenrollFromPlanFailure,
 } from "../slices/trainingPlansSlice";
+import { showSuccess, showError } from "../slices/statusSlice";
 import { racePlansApi } from "../../api/client";
 
 function* fetchTrainingPlansSaga() {
@@ -41,12 +42,14 @@ function* enrollInPlanSaga(
     });
     
     yield put(enrollInPlanSuccess());
+    yield put(showSuccess("Successfully enrolled in training plan!"));
     // Refresh enrollments after successful enrollment
     yield put(fetchMyEnrollmentsRequest());
   } catch (error: any) {
     const errorMsg =
       error?.response?.body?.error || "Failed to enroll in training plan";
     yield put(enrollInPlanFailure(errorMsg));
+    yield put(showError(errorMsg));
   }
 }
 
@@ -69,13 +72,15 @@ function* unenrollFromPlanSaga(action: PayloadAction<number>) {
       planId: action.payload,
     });
     
-    yield put(unenrollFromPlanSuccess());
+    yield put(unenrollFromPlanSuccess(action.payload));
+    yield put(showSuccess("Successfully unenrolled from training plan."));
     // Refresh enrollments after successful unenrollment
     yield put(fetchMyEnrollmentsRequest());
   } catch (error: any) {
     const errorMsg =
       error?.response?.body?.error || "Failed to unenroll from training plan";
     yield put(unenrollFromPlanFailure(errorMsg));
+    yield put(showError(errorMsg));
   }
 }
 

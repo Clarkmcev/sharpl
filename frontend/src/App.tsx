@@ -6,9 +6,11 @@ import Dashboard from "./pages/Dashboard";
 import Onboarding from "./pages/Onboarding";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useSetTheme } from "./hooks/settings";
+import { useStatusToast } from "./hooks/useStatusToast";
 
 function App() {
   useSetTheme();
+  useStatusToast();
 
   return (
     <BrowserRouter>

@@ -5,6 +5,7 @@ import usersReducer from './slices/usersSlice'
 import onboardingReducer from './slices/onboardingSlice'
 import themeReducer from './slices/themeSlice'
 import trainingPlansReducer from './slices/trainingPlansSlice'
+import statusReducer from './slices/statusSlice'
 import rootSaga from './sagas'
 
 // Create the saga middleware
@@ -17,6 +18,7 @@ export const store = configureStore({
     onboarding: onboardingReducer,
     theme: themeReducer,
     trainingPlans: trainingPlansReducer,
+    status: statusReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

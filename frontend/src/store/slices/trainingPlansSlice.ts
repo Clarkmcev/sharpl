@@ -103,10 +103,13 @@ const trainingPlansSlice = createSlice({
       state.error = null;
       state.unenrollmentSuccess = false;
     },
-    unenrollFromPlanSuccess: (state) => {
+    unenrollFromPlanSuccess: (state, action: PayloadAction<number>) => {
       state.unenrolling = false;
       state.error = null;
       state.unenrollmentSuccess = true;
+      state.myEnrollments = state.myEnrollments.filter(
+        (e) => e.racePlan?.id !== action.payload,
+      );
     },
     unenrollFromPlanFailure: (state, action: PayloadAction<string>) => {
       state.unenrolling = false;

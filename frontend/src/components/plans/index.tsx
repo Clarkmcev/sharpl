@@ -1,10 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   fetchTrainingPlansRequest,
   enrollInPlanRequest,
   setSelectedPlan,
-  resetEnrollmentState,
 } from "../../store/slices/trainingPlansSlice";
 import type { RacePlan } from "../../generated";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
@@ -21,28 +20,29 @@ import Modal from "../../components/Modal";
 import Spinner from "../../components/Spinner";
 import PlanCard from "./PlanCard";
 
+const LEVEL_OPTIONS = ["all", "beginner", "intermediate", "advanced"] as const;
+const SPORT_OPTIONS = ["all", "running", "triathlon"] as const;
+
+type LevelFilter = (typeof LEVEL_OPTIONS)[number];
+type SportFilter = (typeof SPORT_OPTIONS)[number];
+
 export default function AvailablePlans() {
   const dispatch = useAppDispatch();
-  const { plans, selectedPlan, loading, enrolling, error, enrollmentSuccess } =
+  const { plans, selectedPlan, loading, enrolling } =
     useAppSelector((state) => state.trainingPlans);
+
+  const [levelFilter, setLevelFilter] = useState<LevelFilter>("all");
+  const [sportFilter, setSportFilter] = useState<SportFilter>("all");
+
+  // Keep last non-null plan so modal content stays visible during close animation
+  const [planForModal, setPlanForModal] = useState(selectedPlan);
+  useEffect(() => {
+    if (selectedPlan) setPlanForModal(selectedPlan);
+  }, [selectedPlan]);
 
   useEffect(() => {
     dispatch(fetchTrainingPlansRequest());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (enrollmentSuccess) {
-      alert("Successfully enrolled in training plan!");
-      dispatch(resetEnrollmentState());
-    }
-  }, [enrollmentSuccess, dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      dispatch(resetEnrollmentState());
-    }
-  }, [error, dispatch]);
 
   const handleEnroll = (plan: RacePlan) => {
     if (enrolling) return;
@@ -72,31 +72,83 @@ export default function AvailablePlans() {
     }
   };
 
+  const filteredPlans = plans.filter((plan) => {
+    const levelMatch =
+      levelFilter === "all" || plan.experienceLevel === levelFilter;
+    const sportMatch = sportFilter === "all" || plan.raceType === sportFilter;
+    return levelMatch && sportMatch;
+  });
+
+  const filterButtonClass = (active: boolean) =>
+    `px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+      active
+        ? "bg-light-primary-500 dark:bg-dark-primary-500 text-white"
+        : "bg-light-bg dark:bg-dark-bg text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-primary-100/20 dark:hover:bg-dark-primary-900/20"
+    }`;
+
   if (loading) {
     return <Spinner />;
   }
 
   return (
     <div>
-      {/* Header */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 pt-2">
-        {plans.map((plan, index) => (
-          <PlanCard
-            key={plan.id}
-            plan={plan}
-            index={index}
-            onSelect={() => dispatch(setSelectedPlan(plan))}
-            getRaceTypeIcon={getRaceTypeIcon}
-            getLevelColor={getLevelColor}
-          />
-        ))}
+      {/* Filters */}
+      <div className="flex flex-wrap gap-6 pb-4 pt-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm font-semibold text-light-text-secondary dark:text-dark-text-secondary">
+            Sport:
+          </span>
+          {SPORT_OPTIONS.map((opt) => (
+            <button
+              key={opt}
+              className={filterButtonClass(sportFilter === opt)}
+              onClick={() => setSportFilter(opt)}
+            >
+              {opt.charAt(0).toUpperCase() + opt.slice(1)}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm font-semibold text-light-text-secondary dark:text-dark-text-secondary">
+            Level:
+          </span>
+          {LEVEL_OPTIONS.map((opt) => (
+            <button
+              key={opt}
+              className={filterButtonClass(levelFilter === opt)}
+              onClick={() => setLevelFilter(opt)}
+            >
+              {opt.charAt(0).toUpperCase() + opt.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Plans Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+        {filteredPlans.length === 0 ? (
+          <p className="col-span-3 text-center text-light-text-secondary dark:text-dark-text-secondary py-8">
+            No plans match the selected filters.
+          </p>
+        ) : (
+          filteredPlans.map((plan, index) => (
+            <PlanCard
+              key={plan.id}
+              plan={plan}
+              index={index}
+              onSelect={() => dispatch(setSelectedPlan(plan))}
+              getRaceTypeIcon={getRaceTypeIcon}
+              getLevelColor={getLevelColor}
+            />
+          ))
+        )}
       </div>
 
       {/* Plan Details Modal */}
       <Modal
         isOpen={!!selectedPlan}
         onClose={() => dispatch(setSelectedPlan(null))}
-        title={selectedPlan?.name}
+        title={planForModal?.name}
         maxWidth="3xl"
         footer={
           <div className="flex justify-end gap-3">
@@ -107,7 +159,7 @@ export default function AvailablePlans() {
               Close
             </Button>
             <Button
-              onClick={() => handleEnroll(selectedPlan!)}
+              onClick={() => handleEnroll(planForModal!)}
               variant="primary"
               disabled={enrolling}
             >
@@ -116,39 +168,39 @@ export default function AvailablePlans() {
           </div>
         }
       >
-        {selectedPlan && (
+        {planForModal && (
           <div>
             <div className="flex justify-between items-center gap-2 mb-6 rounded-lg">
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(
-                  selectedPlan.experienceLevel,
+                  planForModal.experienceLevel,
                 )}`}
               >
-                {selectedPlan.experienceLevel.charAt(0).toUpperCase() +
-                  selectedPlan.experienceLevel.substring(1)}
+                {planForModal.experienceLevel.charAt(0).toUpperCase() +
+                  planForModal.experienceLevel.substring(1)}
               </span>
               <div className="flex items-center gap-4">
                 <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                  {selectedPlan.durationWeeks} weeks
+                  {planForModal.durationWeeks} weeks
                 </span>
                 <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary capitalize">
-                  {selectedPlan.raceType}
+                  {planForModal.raceType}
                 </span>
               </div>
             </div>
 
             <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-              {selectedPlan.description}
+              {planForModal.description}
             </p>
 
-            {selectedPlan.weeklyStructure?.weeks &&
-              selectedPlan.weeklyStructure.weeks.length > 0 && (
+            {planForModal.weeklyStructure?.weeks &&
+              planForModal.weeklyStructure.weeks.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
                     Weekly Structure
                   </h3>
                   <div className="space-y-2">
-                    {selectedPlan.weeklyStructure.weeks.map((week) => (
+                    {planForModal.weeklyStructure.weeks.map((week) => (
                       <Disclosure key={week.week}>
                         {({ open }) => (
                           <>
