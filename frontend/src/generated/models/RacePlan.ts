@@ -41,10 +41,10 @@ export interface RacePlan {
     name?: string;
     /**
      * 
-     * @type {string}
+     * @type {RacePlanRaceTypeEnum}
      * @memberof RacePlan
      */
-    raceType?: string;
+    raceType?: RacePlanRaceTypeEnum;
     /**
      * 
      * @type {string}
@@ -65,10 +65,10 @@ export interface RacePlan {
     durationWeeks?: number;
     /**
      * 
-     * @type {string}
+     * @type {RacePlanExperienceLevelEnum}
      * @memberof RacePlan
      */
-    experienceLevel?: string;
+    experienceLevel?: RacePlanExperienceLevelEnum;
     /**
      * 
      * @type {string}
@@ -94,6 +94,27 @@ export interface RacePlan {
      */
     updatedAt?: Date;
 }
+
+
+/**
+ * @export
+ */
+export const RacePlanRaceTypeEnum = {
+    Running: 'running',
+    Triathlon: 'triathlon'
+} as const;
+export type RacePlanRaceTypeEnum = typeof RacePlanRaceTypeEnum[keyof typeof RacePlanRaceTypeEnum];
+
+/**
+ * @export
+ */
+export const RacePlanExperienceLevelEnum = {
+    Beginner: 'beginner',
+    Intermediate: 'intermediate',
+    Advanced: 'advanced'
+} as const;
+export type RacePlanExperienceLevelEnum = typeof RacePlanExperienceLevelEnum[keyof typeof RacePlanExperienceLevelEnum];
+
 
 /**
  * Check if a given object implements the RacePlan interface.

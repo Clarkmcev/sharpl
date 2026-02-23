@@ -12,6 +12,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ProfileIcon from "@mui/icons-material/Person";
 import InitialComponents from "../components/InitialComponents";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import Tooltip from "../components/Tooltip";
 
 type Tab =
   | "dashboard"
@@ -146,36 +147,47 @@ export default function Dashboard() {
               sharpl
             </h1>
           )}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg transition cursor-pointer"
+          <Tooltip
+            content={sidebarOpen ? "Collapse" : "Expand"}
+            side="right"
           >
-            {sidebarOpen ? (
-              <ChevronLeftIcon className="text-light-text-secondary dark:text-dark-text-secondary" />
-            ) : (
-              <ChevronRightIcon className="text-light-text-secondary dark:text-dark-text-secondary" />
-            )}
-          </button>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-lg transition cursor-pointer"
+            >
+              {sidebarOpen ? (
+                <ChevronLeftIcon className="text-light-text-secondary dark:text-dark-text-secondary" />
+              ) : (
+                <ChevronRightIcon className="text-light-text-secondary dark:text-dark-text-secondary" />
+              )}
+            </button>
+          </Tooltip>
         </div>
 
         <nav className="flex-1 px-1 pt-2">
           {navItems.map((item) => (
-            <button
+            <Tooltip
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center cursor-pointer ${
-                sidebarOpen ? "px-4" : "px-2 justify-center"
-              } py-2 rounded-lg transition-all hover:text-light-text-primary hover:dark:text-dark-text-primary ${
-                activeTab === item.id
-                  ? `text-light-text-primary dark:text-dark-text-primary font-medium`
-                  : "text-light-text-secondary dark:text-dark-text-secondary"
-              }`}
+              content={item.label}
+              side="right"
+              disabled={sidebarOpen}
             >
-              {item.icon}
-              {sidebarOpen && (
-                <span className="ml-2 text-sm">{item.label}</span>
-              )}
-            </button>
+              <button
+                onClick={() => setActiveTab(item.id)}
+                className={`w-full flex items-center cursor-pointer ${
+                  sidebarOpen ? "px-4" : "px-2 justify-center"
+                } py-2 rounded-lg transition-all hover:text-light-text-primary hover:dark:text-dark-text-primary ${
+                  activeTab === item.id
+                    ? `text-light-text-primary dark:text-dark-text-primary font-medium`
+                    : "text-light-text-secondary dark:text-dark-text-secondary"
+                }`}
+              >
+                {item.icon}
+                {sidebarOpen && (
+                  <span className="ml-2 text-sm">{item.label}</span>
+                )}
+              </button>
+            </Tooltip>
           ))}
         </nav>
 
@@ -185,11 +197,17 @@ export default function Dashboard() {
               sidebarOpen ? "space-x-3" : "justify-center"
             }`}
           >
-            <div
-              className={`w-10 h-10 rounded-full background-light flex items-center justify-center text-white font-bold`}
+            <Tooltip
+              content={user?.name || "User"}
+              side="right"
+              disabled={sidebarOpen}
             >
-              {user?.name?.[0]?.toUpperCase() || "U"}
-            </div>
+              <div
+                className={`w-10 h-10 rounded-full background-light flex items-center justify-center text-white font-bold`}
+              >
+                {user?.name?.[0]?.toUpperCase() || "U"}
+              </div>
+            </Tooltip>
             {sidebarOpen && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
@@ -201,13 +219,22 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-          {sidebarOpen && (
+          {sidebarOpen ? (
             <button
               onClick={handleLogout}
               className="w-full mt-3 px-4 py-4 text-sm cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
             >
               Logout
             </button>
+          ) : (
+            <Tooltip content="Logout" side="right">
+              <button
+                onClick={handleLogout}
+                className="w-full mt-3 px-4 py-4 text-sm cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
+              >
+                Logout
+              </button>
+            </Tooltip>
           )}
         </div>
       </aside>

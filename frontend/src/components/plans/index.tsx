@@ -6,6 +6,10 @@ import {
   setSelectedPlan,
 } from "../../store/slices/trainingPlansSlice";
 import type { RacePlan } from "../../generated";
+import {
+  RacePlanRaceTypeEnum,
+  RacePlanExperienceLevelEnum,
+} from "../../generated";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
@@ -20,8 +24,14 @@ import Modal from "../../components/Modal";
 import Spinner from "../../components/Spinner";
 import PlanCard from "./PlanCard";
 
-const LEVEL_OPTIONS = ["all", "beginner", "intermediate", "advanced"] as const;
-const SPORT_OPTIONS = ["all", "running", "triathlon"] as const;
+const LEVEL_OPTIONS = [
+  "all",
+  ...Object.values(RacePlanExperienceLevelEnum),
+] as const;
+const SPORT_OPTIONS = [
+  "all",
+  ...Object.values(RacePlanRaceTypeEnum),
+] as const;
 
 type LevelFilter = (typeof LEVEL_OPTIONS)[number];
 type SportFilter = (typeof SPORT_OPTIONS)[number];

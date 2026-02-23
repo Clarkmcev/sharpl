@@ -974,6 +974,7 @@ definitions:
         example: "5K Beginner - 4 Weeks"
       race_type:
         type: string
+        enum: [running, triathlon]
         example: "running"
       distance:
         type: string
@@ -986,6 +987,7 @@ definitions:
         example: 4
       experience_level:
         type: string
+        enum: [beginner, intermediate, advanced]
         example: "beginner"
       description:
         type: string
