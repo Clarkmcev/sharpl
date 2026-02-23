@@ -1,11 +1,11 @@
 # OnboardingApi
 
-All URIs are relative to *http://localhost:8080*
+All URIs are relative to *http://localhost:8080/api/v1*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**completeOnboarding**](OnboardingApi.md#completeonboarding) | **POST** /api/v1/onboarding | Complete user onboarding |
-| [**getOnboarding**](OnboardingApi.md#getonboarding) | **GET** /api/v1/onboarding | Get user onboarding data |
+| [**completeOnboarding**](OnboardingApi.md#completeonboarding) | **POST** /onboarding | Complete user onboarding |
+| [**getOnboarding**](OnboardingApi.md#getonboarding) | **GET** /onboarding | Get user onboarding data |
 
 
 
@@ -28,7 +28,11 @@ import type { CompleteOnboardingRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new OnboardingApi();
+  const config = new Configuration({ 
+    // To configure API key authorization: JWT
+    apiKey: "YOUR API KEY",
+  });
+  const api = new OnboardingApi(config);
 
   const body = {
     // OnboardingData
@@ -60,7 +64,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[JWT](../README.md#JWT)
 
 ### HTTP request headers
 

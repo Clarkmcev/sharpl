@@ -11,7 +11,7 @@ export default function InitialComponents({
 }: InitialComponentsProps) {
   return (
     <Tile>
-      <div className="text-center py-12 text-light-text-secondary dark:text-dark-text-secondary text-transparent-200 dark:text-transparent-100">
+      <div className="text-center flex flex-col my-auto h-full items-center justify-center text-light-text-secondary dark:text-dark-text-secondary text-transparent-200 dark:text-transparent-100">
         {icon}
         {component}
       </div>

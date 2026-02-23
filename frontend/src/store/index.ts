@@ -4,6 +4,8 @@ import authReducer from './slices/authSlice'
 import usersReducer from './slices/usersSlice'
 import onboardingReducer from './slices/onboardingSlice'
 import themeReducer from './slices/themeSlice'
+import trainingPlansReducer from './slices/trainingPlansSlice'
+import statusReducer from './slices/statusSlice'
 import rootSaga from './sagas'
 
 // Create the saga middleware
@@ -15,13 +17,15 @@ export const store = configureStore({
     users: usersReducer,
     onboarding: onboardingReducer,
     theme: themeReducer,
+    trainingPlans: trainingPlansReducer,
+    status: statusReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: false, // Disable thunk since we're using sagas
       serializableCheck: {
         // Ignore these action types for serialization check
-        ignoredActions: ['auth/loginSuccess', 'auth/registerSuccess'],
+        ignoredActions: ['auth/loginSuccess', 'auth/registerSuccess', 'trainingPlans/enrollInPlanRequest'],
       },
     }).concat(sagaMiddleware),
 })

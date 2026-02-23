@@ -26,10 +26,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     // Login actions
-    loginRequest: (
-      state,
-      _action: PayloadAction<LoginRequest>,
-    ) => {
+    loginRequest: (state, _: PayloadAction<LoginRequest>) => {
       state.loading = true;
       state.error = null;
     },
@@ -51,10 +48,7 @@ const authSlice = createSlice({
     },
 
     // Register actions
-    registerRequest: (
-      state,
-      _action: PayloadAction<RegisterRequest>,
-    ) => {
+    registerRequest: (state, _: PayloadAction<RegisterRequest>) => {
       state.loading = true;
       state.error = null;
       state.registrationSuccess = false;
@@ -83,6 +77,25 @@ const authSlice = createSlice({
       localStorage.removeItem("authToken");
     },
 
+    // Whoami actions
+    whoamiRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    whoamiSuccess: (state, action: PayloadAction<User>) => {
+      state.loading = false;
+      state.user = action.payload;
+      state.isAuthenticated = true;
+      state.error = null;
+    },
+    whoamiFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null;
+    },
+
     // Other actions
     clearError: (state) => {
       state.error = null;
@@ -107,6 +120,9 @@ export const {
   registerFailure,
   logoutRequest,
   logoutSuccess,
+  whoamiRequest,
+  whoamiSuccess,
+  whoamiFailure,
   clearError,
   setCredentials,
 } = authSlice.actions;

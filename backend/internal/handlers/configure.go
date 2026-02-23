@@ -4,6 +4,8 @@ import (
 	"sharpl-backend/generated/restapi/operations"
 	authHandler "sharpl-backend/internal/handlers/auth"
 	onboardingHandler "sharpl-backend/internal/handlers/onboarding"
+	racePlansHandler "sharpl-backend/internal/handlers/raceplans"
+	racesHandler "sharpl-backend/internal/handlers/races"
 	usersHandler "sharpl-backend/internal/handlers/users"
 	"sharpl-backend/internal/repositories"
 	"sharpl-backend/internal/service"
@@ -13,14 +15,14 @@ import (
 	"github.com/go-openapi/runtime/security"
 )
 
-func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService, onboardingService *service.OnboardingService, userRepo repositories.UserRepository) (*operations.SharplAPIAPI, error) {
+func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthService, onboardingService *service.OnboardingService, raceService *service.RaceService, racePlanService *service.RacePlanService, userRepo repositories.UserRepository) (*operations.SharplAPIAPI, error) {
 	// Set up JWT authentication
 	api.JWTAuth = func(tokenString string) (interface{}, error) {
-		// go-swagger passes the full header value, extract just the token
-		token, err := authService.ExtractTokenFromHeader("Bearer " + tokenString)
-		if err != nil {
-			// If extraction fails, assume token doesn't have Bearer prefix
-			token = tokenString
+		// go-swagger passes just the token value (not the full header)
+		// If it starts with "Bearer ", extract the token part
+		token := tokenString
+		if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
+			token = tokenString[7:]
 		}
 
 		user, err := authService.ValidateToken(token)
@@ -47,6 +49,12 @@ func ConfigureServices(api *operations.SharplAPIAPI, authService *service.AuthSe
 
 	// Register onboarding handlers
 	onboardingHandler.NewOnboardingHandler(onboardingService, authService).RegisterHandlers(api)
+
+	// Register race handlers
+	racesHandler.NewRaceHandler(raceService).RegisterHandlers(api)
+
+	// Register race plan handlers
+	racePlansHandler.NewRacePlanHandler(racePlanService).RegisterHandlers(api)
 
 	// Register user handlers
 	usersHandler.NewUserHandler(userRepo).RegisterHandlers(api)

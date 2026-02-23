@@ -109,8 +109,12 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // JWT authentication
+        }
 
-        let urlPath = `/api/v1/onboarding`;
+
+        let urlPath = `/onboarding`;
 
         return {
             path: urlPath,
@@ -154,7 +158,7 @@ export class OnboardingApi extends runtime.BaseAPI implements OnboardingApiInter
         }
 
 
-        let urlPath = `/api/v1/onboarding`;
+        let urlPath = `/onboarding`;
 
         return {
             path: urlPath,

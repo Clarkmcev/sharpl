@@ -1,186 +1,30 @@
-import { useAppSelector } from "../store/hooks";
-import { getTextClass } from "../utils/theme";
-import PersonIcon from "@mui/icons-material/Person";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import SettingsIcon from "@mui/icons-material/Settings";
-import WarningIcon from "@mui/icons-material/Warning";
-import Header from "../components/Header";
-import Field from "../components/Field";
-import Tile from "../components/Tile";
+import { useState } from "react";
+import PageHeader from "../components/PageHeader";
+import SubNavigation from "../components/SubNavigation";
+import Trainings from "../components/profile/EnrolledPlans";
+import PersonalInformation from "../components/profile/PersonalInformation";
 
 export default function Profile() {
-  const { data: onboardingData } = useAppSelector((state) => state.onboarding);
-  const { user } = useAppSelector((state) => state.auth);
-  const themeColor = useAppSelector((state) => state.theme.color);
+  const [subNav, setSubNav] = useState("profile");
 
-  if (!onboardingData) {
-    return (
-      <div className="p-4 rounded-lg">
-        <div className="px-4 py-3 rounded-lg flex items-start bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
-          <WarningIcon className="mr-3 text-yellow-600 dark:text-yellow-400" />
-          <div>
-            <p className="font-medium text-light-text-primary dark:text-dark-text-primary">
-              Complete your profile
-            </p>
-            <p className="text-sm mt-1 text-light-text-secondary dark:text-dark-text-secondary">
-              You haven't completed the onboarding process yet.{" "}
-              <a
-                href="/onboarding"
-                className={`underline ${getTextClass(themeColor)} hover:opacity-80`}
-              >
-                Complete setup
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const formatCrossTraining = (activities: string[]) => {
-    if (!activities || activities.length === 0) return "None";
-    return activities.join(", ");
-  };
+  const profileNavItems = [
+    { label: "Profile", path: "profile" },
+    { label: "Enrolled plans", path: "trainings" },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        <div className="p-4">
-          <h2 className="text-2xl font-bold text-white">Athlete Profile</h2>
-          <p className="text-sm text-white/90 mt-1">
-            Your training profile and preferences
-          </p>
-        </div>
-
-        {/* Personal Information */}
-        <Tile>
-          <Header
-            icon={<PersonIcon fontSize="small" />}
-            header="Personal Information"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field name="Name" value={user?.name || "Not provided"} />
-            <Field name="Email" value={user?.email || "Not provided"} />
-          </div>
-        </Tile>
-
-        {/* Sport & Experience */}
-        <Tile>
-          <Header
-            icon={<DirectionsRunIcon fontSize="small" />}
-            header="Sport & Experience"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field name="Primary Sport" value={onboardingData.sport} />
-            <Field
-              name="Experience Level"
-              value={onboardingData.experienceLevel}
-            />
-            <Field
-              name="Weekly Training Hours"
-              value={`${onboardingData.weeklyTrainingHours} hours`}
-            />
-          </div>
-        </Tile>
-
-        {/* Race Goals */}
-        <Tile>
-          <Header
-            icon={<EmojiEventsIcon fontSize="small" />}
-            header="Race Goals"
-          />
-          <div className="grid grid-cols-1 gap-4 ml-11">
-            {onboardingData.races?.map((race, index) => (
-              <div key={index} className={` pl-4 py-2 rounded-r-lg rounded`}>
-                <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                  Race {index + 1}
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                  <Field name="Name" value={race.name} />
-                  <Field name="Discipline" value={race.discipline} />
-                  <Field name="Distance" value={race.distance} />
-                  <Field
-                    name="Date"
-                    value={new Date(race.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  />
-                  <Field name="Goal" value={race.goal} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </Tile>
-
-        {/* Current Fitness */}
-        <Tile>
-          <Header
-            icon={<FitnessCenterIcon fontSize="small" />}
-            header="Current Fitness"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field
-              name="Current Volume"
-              value={onboardingData.currentVolume || "Not specified"}
-            />
-            <Field
-              name="Longest Run"
-              value={onboardingData.longestRun || "Not specified"}
-            />
-            {onboardingData.recentRaces && (
-              <div className="md:col-span-2">
-                <Field name="Recent Races" value={onboardingData.recentRaces} />
-              </div>
-            )}
-            {onboardingData.injuries && (
-              <div className="md:col-span-2">
-                <Field name="Injuries" value={onboardingData.injuries} />
-              </div>
-            )}
-          </div>
-        </Tile>
-
-        {/* Training Preferences */}
-        <Tile>
-          <Header
-            icon={<SettingsIcon fontSize="small" />}
-            header="Training Preferences"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ml-11">
-            <Field
-              name="Training Days per Week"
-              value={`${onboardingData.trainingDays} days`}
-            />
-            <Field
-              name="Preferred Workout Time"
-              value={onboardingData.preferredWorkoutTime || "Not specified"}
-            />
-            <Field
-              name="Gym Access"
-              value={onboardingData.gymAccess ? "✅ Yes" : "❌ No"}
-            />
-            <Field
-              name="Cross-Training"
-              value={formatCrossTraining(onboardingData.crossTraining)}
-            />
-          </div>
-        </Tile>
-
-        {/* Edit Button */}
-        {/* <div className="px-6 py-4 border-t border-light-border dark:border-dark-border bg-light-elevated dark:bg-dark-elevated">
-          <a
-            href="/onboarding"
-            className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition shadow-md ${getTextClass(themeColor)} ${getLightBgClass(themeColor)} hover:opacity-90`}
-          >
-            <EditIcon fontSize="small" className="mr-2" />
-            Edit Profile
-          </a>
-        </div> */}
-      </div>
-    </div>
+    <section className="flex flex-col gap-2">
+      <PageHeader
+        title="Your Profile"
+        subtitle="Manage your personal information and training preferences."
+      />
+      <SubNavigation
+        items={profileNavItems}
+        subNav={subNav}
+        setSubNav={setSubNav}
+      />
+      {subNav === "profile" && <PersonalInformation />}
+      {subNav === "trainings" && <Trainings />}
+    </section>
   );
 }

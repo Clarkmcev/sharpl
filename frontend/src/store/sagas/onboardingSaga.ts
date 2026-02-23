@@ -1,6 +1,9 @@
 import { put, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import {
+  fetchOnboardingRequest,
+  fetchOnboardingSuccess,
+  fetchOnboardingFailure,
   completeOnboardingRequest,
   completeOnboardingSuccess,
   completeOnboardingFailure,
@@ -8,7 +11,19 @@ import {
 import type { OnboardingData } from "../../generated";
 import { onboardingApi } from "../../api/client";
 
-// Simulated API call - replace with actual API endpoint
+function* fetchOnboardingSaga() {
+  try {
+    const response: { data: OnboardingData } = yield onboardingApi.getOnboarding();
+    yield put(fetchOnboardingSuccess(response.data));
+  } catch (error: any) {
+    yield put(
+      fetchOnboardingFailure(
+        error.message || "Failed to fetch onboarding data",
+      ),
+    );
+  }
+}
+
 function* completeOnboardingSaga(action: PayloadAction<OnboardingData>) {
   try {
     yield onboardingApi.completeOnboarding({ body: action.payload });
@@ -23,5 +38,6 @@ function* completeOnboardingSaga(action: PayloadAction<OnboardingData>) {
 }
 
 export default function* onboardingSaga() {
+  yield takeLatest(fetchOnboardingRequest.type, fetchOnboardingSaga);
   yield takeLatest(completeOnboardingRequest.type, completeOnboardingSaga);
 }

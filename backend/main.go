@@ -6,6 +6,7 @@ import (
 	"sharpl-backend/generated/restapi/operations"
 	"sharpl-backend/internal/database"
 	"sharpl-backend/internal/handlers"
+	"sharpl-backend/internal/middleware"
 	"sharpl-backend/internal/repositories"
 	"sharpl-backend/internal/service"
 
@@ -24,10 +25,15 @@ func main() {
 	userRepo := repositories.NewUserRepository(database.GetDB())
 	sessionRepo := repositories.NewSessionRepository(database.GetDB())
 	onboardingRepo := repositories.NewOnboardingRepository(database.GetDB())
+	raceRepo := repositories.NewRaceRepository(database.GetDB())
+	racePlanRepo := repositories.NewRacePlanRepository(database.GetDB())
+	trainingEnrollmentRepo := repositories.NewTrainingEnrollmentRepository(database.GetDB())
 
 	// Initialize services
 	authService := service.SetAuthService(userRepo, sessionRepo)
-	onboardingService := service.NewOnboardingService(onboardingRepo)
+	onboardingService := service.NewOnboardingService(onboardingRepo, raceRepo)
+	raceService := service.NewRaceService(raceRepo)
+	racePlanService := service.NewRacePlanService(racePlanRepo, trainingEnrollmentRepo)
 
 	// Load swagger spec
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
@@ -39,7 +45,7 @@ func main() {
 	api := operations.NewSharplAPIAPI(swaggerSpec)
 
 	// Configure handlers
-	api, err = handlers.ConfigureServices(api, authService, onboardingService, userRepo)
+	api, err = handlers.ConfigureServices(api, authService, onboardingService, raceService, racePlanService, userRepo)
 	if err != nil {
 		log.Fatalln("Failed to configure services:", err)
 	}
@@ -49,7 +55,11 @@ func main() {
 	defer server.Shutdown()
 
 	server.Port = 8080
+
 	server.ConfigureAPI()
+
+	corsHandler := middleware.SetupCORS()
+	server.SetHandler(corsHandler.Handler(api.Serve(nil)))
 
 	log.Println("Server starting on :8080")
 	if err := server.Serve(); err != nil {

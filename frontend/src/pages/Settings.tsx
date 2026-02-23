@@ -2,12 +2,16 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { logoutRequest } from "../store/slices/authSlice";
 import { setThemeMode, type ThemeMode } from "../store/slices/themeSlice";
+import ProfileEditModal from "../components/ProfileEditModal";
 
 export default function Settings() {
   const { user } = useAppSelector((state) => state.auth);
-  const { data: onboardingData } = useAppSelector((state) => state.onboarding);
+  const { data: profileData } = useAppSelector((state) => state.onboarding);
   const themeState = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
+
+  // Modal state
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Form states
   const [name, setName] = useState(user?.name || "");
@@ -33,6 +37,13 @@ export default function Settings() {
     console.log("Saving profile:", { name, email });
     alert("Profile updated successfully!");
   };
+
+  const handleSaveTheme = () => {
+    // Theme is saved immediately on change, so just show a confirmation
+    alert("Theme settings saved!");
+  };
+
+  handleSaveTheme();
 
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +80,7 @@ export default function Settings() {
   const handleDeleteAccount = () => {
     if (
       window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
+        "Are you sure you want to delete your account? This action cannot be undone.",
       )
     ) {
       // TODO: Implement API call to delete account
@@ -408,47 +419,96 @@ export default function Settings() {
       </div>
 
       {/* Training Profile Summary */}
-      {onboardingData && (
-        <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg shadow p-6 border border-purple-200">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
-            Training Profile Summary
-          </h3>
+      {profileData && (
+        <div className="from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg shadow p-6 border border-purple-200 dark:border-purple-800">
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              Training Profile Summary
+            </h3>
+            <button
+              onClick={() => setIsProfileModalOpen(true)}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium text-sm transition-colors"
+            >
+              Edit Profile
+            </button>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-sm text-gray-600">Sport</p>
-              <p className="font-semibold text-gray-900">
-                {onboardingData.sport}
+              <p className="text-sm text-gray-600 dark:text-gray-400">Sport</p>
+              <p className="font-semibold text-gray-900 dark:text-white">
+                {profileData.sport}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Experience</p>
-              <p className="font-semibold text-gray-900 capitalize">
-                {onboardingData.experienceLevel}
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Experience
+              </p>
+              <p className="font-semibold text-gray-900 dark:text-white capitalize">
+                {profileData.experienceLevel}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Weekly Hours</p>
-              <p className="font-semibold text-gray-900">
-                {onboardingData.weeklyTrainingHours}h
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Weekly Hours
+              </p>
+              <p className="font-semibold text-gray-900 dark:text-white">
+                {profileData.weeklyTrainingHours}h
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Training Days</p>
-              <p className="font-semibold text-gray-900">
-                {onboardingData.trainingDays} days
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Training Days
+              </p>
+              <p className="font-semibold text-gray-900 dark:text-white">
+                {profileData.trainingDays} days
               </p>
             </div>
           </div>
-          <div className="mt-4">
-            <a
-              href="/onboarding"
-              className="text-purple-600 hover:text-purple-700 font-medium text-sm"
-            >
-              Update training profile →
-            </a>
-          </div>
+
+          {/* Races Section */}
+          {profileData.preparingForRace &&
+            profileData.races &&
+            profileData.races.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-purple-200 dark:border-purple-800">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">
+                  Upcoming Races
+                </h4>
+                <div className="space-y-2">
+                  {profileData.races.map((race, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center p-3 bg-white/50 dark:bg-black/20 rounded-lg"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {race.name}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {race.discipline} - {race.distance}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {new Date(race.date).toLocaleDateString()}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                          {race.goal}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
         </div>
       )}
+
+      {/* Profile Edit Modal */}
+      <ProfileEditModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        initialData={profileData || undefined}
+      />
 
       {/* Danger Zone */}
       <div className="bg-white rounded-lg shadow border-2 border-red-200">

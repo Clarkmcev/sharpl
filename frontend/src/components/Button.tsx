@@ -18,14 +18,14 @@ export default function Button({
   loading = false,
 }: ButtonProps) {
   const baseClasses =
-    "cursor-pointer py-3 px-6 rounded-lg font-semibold transition duration-200 shadow-lg";
+    "cursor-pointer py-2 px-4 rounded-lg font-semibold transition duration-200 shadow-lg";
 
   const variantClasses = {
     primary: "bg-light-CTA-bg dark:bg-dark-CTA-bg text-white",
     secondary:
       "text-light-CTA-bg dark:text-dark-CTA-bg brightness-150 shadow-none",
     danger:
-      "bg-red-600 dark:bg-red-700 text-white hover:bg-red-700 dark:hover:bg-red-600",
+      "text-red-500/80 shadow-none hover:text-red-500 bg-red-600/10 hover:bg-red-600/20",
     disabled: "text-gray-400/20 shadow-none cursor-auto!",
   };
 
