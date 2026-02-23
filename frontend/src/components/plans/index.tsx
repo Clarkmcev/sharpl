@@ -13,12 +13,6 @@ import {
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import Spinner from "../../components/Spinner";
@@ -28,18 +22,16 @@ const LEVEL_OPTIONS = [
   "all",
   ...Object.values(RacePlanExperienceLevelEnum),
 ] as const;
-const SPORT_OPTIONS = [
-  "all",
-  ...Object.values(RacePlanRaceTypeEnum),
-] as const;
+const SPORT_OPTIONS = ["all", ...Object.values(RacePlanRaceTypeEnum)] as const;
 
 type LevelFilter = (typeof LEVEL_OPTIONS)[number];
 type SportFilter = (typeof SPORT_OPTIONS)[number];
 
 export default function AvailablePlans() {
   const dispatch = useAppDispatch();
-  const { plans, selectedPlan, loading, enrolling } =
-    useAppSelector((state) => state.trainingPlans);
+  const { plans, selectedPlan, loading, enrolling } = useAppSelector(
+    (state) => state.trainingPlans,
+  );
 
   const [levelFilter, setLevelFilter] = useState<LevelFilter>("all");
   const [sportFilter, setSportFilter] = useState<SportFilter>("all");
@@ -143,7 +135,7 @@ export default function AvailablePlans() {
         ) : (
           filteredPlans.map((plan, index) => (
             <PlanCard
-              key={plan.id}
+              key={`${sportFilter}-${levelFilter}-${plan.id}`}
               plan={plan}
               index={index}
               onSelect={() => dispatch(setSelectedPlan(plan))}
@@ -199,60 +191,9 @@ export default function AvailablePlans() {
               </div>
             </div>
 
-            <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+            <p className="text-light-text-secondary dark:text-dark-text-secondary">
               {planForModal.description}
             </p>
-
-            {planForModal.weeklyStructure?.weeks &&
-              planForModal.weeklyStructure.weeks.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-                    Weekly Structure
-                  </h3>
-                  <div className="space-y-2">
-                    {planForModal.weeklyStructure.weeks.map((week) => (
-                      <Disclosure key={week.week}>
-                        {({ open }) => (
-                          <>
-                            <DisclosureButton className="w-full flex items-center justify-between gap-3 p-4 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-primary-100/10 dark:hover:bg-dark-primary-900/20 transition-colors cursor-pointer">
-                              <div className="flex items-center gap-3">
-                                <div className="px-3 py-1 rounded-lg bg-light-primary-100 dark:bg-dark-primary-900/30">
-                                  <span className="text-sm font-bold text-white">
-                                    Week {week.week}
-                                  </span>
-                                </div>
-                                <p className="text-sm font-medium text-left">
-                                  {week.description}
-                                </p>
-                              </div>
-                              <ExpandMoreIcon
-                                className={`text-light-text-secondary dark:text-dark-text-secondary transition-transform duration-200 ${
-                                  open ? "rotate-180" : ""
-                                }`}
-                              />
-                            </DisclosureButton>
-                            <DisclosurePanel className="px-4 pt-2 pb-3 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                              <div className="pl-4 border-l-2 border-light-primary-500 dark:border-dark-primary-500">
-                                <p className="mb-2">
-                                  Detailed breakdown for Week {week.week}:
-                                </p>
-                                <ul className="list-disc list-inside space-y-1">
-                                  <li>Focus: {week.description}</li>
-                                  <li>Duration: 7 days</li>
-                                  <li>
-                                    Training sessions will be scheduled
-                                    throughout the week
-                                  </li>
-                                </ul>
-                              </div>
-                            </DisclosurePanel>
-                          </>
-                        )}
-                      </Disclosure>
-                    ))}
-                  </div>
-                </div>
-              )}
           </div>
         )}
       </Modal>

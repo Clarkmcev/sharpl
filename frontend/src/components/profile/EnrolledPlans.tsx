@@ -12,9 +12,12 @@ import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Uncomplete from "./Uncomplete";
 import Spinner from "../Spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function EnrolledPlans() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const { myEnrollments, loadingEnrollments, unenrolling } = useAppSelector(
     (state) => state.trainingPlans,
   );
@@ -53,7 +56,10 @@ export default function EnrolledPlans() {
         message={
           <div>
             You are not enrolled in any training plans yet.{" "}
-            <a href="/onboarding" className={`underline  hover:opacity-80`}>
+            <a
+              onClick={() => navigate("/dashboard/training")}
+              className={`underline  hover:opacity-80`}
+            >
               Choose a plan
             </a>
           </div>
